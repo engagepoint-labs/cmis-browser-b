@@ -5,7 +5,7 @@
 *.war
 *.ear
 
-#from Idea
+#from IntelliJIdea
 .idea/
 target/
 *.iml

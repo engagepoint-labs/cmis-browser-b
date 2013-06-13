@@ -22,7 +22,7 @@ public class MainBean implements Serializable
         SessionFactory sessionFactory = SessionFactoryImpl.newInstance();
         Map<String, String> parameter = new HashMap<String, String>();
 
-        parameter.put(SessionParameter.ATOMPUB_URL, "http://lab2:8080/chemistry-opencmis-server-inmemory-0.9.0/atom");//"http://repo.opencmis.org/inmemory/atom/");
+        parameter.put(SessionParameter.ATOMPUB_URL, "http://lab8:8080/chemistry-opencmis-server-inmemory-0.9.0/atom11");//"http://repo.opencmis.org/inmemory/atom/");
         parameter.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
 
         Repository repository = sessionFactory.getRepositories(parameter).get(0);

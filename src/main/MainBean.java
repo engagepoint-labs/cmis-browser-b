@@ -24,26 +24,23 @@ public class MainBean implements Serializable
         Map<String, String> parameter = new HashMap<String, String>();
 
         // ATOM
-        parameter.put(SessionParameter.ATOMPUB_URL, "http://lab2:8080/chemistry-opencmis-server-inmemory-0.9.0/atom");//"http://repo.opencmis.org/inmemory/atom/");
-        parameter.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
+//        parameter.put(SessionParameter.ATOMPUB_URL, "http://lab2:8080/chemistry-opencmis-server-inmemory-0.9.0/atom");//"http://repo.opencmis.org/inmemory/atom/");
+//        parameter.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
 
        // WSDL - not working (even in Workbench)
        // Error: Cannot initialize Web Services service object [RepositoryService]: null
 
-//        parameter.put(SessionParameter.USER, "admin");
-//        parameter.put(SessionParameter.PASSWORD, "admin");
-//
-//        final String url = "http://lab2:8080/chemistry-opencmis-server-inmemory-0.9.0/services/";
-//        parameter.put(SessionParameter.BINDING_TYPE, BindingType.WEBSERVICES.value());
-//        parameter.put(SessionParameter.WEBSERVICES_ACL_SERVICE,             url+"ACLService");
-//        parameter.put(SessionParameter.WEBSERVICES_DISCOVERY_SERVICE,       url+"DiscoveryService");
-//        parameter.put(SessionParameter.WEBSERVICES_MULTIFILING_SERVICE,     url+"MultiFilingService");
-//        parameter.put(SessionParameter.WEBSERVICES_NAVIGATION_SERVICE,      url+"NavigationService");
-//        parameter.put(SessionParameter.WEBSERVICES_OBJECT_SERVICE,          url+"ObjectService");
-//        parameter.put(SessionParameter.WEBSERVICES_POLICY_SERVICE,          url+"PolicyService");
-//        parameter.put(SessionParameter.WEBSERVICES_RELATIONSHIP_SERVICE,    url+"RelationshipService");
-//        parameter.put(SessionParameter.WEBSERVICES_REPOSITORY_SERVICE,      url+"RepositoryService");
-//        parameter.put(SessionParameter.WEBSERVICES_VERSIONING_SERVICE,      url+"VersioningService");
+        final String url = "http://lab2:8080/cmis-browser/services11/";
+        parameter.put(SessionParameter.BINDING_TYPE, BindingType.WEBSERVICES.value());
+        parameter.put(SessionParameter.WEBSERVICES_ACL_SERVICE,             url+"ACLService?wsdl");
+        parameter.put(SessionParameter.WEBSERVICES_DISCOVERY_SERVICE,       url+"DiscoveryService?wsdl");
+        parameter.put(SessionParameter.WEBSERVICES_MULTIFILING_SERVICE,     url+"MultiFilingService?wsdl");
+        parameter.put(SessionParameter.WEBSERVICES_NAVIGATION_SERVICE,      url+"NavigationService?wsdl");
+        parameter.put(SessionParameter.WEBSERVICES_OBJECT_SERVICE,          url+"ObjectService?wsdl");
+        parameter.put(SessionParameter.WEBSERVICES_POLICY_SERVICE,          url+"PolicyService?wsdl");
+        parameter.put(SessionParameter.WEBSERVICES_RELATIONSHIP_SERVICE,    url+"RelationshipService?wsdl");
+        parameter.put(SessionParameter.WEBSERVICES_REPOSITORY_SERVICE,      url+"RepositoryService?wsdl");
+        parameter.put(SessionParameter.WEBSERVICES_VERSIONING_SERVICE,      url+"VersioningService?wsdl");
 
         Repository repository = sessionFactory.getRepositories(parameter).get(0);
         parameter.put(SessionParameter.REPOSITORY_ID, repository.getId());

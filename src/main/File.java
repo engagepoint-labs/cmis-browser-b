@@ -1,7 +1,7 @@
 package main;
 
 import javax.faces.bean.ManagedBean;
-//Comment
+
 @ManagedBean(name = "file", eager = true)
 public class File {
     private String type;

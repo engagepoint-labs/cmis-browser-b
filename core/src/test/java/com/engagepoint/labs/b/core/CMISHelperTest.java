@@ -1,8 +1,15 @@
 package com.engagepoint.labs.b.core;
 
+import org.apache.chemistry.opencmis.client.api.SessionFactory;
+import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.junit.Assert.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,11 +18,15 @@ import org.junit.Test;
  * Time: 1:56 PM
  * To change this template use File | Settings | File Templates.
  */
-//TEst class
+
 public class CMISHelperTest {
+    SessionFactory sessionFactory;
+    Map<String, String> parameter;
+
     @Before
     public void setUp() throws Exception {
-
+        sessionFactory = SessionFactoryImpl.newInstance();
+        parameter = new HashMap<String, String>();
     }
 
     @After

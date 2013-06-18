@@ -1,0 +1,105 @@
+<project
+        xmlns="http://maven.apache.org/POM/4.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <artifactId>CMIS-Browser</artifactId>
+        <groupId>com.engagepoint.labs.b</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>web</artifactId>
+    <packaging>war</packaging>
+
+    <name>web Maven Webapp</name>
+    <url>http://maven.apache.org</url>
+
+    <dependencies>
+        <!-- Core -->
+        <dependency>
+            <groupId>com.engagepoint.labs.b</groupId>
+            <artifactId>core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- JSF -->
+        <dependency>
+            <groupId>com.sun.faces</groupId>
+            <artifactId>jsf-api</artifactId>
+            <version>2.1.7</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.faces</groupId>
+            <artifactId>jsf-impl</artifactId>
+            <version>2.1.7</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- PrimeFaces -->
+        <dependency>
+            <groupId>org.primefaces</groupId>
+            <artifactId>primefaces</artifactId>
+            <version>3.5</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>web</finalName>
+
+        <plugins>
+            <!-- Maven Cargo Plugin -->
+            <plugin>
+                <groupId>org.codehaus.cargo</groupId>
+                <artifactId>cargo-maven2-plugin</artifactId>
+                <version>1.4.0</version>
+                <configuration>
+
+                    <!-- Container configuration -->
+                    <container>
+                        <containerId>glassfish3x</containerId>
+                        <zipUrlInstaller>
+                            <url>http://download.java.net/glassfish/3.1.2/release/glassfish-3.1.2.zip</url>
+                            <downloadDir>${user.home}/.m2/cargo/containers</downloadDir>
+                        </zipUrlInstaller>
+                    </container>
+
+                    <!--Configuration to use with the container-->
+                    <configuration>
+                        <!--<type>existing</type>-->
+                        <properties>
+                            <cargo.hostname>localhost</cargo.hostname>
+                            <cargo.servelet.port>8080</cargo.servelet.port>
+                            <cargo.remote.username>admin</cargo.remote.username>
+                            <cargo.remote.password></cargo.remote.password>
+                            <cargo.glassfish.domain.name>domain1</cargo.glassfish.domain.name>
+                        </properties>
+                    </configuration>
+
+                    <!-- Deployer configuration -->
+                    <deployables>
+                        <deployable>
+                            <groupId>com.engagepoint.labs.b</groupId>
+                            <artifactId>web</artifactId>
+                            <type>war</type>
+                            <properties>
+                                <context>/browser</context>
+                            </properties>
+                        </deployable>
+
+                        <deployable>
+                            <groupId>org.apache.chemistry.opencmis</groupId>
+                            <artifactId>chemistry-opencmis-server-inmemory</artifactId>
+                            <type>war</type>
+                            <properties>
+                                <context>/server</context>
+                            </properties>
+                        </deployable>
+                    </deployables>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

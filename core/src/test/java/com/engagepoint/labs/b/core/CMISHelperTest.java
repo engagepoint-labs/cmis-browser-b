@@ -6,7 +6,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.*;
@@ -34,6 +36,16 @@ public class CMISHelperTest {
 
     }
 
+    private List<BrowserItem> makeList() {
+        List<BrowserItem> list = new ArrayList<BrowserItem>();
+        list.add(new BrowserItem("My_Document-0-0", "Tue Jun 18 17:09:43 EEST 2013"));
+        list.add(new BrowserItem("My_Document-0-1", "Tue Jun 18 17:09:43 EEST 2013"));
+        list.add(new BrowserItem("My_Document-0-2", "Tue Jun 18 17:09:43 EEST 2013"));
+        list.add(new BrowserItem("My_Folder-0-0", "Tue Jun 18 17:09:41 EEST 2013"));
+        list.add(new BrowserItem("My_Folder-0-1", "Tue Jun 18 17:09:42 EEST 2013"));
+        return list;
+    }
+
     @Test
     public void testConnect() throws Exception {
 
@@ -41,6 +53,7 @@ public class CMISHelperTest {
 
     @Test
     public void testGetRootFolder() throws Exception {
-
+        assertNotNull(makeList());
+//        assertNotSame(makeList(), new CMISHelper().getRootFolder());
     }
 }

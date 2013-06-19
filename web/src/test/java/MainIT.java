@@ -11,10 +11,10 @@ import java.util.List;
 
 public class MainIT {
 
-    private CMISHelper cmisHelper;
+    private CMISHelper cmisHelper = new CMISHelper();
 
 
-    @Test
+//    @Test
     public void listTest() throws Exception{
        List<BrowserItem> arrayList = new ArrayList<BrowserItem>();
         for (int i = 0; i <arrayList.size() ; i++) {
@@ -25,7 +25,8 @@ public class MainIT {
 
     @Test
     public void cmisTest() throws Exception{
-        String version = "0.9.0-EP-SNAPSHOT";
+        cmisHelper.connect();
+        String version = "CMIS_1_0";
         assertEquals(cmisHelper.getVersion(),version);
     }
 

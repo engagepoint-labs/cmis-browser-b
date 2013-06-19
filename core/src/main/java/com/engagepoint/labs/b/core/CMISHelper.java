@@ -51,6 +51,7 @@ public class CMISHelper
         parameter.put(SessionParameter.REPOSITORY_ID, repository.getId());
 
         setVersion(repository.getCmisVersion().toString());
+
         return sessionFactory.createSession(parameter);
     }
 

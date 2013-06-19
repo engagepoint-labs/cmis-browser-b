@@ -54,6 +54,5 @@ public class CMISHelperTest {
     @Test
     public void testGetRootFolder() throws Exception {
         assertNotNull(makeList());
-//        assertNotSame(makeList(), new CMISHelper().getRootFolder());
     }
 }

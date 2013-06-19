@@ -12,7 +12,19 @@ import java.util.List;
 import java.util.Map;
 
 public class CMISHelper
+
 {
+
+    private String version;
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
     public Session connect(){
         SessionFactory sessionFactory = SessionFactoryImpl.newInstance();
         Map<String, String> parameter = new HashMap<String, String>();
@@ -38,6 +50,7 @@ public class CMISHelper
         Repository repository = sessionFactory.getRepositories(parameter).get(0);
         parameter.put(SessionParameter.REPOSITORY_ID, repository.getId());
 
+        setVersion(repository.getCmisVersion().toString());
         return sessionFactory.createSession(parameter);
     }
 
@@ -50,7 +63,7 @@ public class CMISHelper
         BrowserItem file;
 
         for (CmisObject o : children) {
-            Property<String> p = o.getProperty(PropertyIds.CREATION_DATE);
+            Property<String> p = o.getProperty(PropertyIds.VERSION_SERIES_ID);
 
             file = new BrowserItem(o.getName(), p.getValueAsString());
             list.add(file);

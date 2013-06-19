@@ -50,6 +50,8 @@
             <type>war</type>
             <scope>provided</scope>
         </dependency>
+
+
     </dependencies>
 
     <build>
@@ -62,22 +64,48 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.12</version>
+                <version>2.15</version>
                 <executions>
                     <execution>
+                        <id>integration-test</id>
                         <goals>
                             <goal>integration-test</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>verify</id>
+                        <goals>
                             <goal>verify</goal>
                         </goals>
                     </execution>
                 </executions>
             </plugin>
 
+
+
+
             <!-- Maven Cargo Plugin -->
             <plugin>
+
                 <groupId>org.codehaus.cargo</groupId>
                 <artifactId>cargo-maven2-plugin</artifactId>
                 <version>1.4.0</version>
+
+                <executions>
+                <execution>
+                    <id>start-tomcat</id>
+                    <phase>pre-integration-test</phase>
+                    <goals>
+                        <goal>run</goal>
+                    </goals>
+                    <configuration>
+                        <daemon>true</daemon>
+                    </configuration>
+                </execution>
+
+              </executions>
+
+
                 <configuration>
 
                     <!-- Container configuration glassfish -->
@@ -107,6 +135,8 @@
 
                         <!--<log>${project.build.directory}/cargo.log</log>-->
 
+
+
                         <zipUrlInstaller>
                             <url>http://apache.cp.if.ua/tomcat/tomcat-7/v7.0.41/bin/apache-tomcat-7.0.41.zip</url>
                             <downloadDir>${user.home}/.m2/cargo/containers</downloadDir>
@@ -121,14 +151,27 @@
                                 <artifactId>jsf-impl</artifactId>
                             </dependency>
                         </dependencies>
+
+
                     </container>
-                    <configuration>
+
+
+
+                <configuration>
+
+
                         <properties>
                             <cargo.servlet.port>8080</cargo.servlet.port>
                         </properties>
+
+
                     </configuration>
 
-                    <!-- Deployer configuration -->
+
+
+
+                <!-- Deployer configuration -->
+
                     <deployables>
                         <deployable>
                             <groupId>org.apache.chemistry.opencmis</groupId>
@@ -145,29 +188,23 @@
                             <properties>
                                 <context>/browser</context>
                             </properties>
+
+
+
                         </deployable>
 
                     </deployables>
+
                 </configuration>
 
-                <executions>
-                    <execution>
-                        <id>start-tomcat</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>start</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>stop-tomcat</id>
-                        <phase>post-integration-test</phase>
-                        <goals>
-                            <goal>stop</goal>
-                        </goals>
-                    </execution>
-                </executions>
 
             </plugin>
-        </plugins>
+
+
+    </plugins>
+
     </build>
+
+
+
 </project>

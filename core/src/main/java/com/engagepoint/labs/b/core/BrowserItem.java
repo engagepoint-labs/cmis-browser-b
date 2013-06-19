@@ -5,7 +5,7 @@ public class BrowserItem
     private String type;
     private String name;
 
-    BrowserItem(String name, String type) {
+    public BrowserItem(String name, String type) {
         this.name = name;
         this.type = type;
     }

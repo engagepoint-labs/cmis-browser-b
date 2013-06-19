@@ -66,10 +66,6 @@
                         </goals>
                         <configuration>
 
-                            <excludes>
-                                <!--<exclude>**/User*</exclude>-->
-                            </excludes>
-
                             <rules>
                                 <rule>
                                     <element>BUNDLE</element>

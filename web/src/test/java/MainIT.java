@@ -1,11 +1,7 @@
 import com.engagepoint.labs.b.core.BrowserItem;
 import com.engagepoint.labs.b.core.CMISHelper;
 
-import org.apache.chemistry.opencmis.client.api.CmisObject;
-import org.apache.chemistry.opencmis.client.api.Folder;
-import org.apache.chemistry.opencmis.client.api.ItemIterable;
-import org.apache.chemistry.opencmis.client.api.Property;
-import org.apache.chemistry.opencmis.commons.PropertyIds;
+
 import org.junit.Test;
 
 
@@ -18,9 +14,8 @@ public class MainIT {
 
 
     @Test
-    public void getFolderTest(){
-
+    public List<BrowserItem> getFolderTest() throws Exception{
       list = new CMISHelper().getRootFolder();
-
+      return list;
     }
 }

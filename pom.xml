@@ -23,6 +23,12 @@
                 <version>3.8.1</version>
                 <scope>test</scope>
             </dependency>
+            <!-- JACOCO -->
+            <!--<dependency>-->
+                <!--<groupId>org.jacoco</groupId>-->
+                <!--<artifactId>jacoco-maven-plugin</artifactId>-->
+                <!--<version>0.6.3.201306030806</version>-->
+            <!--</dependency>-->
 
             <dependency>
                 <groupId>org.apache.chemistry.opencmis</groupId>
@@ -38,4 +44,14 @@
         </dependencies>
 
     </dependencyManagement>
+    <!--<build>-->
+        <!--<plugins>-->
+            <!--<plugin>-->
+                <!--<groupId>org.jacoco</groupId>-->
+                <!--<artifactId>jacoco-maven-plugin</artifactId>-->
+                <!--<version>0.6.3.201306030806</version>-->
+
+            <!--</plugin>-->
+        <!--</plugins>-->
+    <!--</build>-->
 </project>

@@ -14,7 +14,7 @@ public class MainIT {
     private CMISHelper cmisHelper = new CMISHelper();
 
 
-//    @Test
+    @Test
     public void listTest() throws Exception{
        List<BrowserItem> arrayList = new ArrayList<BrowserItem>();
         for (int i = 0; i <arrayList.size() ; i++) {

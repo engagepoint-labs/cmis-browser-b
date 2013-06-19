@@ -17,8 +17,9 @@ public class MainIT {
     @Test
     public void listTest() throws Exception{
        List<BrowserItem> arrayList = new ArrayList<BrowserItem>();
-        arrayList = cmisHelper.getRootFolder();
-
+        for (int i = 0; i <arrayList.size() ; i++) {
+            arrayList.add(cmisHelper.getRootFolder().get(i));
+        }
         assertNotNull(arrayList);
     }
 

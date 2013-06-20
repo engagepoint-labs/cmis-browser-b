@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+<head>
+    <title>List</title>
+</head>
+<h:body>
+    <h:form>
+        <p:dataTable value="#{userBean.usersList}" var="users">
+            <p:column headerText="User Name">
+                <h:outputText value="#{users.name}"/>
+            </p:column>
+            <p:column headerText="User Last Name">
+                <h:outputText value="#{users.lastName}"/>
+            </p:column>
+        </p:dataTable>
+
+        <h:commandButton value="Edit" action="edit" immediate="true"/>
+        <h:commandButton value="Home" action="home" immediate="true"/>
+
+    </h:form>
+</h:body>
+</html>

@@ -4,7 +4,7 @@ import com.engagepoint.labs.b.pages.Pages;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
- //
+
 public class BrowserWebSteps {
 
     private final Pages pages;

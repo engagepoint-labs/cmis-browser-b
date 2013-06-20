@@ -31,14 +31,6 @@ public abstract class AbstractPage extends WebDriverPage {
         }
     }
 
-    public void notFound(String text) {
-        notFound(getPageSource(), text);
-    }
-
-    public void notFound(String pageSource, String text) {
-        assertThat(pageSource.contains(escapeHtml(text)), is(false));
-    }
-
     private String escapeHtml(String text) {
         return text.replace("<", "&lt;").replace(">", "&gt;");
     }

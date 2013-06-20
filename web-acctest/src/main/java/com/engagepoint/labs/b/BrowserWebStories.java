@@ -2,11 +2,15 @@ package com.engagepoint.labs.b;
 
 import com.engagepoint.labs.b.pages.Pages;
 import com.engagepoint.labs.b.steps.BrowserWebSteps;
+import com.google.common.util.concurrent.MoreExecutors;
 import org.jbehave.core.Embeddable;
 import org.jbehave.core.configuration.Configuration;
+import org.jbehave.core.configuration.MostUsefulConfiguration;
+import org.jbehave.core.embedder.Embedder;
 import org.jbehave.core.embedder.executors.SameThreadExecutors;
 import org.jbehave.core.io.LoadFromClasspath;
 import org.jbehave.core.io.StoryFinder;
+import org.jbehave.core.io.UnderscoredCamelCaseResolver;
 import org.jbehave.core.junit.JUnitStories;
 import org.jbehave.core.reporters.StoryReporterBuilder;
 import org.jbehave.core.steps.InjectableStepsFactory;
@@ -35,8 +39,9 @@ public class BrowserWebStories extends JUnitStories {
     private ContextView contextView = new LocalFrameContextView().sized(500, 100);
 
     public BrowserWebStories() {
+        // If configuring lifecycle per-stories, you need to ensure that you a same-thread executor
         if ( lifecycleSteps instanceof PerStoriesWebDriverSteps ){
-            configuredEmbedder().useExecutorService(new SameThreadExecutors().create(configuredEmbedder().embedderControls()));
+            configuredEmbedder().useExecutorService(MoreExecutors.sameThreadExecutor());
         }
     }
 
@@ -70,7 +75,13 @@ public class BrowserWebStories extends JUnitStories {
                 .findPaths(codeLocationFromClass(this.getClass()).getFile(), asList("**/*.story"), null);
     }
 
+    // This Embedder is used by Maven or Ant and it will override anything set in the constructor
+    public static class SameThreadEmbedder extends Embedder {
 
+        public SameThreadEmbedder() {
+            useExecutorService(MoreExecutors.sameThreadExecutor());
+        }
 
+    }
 
 }

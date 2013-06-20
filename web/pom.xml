@@ -58,7 +58,6 @@
         <finalName>web</finalName>
 
 
-
         <plugins>
 
             <plugin>
@@ -82,8 +81,6 @@
             </plugin>
 
 
-
-
             <!-- Maven Cargo Plugin -->
             <plugin>
 
@@ -92,47 +89,52 @@
                 <version>1.4.0</version>
 
                 <executions>
-                <execution>
-                    <id>start-tomcat</id>
-                    <phase>pre-integration-test</phase>
-                    <goals>
-                        <goal>run</goal>
-                    </goals>
+                    <execution>
+                        <id>start-container</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>start</goal>
+                        </goals>
+                    </execution>
 
-                </execution>
-
-              </executions>
+                    <execution>
+                        <id>stop-container</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                    </execution>
+                </executions>
 
 
                 <configuration>
 
                     <!-- Container configuration glassfish -->
                     <container>
-                    <!--<containerId>glassfish3x</containerId>-->
-                    <!--<zipUrlInstaller>-->
-                    <!--<url>http://download.java.net/glassfish/3.1.2/release/glassfish-3.1.2.zip</url>-->
-                    <!--<downloadDir>${user.home}/.m2/cargo/containers</downloadDir>-->
-                    <!--</zipUrlInstaller>-->
-                    <!--</container>-->
+                        <!--<containerId>glassfish3x</containerId>-->
+                        <!--<zipUrlInstaller>-->
+                        <!--<url>http://download.java.net/glassfish/3.1.2/release/glassfish-3.1.2.zip</url>-->
+                        <!--<downloadDir>${user.home}/.m2/cargo/containers</downloadDir>-->
+                        <!--</zipUrlInstaller>-->
+                        <!--</container>-->
 
-                    <!--&lt;!&ndash;Configuration to use with the container&ndash;&gt;-->
-                    <!--<configuration>-->
-                    <!--&lt;!&ndash;<type>existing</type>&ndash;&gt;-->
-                    <!--<properties>-->
-                    <!--<cargo.hostname>localhost</cargo.hostname>-->
-                    <!--<cargo.servelet.port>8080</cargo.servelet.port>-->
-                    <!--<cargo.remote.username>admin</cargo.remote.username>-->
-                    <!--<cargo.remote.password></cargo.remote.password>-->
-                    <!--<cargo.glassfish.domain.name>domain1</cargo.glassfish.domain.name>-->
-                    <!--</properties>-->
-                    <!--</configuration>-->
+                        <!--&lt;!&ndash;Configuration to use with the container&ndash;&gt;-->
+                        <!--<configuration>-->
+                        <!--&lt;!&ndash;<type>existing</type>&ndash;&gt;-->
+                        <!--<properties>-->
+                        <!--<cargo.hostname>localhost</cargo.hostname>-->
+                        <!--<cargo.servelet.port>8080</cargo.servelet.port>-->
+                        <!--<cargo.remote.username>admin</cargo.remote.username>-->
+                        <!--<cargo.remote.password></cargo.remote.password>-->
+                        <!--<cargo.glassfish.domain.name>domain1</cargo.glassfish.domain.name>-->
+                        <!--</properties>-->
+                        <!--</configuration>-->
 
-                    <!-- Container configuration tomcat -->
-                    <!--<container>-->
+                        <!-- Container configuration tomcat -->
+                        <!--<container>-->
                         <containerId>tomcat7x</containerId>
 
                         <!--<log>${project.build.directory}/cargo.log</log>-->
-
 
 
                         <zipUrlInstaller>
@@ -154,8 +156,7 @@
                     </container>
 
 
-
-                <configuration>
+                    <configuration>
 
 
                         <properties>
@@ -166,9 +167,7 @@
                     </configuration>
 
 
-
-
-                <!-- Deployer configuration -->
+                    <!-- Deployer configuration -->
 
                     <deployables>
                         <deployable>
@@ -188,7 +187,6 @@
                             </properties>
 
 
-
                         </deployable>
 
                     </deployables>
@@ -199,10 +197,9 @@
             </plugin>
 
 
-    </plugins>
+        </plugins>
 
     </build>
-
 
 
 </project>

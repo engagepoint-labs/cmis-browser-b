@@ -27,7 +27,7 @@ public class MainIT {
     public void cmisTest() throws Exception{
         cmisHelper.connect();
         String version = "CMIS_1_0";
-        assertEquals(cmisHelper.getVersion(),version);
+        assertEquals(version,cmisHelper.getVersion());
     }
 
 }

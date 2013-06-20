@@ -18,6 +18,11 @@ public class BrowserWebSteps {
         pages.home().open();
     }
 
+    @Then("Find title  $Hallo user")
+    public void findTitle(String title){
+        pages.home().found(title);
+    }
+
 /*
     @When("user opens Data Files page")
     public void userClicksOnDataFiles(){

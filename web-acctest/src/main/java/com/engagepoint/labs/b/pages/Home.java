@@ -11,7 +11,7 @@ public class Home extends AbstractPage {
     }
 
     public void open() {
-        //// get("http://localhost:8080/trader-runner/"); --- > url in story
+        get("http://localhost:8080/home.xhtml"); //  --- > url in story
         manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 

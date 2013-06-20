@@ -8,5 +8,4 @@ So that I can achieve a business goal
 Scenario: User searches for a single step
 
 Given user is on Home page
-When user opens Find Steps page
-Then Find Steps page is shown
+Then Find title Hallo user

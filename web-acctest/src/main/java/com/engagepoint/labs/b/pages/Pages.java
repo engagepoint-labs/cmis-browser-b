@@ -8,6 +8,7 @@ public class Pages {
 
     private final WebDriverProvider driverProvider;
     private Home home;
+    private Index index;
 
     public Pages(WebDriverProvider driverProvider) {
         this.driverProvider = driverProvider;
@@ -20,6 +21,12 @@ public class Pages {
         return home;
     }
 
+    public Index index(){
+        if ( index == null ){
+            index = new Index(driverProvider);
+        }
+        return index;
+    }
 
 
 

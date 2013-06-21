@@ -3,11 +3,11 @@ package com.engagepoint.labs.b.steps;
 import com.engagepoint.labs.b.pages.Pages;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
-import org.jbehave.core.annotations.When;
 
 public class BrowserWebSteps {
 
     private final Pages pages;
+
 
     public BrowserWebSteps(Pages pages) {
         this.pages = pages;
@@ -23,6 +23,15 @@ public class BrowserWebSteps {
         pages.home().found(title);
     }
 
+    @Given("user is on Index page")
+    public void userIsOnIndexPage(){
+        pages.index().open();
+    }
+
+    @Then("Find text $title")
+    public void findText(String title){
+        pages.index().found(title);
+    }
 
 
 

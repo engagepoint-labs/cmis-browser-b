@@ -1,6 +1,8 @@
 package com.engagepoint.labs.b.core;
 
-public class BrowserItem
+import java.io.Serializable;
+
+public class BrowserItem   implements Serializable
 {
     private String type;
     private String name;

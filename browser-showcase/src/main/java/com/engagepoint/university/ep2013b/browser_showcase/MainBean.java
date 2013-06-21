@@ -1,6 +1,7 @@
-package com.engagepoint.labs.b.web;
+package com.engagepoint.university.ep2013b.browser_showcase;
 
-import com.engagepoint.labs.b.core.*;
+import com.engagepoint.university.ep2013b.browser_api.BrowserItem;
+import com.engagepoint.university.ep2013b.browser_cmis.CMISHelper;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>browser</artifactId>
+        <groupId>com.engagepoint.university.ep2013b</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>browser-showcase</artifactId>
+    <packaging>war</packaging>
+
+    <name>browser-showcase</name>
+    <url>http://maven.apache.org</url>
+
+    <dependencies>
+
+        <!-- ep2013b -->
+        <dependency>
+            <groupId>com.engagepoint.university.ep2013b</groupId>
+            <artifactId>browser-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.engagepoint.university.ep2013b</groupId>
+            <artifactId>browser-cmis</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- JSF -->
+        <dependency>
+            <groupId>com.sun.faces</groupId>
+            <artifactId>jsf-api</artifactId>
+            <version>2.2.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.faces</groupId>
+            <artifactId>jsf-impl</artifactId>
+            <version>2.2.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- PrimeFaces -->
+        <dependency>
+            <groupId>org.primefaces</groupId>
+            <artifactId>primefaces</artifactId>
+            <version>3.5</version>
+        </dependency>
+
+        <!-- Chemistry -->
+        <dependency>
+            <groupId>org.apache.chemistry.opencmis</groupId>
+            <artifactId>chemistry-opencmis-server-inmemory</artifactId>
+            <type>war</type>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.2.2</version>
+        </dependency>
+    </dependencies>
+
+</project>

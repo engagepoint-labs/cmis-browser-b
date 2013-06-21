@@ -6,6 +6,7 @@
       xmlns:p="http://primefaces.org/ui">
 
 <h:body>
+    <h:form>
     <h1>Root's Folder:</h1>
     <h3>Message:</h3>#{bean.message}
     <p/>
@@ -14,6 +15,8 @@
     <p:dataList value="#{bean.list}" var="f" itemType="disc">
         <b>#{f.name}</b>  (#{f.type})
     </p:dataList>
+
+    </h:form>
 </h:body>
 </html>
 

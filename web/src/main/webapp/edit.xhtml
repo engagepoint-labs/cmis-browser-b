@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:body>
+    <h:form>
+
+    <h:panelGrid columns="2">
+        <!-- TODO: ID should be read-only -->
+        <h:outputLabel value="ID:"/>
+        <h:inputText value="#{boxbean.editable.id}"/>
+
+        <h:outputLabel value="Fist name:"/>
+        <h:inputText value="#{boxbean.editable.firstname}"/>
+
+        <h:outputLabel value="Last name:"/>
+        <h:inputText value="#{boxbean.editable.lastname}"/>
+
+        <h:commandButton action="list.xhtml" value="Cancel" immediate="true"/>
+        <h:commandButton action="#{mainbean.update(boxbean.editable)}" value="Save"/>
+    </h:panelGrid>
+
+    </h:form>
+</h:body>
+</html>

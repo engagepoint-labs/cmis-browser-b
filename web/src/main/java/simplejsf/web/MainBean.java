@@ -13,8 +13,7 @@ import java.util.List;
 @RequestScoped
 public class MainBean implements Serializable
 {
-    private List<Person> persons = new ArrayList<Person>();
-
+    private Person editable = new Person();
 
     public MainBean()
     {
@@ -25,10 +24,6 @@ public class MainBean implements Serializable
     {
         Log.println("");
         Log.println("MainBean.init() ---------------------------------");
-
-        persons.add(new Person(persons.size(), "Bilbo", "Bagins"));
-        persons.add(new Person(persons.size(), "Thorin", "Oakenshield"));
-        persons.add(new Person(persons.size(), "Gandalf", "White"));
     }
 
     @PreDestroy
@@ -37,20 +32,33 @@ public class MainBean implements Serializable
         Log.println("MainBean.destroy()");
     }
 
-
-    public List<Person> getPersons()
+    public Person getEditable()
     {
-        return persons;
+        Log.println("MainBean.getEditable()");
+
+        return editable;
     }
 
-
-    public String update(Person person)
+    public List<Person> getData()
     {
-        Log.println("MainBean.update(" + person.hashCode() + ")");
+        Log.println("MainBean.getData()");
 
-        Person updated = persons.get(person.getId());
-        updated.setLastname(person.getLastname());
-        updated.setFirstname(person.getFirstname());
+        return Storage.select();
+    }
+
+    public String edit(Person selected)
+    {
+        Log.println("MainBean.edit(" + selected.getId() + ")");
+        this.editable = selected;
+
+        return "edit.xhtml";
+    }
+
+    public String update()
+    {
+        Log.println("MainBean.update(" + editable.getId() + ")");
+
+        Storage.update(editable);
 
         return "list.xhtml";
     }

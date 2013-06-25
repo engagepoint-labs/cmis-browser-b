@@ -3,11 +3,17 @@ package simplejsf.core;
 
 public class Person
 {
-//    private final int id;
+    //    private final int id;
     private int id;
     private String lastname;
     private String firstname;
 
+    public Person()
+    {
+        this.id = -1;
+        this.lastname = "none";
+        this.firstname = "none";
+    }
 
     public Person(int id, String firstname, String lastname)
     {
@@ -20,6 +26,8 @@ public class Person
 
     public void setId(int id)
     {
+        Log.println("Person.setId() = " + id);
+
         this.id = id;
     }
 

@@ -3,22 +3,32 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html">
-<head>
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
     <title>Edit</title>
-</head>
+</h:head>
 <h:body>
     <h:form>
 
+        <p:dataTable>
+            <p:column headerText="UserName">
+                <h:outputText value="#{param.name}" />
+            </p:column>
 
-                <h:inputText value="#{param.name}"/>
+            <p:column headerText="UserLastName">
+                <h:outputText value="#{param.lastName}" />
+            </p:column>
 
+        </p:dataTable>
 
-                <h:inputText value="#{param.lastname}"/>
+        <p:commandButton value="Cancel"
+                         action="list?faces-redirect=true"
+                         ajax="false"/>
 
-
-
-        <h:commandButton value="Cancel" action="list" immediate="true"/>
+        <p:commandButton value="Update"
+                         action="list?faces-redirect=true"
+                         ajax="false"/>
     </h:form>
 </h:body>
 </html>

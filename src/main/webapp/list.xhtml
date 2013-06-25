@@ -5,25 +5,38 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui">
-<head>
+<h:head>
     <title>List</title>
-</head>
+</h:head>
 <h:body>
     <h:form>
 
 
         <p:dataTable var="users" value="#{userBean.usersList}">
             <p:column headerText="UserName">
-                <h:outputText value="#{users.name}" />
+                <h:outputText value="#{users.name}"/>
             </p:column>
 
             <p:column headerText="UserLastName">
-                <h:outputText value="#{users.lastName}" />
+                <h:outputText value="#{users.lastName}"/>
+            </p:column>
+
+            <p:column headerText="Action">
+                <p:commandButton value="Edit"
+                                 action="edit?faces-redirect=true"
+                                 ajax="false">
+                    <f:param name="name" value="#{users.name}"/>
+                    <f:param name="lastName" value="#{users.lastName}"/>
+                </p:commandButton>
+
+                <p:commandButton value="Delete"
+                                 action="delete?faces-redirect=true"
+                                 disabled="true"/>
+
             </p:column>
 
         </p:dataTable>
 
-        <h:commandButton value="Home" action="home" immediate="true"/>
 
     </h:form>
 </h:body>

@@ -12,7 +12,7 @@ import java.util.*;
  * Time: 2:02 PM
  * To change this template use File | Settings | File Templates.
  */
-@ManagedBean(name="listBean", eager=true)
+@ManagedBean(name = "listBean", eager = true)
 @SessionScoped
 public class ListBean {
     private Map<Long, User> usersMap = new HashMap<Long, User>();
@@ -29,7 +29,7 @@ public class ListBean {
     }
 
     public List<User> getUsers() {
-        return new ArrayList<User>( usersMap.values());
+        return new ArrayList<User>(usersMap.values());
     }
 
     public User getUserById(long id) {

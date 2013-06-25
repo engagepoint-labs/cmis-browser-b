@@ -1,11 +1,9 @@
 package core;
 
-import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
+import javax.faces.event.ComponentSystemEvent;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,13 +12,14 @@ import javax.servlet.http.HttpServletRequest;
  * Time: 1:56 PM
  * To change this template use File | Settings | File Templates.
  */
-@ManagedBean(name="editBean", eager=true)
+@ManagedBean(name = "editBean", eager = true)
 @ViewScoped
 public class EditBean {
     User user;
     private Long id;
     @ManagedProperty("#{listBean}")
     ListBean listBean;
+
 
     public ListBean getListBean() {
         return listBean;
@@ -41,13 +40,13 @@ public class EditBean {
     public EditBean() {
     }
 
-    @PostConstruct
-    public void init() {
+
+    public void init(ComponentSystemEvent event) {
         user = listBean.getUserById(getId());
     }
 
-    public void save() {
-
+    public String save() {
+         return "save";
     }
 
     public User getUser() {

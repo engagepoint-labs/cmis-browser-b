@@ -15,7 +15,7 @@ import java.util.List;
  * Time: 1:00 PM
  * To change this template use File | Settings | File Templates.
  */
-@ManagedBean(name="userBean", eager=true)
+@ManagedBean(name = "userBean", eager = true)
 @RequestScoped
 public class UserBean implements Serializable {
 
@@ -24,7 +24,8 @@ public class UserBean implements Serializable {
 
     List<User> list;
 
-    public UserBean() {}
+    public UserBean() {
+    }
 
     @PostConstruct
     public void init() {

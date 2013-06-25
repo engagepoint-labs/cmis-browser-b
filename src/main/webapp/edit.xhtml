@@ -21,16 +21,30 @@
         <h:inputHidden id="id" value="#{editBean.user.id}"/>
         <h:panelGrid columns="2">
             <h:outputText value="Name"/>
-            <p:inputText value="#{editBean.user.name}"/>
+            <p:inputText value="#{editBean.firstName}"/>
             <h:outputText value="Last Name"/>
-            <p:inputText value="#{editBean.user.lastName}" required="true" requiredMessage="dsfsfsdfsddsff">
+            <p:inputText value="#{editBean.lastName}" required="true" requiredMessage="dsfsfsdfsddsff">
                     </p:inputText>
         </h:panelGrid>
 
 
         <p:commandButton value="Save"
-                         action="#{editBean.save}"
+                         action="#{editBean.check}"
+                         oncomplete="dialog.show()"
+                         />
+        <p:commandButton value="Cancel"
+                         action="list.xhtml"
+                         immediate="true"
                          ajax="false"/>
+        <p:dialog widgetVar="dialog">
+            <p:commandButton value="Save"
+                             action="#{editBean.save}"
+                             ajax="false"/>
+            <p:commandButton value="Cancel"
+                             onclick="dialog.hide()"
+                             immediate="true"
+                             ajax="false"/>
+        </p:dialog>
     </h:form>
 </h:body>
 </html>

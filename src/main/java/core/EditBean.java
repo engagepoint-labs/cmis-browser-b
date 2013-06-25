@@ -20,6 +20,8 @@ public class EditBean {
     @ManagedProperty("#{listBean}")
     ListBean listBean;
 
+    private String lastName;
+    private String firstName;
 
     public ListBean getListBean() {
         return listBean;
@@ -40,12 +42,35 @@ public class EditBean {
     public EditBean() {
     }
 
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
     public void init(ComponentSystemEvent event) {
         user = listBean.getUserById(getId());
+        lastName = user.getLastName();
+        firstName = user.getName();
+    }
+
+    public void check(){
+
     }
 
     public String save() {
+         user.setName(firstName);
+        user.setLastName(lastName);
          return "save";
     }
 

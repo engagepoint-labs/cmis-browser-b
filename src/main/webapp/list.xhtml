@@ -11,28 +11,21 @@
 <h:body>
     <h:form>
 
-        <p:dataTable var="users" value="#{userBean.usersList}">
+        <p:dataTable  var="u" value="#{userBean.usersList}">
+
+
+
             <p:column headerText="UserName">
-                <h:outputText value="#{users.name}"/>
+                <h:outputLink value="#{request.contextPath}/edit.xhtml">
+                    <f:param name="id" value="#{u.id}"/>
+                    <h:outputText value="#{u.name}"/>
+                </h:outputLink>
             </p:column>
 
             <p:column headerText="UserLastName">
-                <h:outputText value="#{users.lastName}"/>
+                <h:outputText value="#{u.lastName}"/>
             </p:column>
 
-            <p:column headerText="Action">
-                <p:commandButton value="Edit"
-                                 action="edit?faces-redirect=true"
-                                 ajax="false">
-                    <f:param name="name" value="#{users.name}"/>
-                    <f:param name="lastName" value="#{users.lastName}"/>
-                </p:commandButton>
-
-                <p:commandButton value="Delete"
-                                 action="delete?faces-redirect=true"
-                                 disabled="true"/>
-
-            </p:column>
 
         </p:dataTable>
 

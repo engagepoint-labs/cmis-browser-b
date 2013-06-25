@@ -10,13 +10,15 @@ import java.io.Serializable;
  * To change this template use File | Settings | File Templates.
  */
 public class User implements Serializable {
+    private Long id;
     private String name;
     private String lastName;
 
     public User() {
     }
 
-    public User(String name, String lastName) {
+    public User(Long id, String name, String lastName) {
+        this.id = id;
         this.name = name;
         this.lastName = lastName;
     }
@@ -35,5 +37,13 @@ public class User implements Serializable {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

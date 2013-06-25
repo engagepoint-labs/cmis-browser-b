@@ -2,9 +2,10 @@ package core;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -18,21 +19,27 @@ import java.util.List;
 @RequestScoped
 public class UserBean implements Serializable {
 
-    private List<User> usersList = new ArrayList<User>();
+    @ManagedProperty("#{listBean}")
+    ListBean listBean;
+
+    List<User> list;
 
     public UserBean() {}
 
     @PostConstruct
     public void init() {
-        usersList.add(new User("Ivan","Ivanov"));
-        usersList.add(new User("Alex","Petrov"));
-        usersList.add(new User("Sergey","Timkov"));
-        usersList.add(new User("Oleg","Alkov"));
+        list = listBean.getUsers();
     }
 
-    public List<User> getUsersList() {
-        return usersList;
+    public Collection<User> getUsersList() {
+        return list;
     }
 
+    public ListBean getListBean() {
+        return listBean;
+    }
 
+    public void setListBean(ListBean listBean) {
+        this.listBean = listBean;
+    }
 }

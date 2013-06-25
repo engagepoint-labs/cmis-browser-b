@@ -45,6 +45,11 @@
             <artifactId>commons-fileupload</artifactId>
             <version>1.2.2</version>
         </dependency>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>6.0</version>
+        </dependency>
 
     </dependencies>
 
@@ -102,6 +107,12 @@
                     <configuration>
                         <properties>
                             <cargo.servlet.port>8080</cargo.servlet.port>
+                            <cargo.jvmargs>
+                                -Xdebug
+                                -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=18000
+                                -Xnoagent
+                                -Djava.compiler=NONE
+                            </cargo.jvmargs>
                         </properties>
                     </configuration>
 

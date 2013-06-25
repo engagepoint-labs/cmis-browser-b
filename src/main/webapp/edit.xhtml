@@ -5,29 +5,29 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui">
+<f:metadata>
+    <f:viewParam name="id" value="#{editBean.id}" />
+</f:metadata>
 <h:head>
     <title>Edit</title>
 </h:head>
+
 <h:body>
     <h:form>
-
-        <p:dataTable>
-            <p:column headerText="UserName">
-                <h:outputText value="#{param.userName}" />
-            </p:column>
-
-            <p:column headerText="UserLastName">
-                <h:outputText value="#{param.lastName}" />
-            </p:column>
-
-        </p:dataTable>
-
+        <h:inputHidden id="id" value="#{editBean.user.id}"/>
+        <h:panelGrid columns="2">
+            <h:outputText value="Last Name"/>
+            <p:inputText value="#{editBean.user.lastName}"/>
+            <h:outputText value="Name"/>
+            <p:inputText value="#{editBean.user.name}"/>
+        </h:panelGrid>
         <p:commandButton value="Cancel"
-                         action="list?faces-redirect=true"
+                         action="list"
+                         immediate="true"
                          ajax="false"/>
 
-        <p:commandButton value="Update"
-                         action="list?faces-redirect=true"
+        <p:commandButton value="Save"
+                         action="#{editBean.save}"
                          ajax="false"/>
     </h:form>
 </h:body>

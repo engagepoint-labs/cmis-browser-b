@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+
+<h:head>
+    <title>
+        User list
+    </title>
+</h:head>
+
+<h:body>
+
+    <h:form>
+
+        <p/>
+        <table>
+
+         <tr>
+            <td style="width: 140px;" >
+             <h:outputText>             </h:outputText>
+            </td>
+            <td style="width: 300px;">
+                <h:outputText value="   User list:  click lastname to edit record"
+                              style="font-weight: bold;color: indigo;font-size: 110%; height: 50px;" />
+
+            </td>
+
+         </tr>
+         <tr>
+             <td style="width: 140px;" >
+                 <h:outputText>             </h:outputText>
+             </td>
+
+             <td style="width: 300px;">
+
+                 <h:dataTable var="user" value="#{listbean.list}" title="Choose user for editing:" border="1"
+                              style="width: 250px;" >
+
+                     <h:column rowHeader="true"  >
+                         <h:outputText value="#{user.firstname}" style="color: darkgreen;width: 120px;text-align: center;"/>
+                     </h:column>
+                     <h:column rowHeader="true" >
+                         <h:commandLink action="#{listbean.edit(user)}" value="#{user.lastname}"
+                                        style="color: purple;width: 120px;text-align: center;"/>
+                     </h:column>
+
+                 </h:dataTable>
+
+
+             </td>
+
+         </tr>
+       </table>
+
+    </h:form>
+</h:body>
+</html>

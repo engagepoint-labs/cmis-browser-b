@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+
+<h:head>
+    <title>
+        Edit user page
+    </title>
+</h:head>
+
+<h:body>
+
+    <h:form>
+
+        <p/>
+
+        <h:outputText value="Edit selected user:"/>
+        <p/>
+
+        <h:panelGrid columns="2">
+
+            <h:outputText value="First name:   " style="width: 150px;"   />
+            <h:inputText value="#{editbean.edited.firstname}" style="width: 200px;"/>
+            <h:outputText value="Last name:    "  style="width: 150px;"  />
+            <h:inputText value="#{editbean.edited.lastname}" style="width: 200px;"
+                         required="true" requiredMessage="You HAVE to type last name!!"
+                         id="lastname"/>
+            <h:message for="lastname"  style="width: 150px;color: red;"  />
+            <h:outputText value="    "  style="width: 200px" />
+
+            <h:commandButton value="Save" action="#{editbean.save()}" style="width: 150px;" />
+            <h:commandButton value="Cancel" action="#{editbean.cancel()}" style="width: 200px;"  />
+
+
+        </h:panelGrid>
+
+    </h:form>
+
+</h:body>
+</html>

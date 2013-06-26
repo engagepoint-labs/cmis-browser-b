@@ -3,7 +3,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
-import java.util.ArrayList;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,6 +18,8 @@ public class Editbean  implements Serializable {
 
     private User user;
 
+    private String a;
+    private String b;
 
     @ManagedProperty(value="#{listbean}")
     private Listbean listbean;

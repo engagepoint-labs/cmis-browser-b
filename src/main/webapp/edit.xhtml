@@ -4,6 +4,7 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:utils="http://java.sun.com/jsf/composite/utils"
       xmlns:p="http://primefaces.org/ui">
 
 
@@ -39,6 +40,14 @@
 
 
         </p:panelGrid>
+
+        <p/>
+
+         <utils:useredit
+                 firstValue="#{editbean.user.firstname}"
+                 lastValue="#{editbean.user.lastname}"
+                 saveAction="#{editbean.save()}"
+                 cancelAction="#{editbean.cancel()}"  />
 
     </h:form>
 

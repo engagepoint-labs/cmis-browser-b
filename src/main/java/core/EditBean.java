@@ -1,5 +1,7 @@
 package core;
 
+import org.primefaces.context.RequestContext;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -15,13 +17,18 @@ import javax.faces.event.ComponentSystemEvent;
 @ManagedBean(name = "editBean", eager = true)
 @ViewScoped
 public class EditBean {
-    User user;
+    private User user;
     private Long id;
+    private String lastName;
+    private String firstName;
+
     @ManagedProperty("#{listBean}")
     ListBean listBean;
 
-    private String lastName;
-    private String firstName;
+
+    public EditBean() {
+    }
+
 
     public ListBean getListBean() {
         return listBean;
@@ -37,9 +44,6 @@ public class EditBean {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public EditBean() {
     }
 
     public String getLastName() {
@@ -64,14 +68,14 @@ public class EditBean {
         firstName = user.getName();
     }
 
-    public void check(){
-
+    public String check() {
+        return "check";
     }
 
     public String save() {
-         user.setName(firstName);
+        user.setName(firstName);
         user.setLastName(lastName);
-         return "save";
+        return "save";
     }
 
     public User getUser() {

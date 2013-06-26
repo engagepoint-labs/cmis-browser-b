@@ -7,8 +7,8 @@
       xmlns:p="http://primefaces.org/ui">
 
 <f:metadata>
-    <f:viewParam name="id" value="#{editBean.id}" />
-    <f:event type="preRenderView" listener="#{editBean.init}" />
+    <f:viewParam name="id" value="#{editBean.id}"/>
+    <f:event type="preRenderView" listener="#{editBean.init}"/>
 </f:metadata>
 
 <h:head>
@@ -16,27 +16,33 @@
 </h:head>
 
 <h:body>
-    <h:form>
-        <h:messages />
+    <h:form id="form">
+
         <h:inputHidden id="id" value="#{editBean.user.id}"/>
         <h:panelGrid columns="2">
             <h:outputText value="Name"/>
             <p:inputText value="#{editBean.firstName}"/>
             <h:outputText value="Last Name"/>
-            <p:inputText value="#{editBean.lastName}" required="true" requiredMessage="dsfsfsdfsddsff">
-                    </p:inputText>
+            <p:inputText value="#{editBean.lastName}" id="lastMessage" required="true"
+                         requiredMessage="Last name cannot be empty ">
+                <p:message for="lastMessage"/>
+            </p:inputText>
         </h:panelGrid>
-
 
         <p:commandButton value="Save"
                          action="#{editBean.check}"
-                         oncomplete="dialog.show()"
-                         />
+                         oncomplete="if (!args.validationFailed) {dialog.show()}
+                         else {confirmation.show()}"
+        />
+
         <p:commandButton value="Cancel"
-                         action="list.xhtml"
+                         action="list"
                          immediate="true"
                          ajax="false"/>
+
         <p:dialog widgetVar="dialog">
+            <h:outputText value="Do you want to save data?" />
+            <br></br>
             <p:commandButton value="Save"
                              action="#{editBean.save}"
                              ajax="false"/>
@@ -45,6 +51,12 @@
                              immediate="true"
                              ajax="false"/>
         </p:dialog>
+
+        <p:confirmDialog widgetVar="confirmation" message="Last name is required!"
+                         header="Error">
+            <p:commandButton value="OK" onclick="confirmation.hide()"/>
+        </p:confirmDialog>
+
     </h:form>
 </h:body>
 </html>

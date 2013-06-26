@@ -18,14 +18,13 @@ public class Editbean  implements Serializable {
 
     private User user;
 
-    private String a;
-    private String b;
-
     @ManagedProperty(value="#{listbean}")
     private Listbean listbean;
 
 
-
+    public Listbean getListbean() {
+        return listbean;
+    }
 
     public void setListbean(Listbean listbean) {
         this.listbean = listbean;

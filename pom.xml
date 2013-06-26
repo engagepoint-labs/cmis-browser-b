@@ -1,189 +1,106 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
-    <groupId>com.engagepoint.university.ep2013b</groupId>
-    <artifactId>browser</artifactId>
-    <packaging>pom</packaging>
+    <groupId>featureLABB31</groupId>
+    <artifactId>featureLABB31</artifactId>
+    <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
+    <name>featureLABB31 Maven Webapp</name>
+    <url>http://maven.apache.org</url>
 
-    <modules>
-        <module>browser-api</module>
-        <module>browser-cmis</module>
-        <module>browser-component</module>
-        <module>browser-showcase</module>
-        <module>browser-test</module>
-    </modules>
 
-    <dependencyManagement>
-        <dependencies>
-            <!-- JUnit -->
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>4.11</version>
-                <scope>test</scope>
-            </dependency>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.faces</groupId>
+            <artifactId>jsf-api</artifactId>
+            <version>2.2.0</version>
+            <scope>provided</scope>
+        </dependency>
 
-            <dependency>
-                <groupId>org.apache.chemistry.opencmis</groupId>
-                <artifactId>chemistry-opencmis-server-inmemory</artifactId>
-                <type>war</type>
-                <version>0.9.0-EP-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.chemistry.opencmis</groupId>
-                <artifactId>chemistry-opencmis-client-impl</artifactId>
-                <version>0.9.0-EP-SNAPSHOT</version>
-            </dependency>
-        </dependencies>
+        <dependency>
+            <groupId>com.sun.faces</groupId>
+            <artifactId>jsf-impl</artifactId>
+            <version>2.2.0</version>
+            <scope>provided</scope>
+        </dependency>
 
-    </dependencyManagement>
+        <!-- PrimeFaces -->
+        <dependency>
+            <groupId>org.primefaces</groupId>
+            <artifactId>primefaces</artifactId>
+            <version>3.5</version>
+            <scope>provided</scope>
+        </dependency>
 
-    <prerequisites>
-        <maven>2.2.1</maven>
-    </prerequisites>
+    </dependencies>
 
     <build>
-
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-clean-plugin</artifactId>
-                    <version>2.5</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-deploy-plugin</artifactId>
-                    <version>2.7</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-install-plugin</artifactId>
-                    <version>2.4</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-site-plugin</artifactId>
-                    <version>3.3</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.1</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-jar-plugin</artifactId>
-                    <version>2.4</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-resources-plugin</artifactId>
-                    <version>2.6</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.15</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-war-plugin</artifactId>
-                    <version>2.3</version>
-                </plugin>
-
-            </plugins>
-        </pluginManagement>
-
         <plugins>
-
-            <!-- Maven versions plugin-->
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>versions-maven-plugin</artifactId>
-                <version>2.1</version>
-            </plugin>
-
-            <!-- JaCoCo plugin -->
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.6.3.201306030806</version>
+                <groupId>org.codehaus.cargo</groupId>
+                <artifactId>cargo-maven2-plugin</artifactId>
+                <version>1.4.0</version>
 
                 <executions>
                     <execution>
-                        <id>prepare-agent</id>
+                        <id>start-container</id>
+                        <phase>pre-integration-test</phase>
                         <goals>
-                            <goal>prepare-agent</goal>
+                            <goal>start</goal>
                         </goals>
+
                     </execution>
                     <execution>
-                        <id>report</id>
-                        <phase>prepare-package</phase>
+                        <id>stop-container</id>
+                        <phase>post-integration-test</phase>
                         <goals>
-                            <goal>report</goal>
+                            <goal>stop</goal>
                         </goals>
-                    </execution>
-                    <execution>
-                        <id>check</id>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                        <configuration>
 
-                            <rules>
-                                <rule>
-                                    <element>BUNDLE</element>
-                                    <limits>
-
-                                        <limit>
-                                            <counter>INSTRUCTION</counter>
-                                            <value>COVEREDRATIO</value>
-                                            <minimum>0</minimum>
-                                        </limit>
-
-                                        <limit>
-                                            <counter>BRANCH</counter>
-                                            <value>COVEREDRATIO</value>
-                                            <minimum>0</minimum>
-                                        </limit>
-
-                                        <limit>
-                                            <counter>COMPLEXITY</counter>
-                                            <value>MISSEDCOUNT</value>
-                                            <maximum>50</maximum>
-                                        </limit>
-
-                                        <limit>
-                                            <counter>LINE</counter>
-                                            <value>MISSEDCOUNT</value>
-                                            <maximum>50</maximum>
-                                        </limit>
-
-                                        <limit>
-                                            <counter>METHOD</counter>
-                                            <value>MISSEDCOUNT</value>
-                                            <maximum>50</maximum>
-                                        </limit>
-
-                                        <limit>
-                                            <counter>CLASS</counter>
-                                            <value>MISSEDCOUNT</value>
-                                            <maximum>50</maximum>
-                                        </limit>
-
-                                    </limits>
-
-                                </rule>
-                            </rules>
-                        </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <container>
+                        <containerId>tomcat7x</containerId>
+                        <zipUrlInstaller>
+                            <url>http://apache.cp.if.ua/tomcat/tomcat-7/v7.0.41/bin/apache-tomcat-7.0.41.zip</url>
+                            <downloadDir>${user.home}/.m2/cargo/containers</downloadDir>
+                        </zipUrlInstaller>
+                        <dependencies>
+                            <dependency>
+                                <groupId>com.sun.faces</groupId>
+                                <artifactId>jsf-api</artifactId>
+                            </dependency>
+                            <dependency>
+                                <groupId>com.sun.faces</groupId>
+                                <artifactId>jsf-impl</artifactId>
+                            </dependency>
+                        </dependencies>
+                    </container>
+                    <configuration>
+                        <properties>
+                            <cargo.servlet.port>8080</cargo.servlet.port>
+                        </properties>
+                    </configuration>
 
+                    <deployables>
+                        <deployable>
+                            <groupId>${project.artifactId}</groupId>
+                            <artifactId>${project.artifactId}</artifactId>
+                            <type>war</type>
+                            <properties>
+                                <context>/</context>
+                            </properties>
+                        </deployable>
+                    </deployables>
+
+                </configuration>
             </plugin>
         </plugins>
     </build>

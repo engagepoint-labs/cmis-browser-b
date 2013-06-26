@@ -1,5 +1,6 @@
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -19,11 +20,17 @@ public class Listbean implements Serializable {
   private ArrayList<User> list = new ArrayList<User>();
   private User selected = new User();
 
-    /*
+
     @ManagedProperty(value="#{users}")
     private UserDB users;
-   */
 
+    public UserDB getUsers() {
+        return users;
+    }
+
+    public void setUsers(UserDB users) {
+        this.users = users;
+    }
 
     public Listbean() {
 
@@ -32,6 +39,14 @@ public class Listbean implements Serializable {
     @PostConstruct
     public void init(){
 
+             for (User us:users.getDb()){
+
+                 System.out.println(us);
+
+             }
+        list = users.getDb();
+
+     /*
         int id = 0;
 
         User us = new User(++id, "Ivan", "Petrov");
@@ -48,6 +63,7 @@ public class Listbean implements Serializable {
         list.add(us);
         us = new User(++id, "Stas","Kamarin");
         list.add(us);
+     */
 
     }
 

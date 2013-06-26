@@ -25,9 +25,7 @@ public class Editbean  implements Serializable {
     private Listbean listbean;
 
 
-    public Listbean getListbean() {
-        return listbean;
-    }
+
 
     public void setListbean(Listbean listbean) {
         this.listbean = listbean;

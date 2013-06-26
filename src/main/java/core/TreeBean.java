@@ -26,9 +26,7 @@ public class TreeBean implements Serializable {
 
     private TreeNode selectedNode;
 
-    public TreeBean() {
-
-    }
+    public TreeBean() {}
 
     @PostConstruct
     public void init() {
@@ -48,7 +46,7 @@ public class TreeBean implements Serializable {
         TreeNode node010 = new DefaultTreeNode("Node 0.1.0", node01);
 
         TreeNode node100 = new DefaultTreeNode("Node 1.0.0", node10);
-        selectedNode = node1;
+        setSelectedNode(node1);
     }
 
     public TreeNode getRoot() {
@@ -65,7 +63,8 @@ public class TreeBean implements Serializable {
 
     public void displaySelectedSingle(ActionEvent event) {
         if(selectedNode != null) {
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Selected", selectedNode.getData().toString());
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                    "Selected", selectedNode.getData().toString());
 
             FacesContext.getCurrentInstance().addMessage(null, message);
         }

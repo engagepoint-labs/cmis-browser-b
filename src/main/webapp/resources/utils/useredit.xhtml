@@ -4,18 +4,27 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:composite="http://java.sun.com/jsf/composite"
       xmlns:p="http://primefaces.org/ui">
 
 
-<h:head>
-    <title>
-        Edit user page
-    </title>
-</h:head>
+<composite:interface>
 
-<h:body>
+    <composite:attribute name="firstValue" />
+    <composite:attribute name="lastValue" />
 
-    <h:form>
+     <composite:attribute name="saveAction"
+                         method-signature="java.lang.String action()" />
+    <composite:attribute name="cancelAction"
+                         method-signature="java.lang.String action()" />
+
+
+</composite:interface>
+
+<composite:implementation>
+
+
+<h:form>
 
         <p/>
 
@@ -26,21 +35,22 @@
         <p:panelGrid columns="2">
 
             <h:outputText value="First name:   " style="width: 120px;"   />
-            <h:inputText value="#{editbean.user.firstname}" style="width: 150px;"/>
+            <h:inputText value="#{cc.attrs.firstValue}" style="width: 150px;"/>
             <h:outputText value="Last name:    "  style="width: 120px;"  />
-            <h:inputText value="#{editbean.user.lastname}" style="width: 150px;"
+            <h:inputText value="#{cc.attrs.lastValue}" style="width: 150px;"
                          required="true" requiredMessage="You HAVE to type last name!!"
                          id="lastname"/>
             <p:message for="lastname"  style="width: 120px;color: red;"  />
             <h:outputText value="    "  style="width: 150px" />
 
-            <h:commandButton value="Save" action="#{editbean.save()}" style="width: 120px;" />
-            <h:commandButton value="Cancel" action="#{editbean.cancel()}" style="width: 150px;"  />
+            <h:commandButton value="Save" action="#{cc.attrs.saveAction}" style="width: 120px;" />
+            <h:commandButton value="Cancel" action="#{cc.attrs.cancelAction}" style="width: 150px;"  />
 
 
         </p:panelGrid>
 
     </h:form>
+</composite:implementation>
 
-</h:body>
+
 </html>

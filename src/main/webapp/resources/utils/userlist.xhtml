@@ -4,34 +4,38 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite"
       xmlns:p="http://primefaces.org/ui">
 
+<composite:interface>
 
-<h:head>
-    <title>
-        User list
-    </title>
-</h:head>
+    <composite:attribute name="list" />
 
-<h:body>
+    <composite:attribute name="selectAction"
+                         method-signature="java.lang.String action(User  user)" />
 
-    <h:form>
 
-        <p:dataTable var="user" value="#{listbean.list}" title="Choose user for editing:" border="1"
+</composite:interface>
+
+<composite:implementation>
+
+
+<h:form>
+
+        <p:dataTable var="user" value="#{cc.attrs.list}" title="Choose user for editing:" border="1"
                      style="width: 250px;" >
 
             <p:column rowHeader="true"  >
                 <h:outputText value="#{user.firstname}" style="color: darkgreen;width: 120px;text-align: center;"/>
             </p:column>
             <p:column rowHeader="true" >
-                <h:commandLink action="#{listbean.select(user)}" value="#{user.lastname}"
+                <h:commandLink action="#{cc.attrs.selectAction(user)}" value="#{user.lastname}"
                                style="color: purple;width: 120px;text-align: center;"/>
             </p:column>
 
         </p:dataTable>
 
-
-
     </h:form>
-</h:body>
+</composite:implementation>
+
 </html>

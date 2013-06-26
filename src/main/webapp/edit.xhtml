@@ -26,9 +26,9 @@
         <h:panelGrid columns="2">
 
             <h:outputText value="First name:   " style="width: 120px;"   />
-            <h:inputText value="#{listbean.selected.firstname}" style="width: 150px;"/>
+            <h:inputText value="#{editbean.user.firstname}" style="width: 150px;"/>
             <h:outputText value="Last name:    "  style="width: 120px;"  />
-            <h:inputText value="#{listbean.selected.lastname}" style="width: 150px;"
+            <h:inputText value="#{editbean.user.lastname}" style="width: 150px;"
                          required="true" requiredMessage="You HAVE to type last name!!"
                     id="lastname"/>
             <h:message for="lastname"  style="width: 120px;color: red;"  />

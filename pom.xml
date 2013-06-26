@@ -35,7 +35,11 @@
             <groupId>org.primefaces</groupId>
             <artifactId>primefaces</artifactId>
             <version>3.5</version>
-            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.2.2</version>
         </dependency>
 
     </dependencies>
@@ -47,24 +51,7 @@
                 <artifactId>cargo-maven2-plugin</artifactId>
                 <version>1.4.0</version>
 
-                <executions>
-                    <execution>
-                        <id>start-container</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>start</goal>
-                        </goals>
 
-                    </execution>
-                    <execution>
-                        <id>stop-container</id>
-                        <phase>post-integration-test</phase>
-                        <goals>
-                            <goal>stop</goal>
-                        </goals>
-
-                    </execution>
-                </executions>
                 <configuration>
                     <container>
                         <containerId>tomcat7x</containerId>

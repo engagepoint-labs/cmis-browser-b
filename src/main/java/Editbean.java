@@ -17,8 +17,7 @@ import java.util.ArrayList;
 @ViewScoped
 public class Editbean  implements Serializable {
 
-    private User selected = new User();
-    //private User edited = new User();
+    private User user;
 
 
     @ManagedProperty(value="#{listbean}")
@@ -43,65 +42,41 @@ public class Editbean  implements Serializable {
     public void init(){
 
 
-        selected = listbean.getSelected();
-
+        User selected = listbean.getSelected();
+        user = new User(selected.getId(), selected.getFirstname(), selected.getLastname());
         System.out.println("@PostConstruct");
         System.out.println("selected = "+selected);
         System.out.println("listbean selected   = "+listbean.getSelected());
-        selected = listbean.getSelected();
+
 
     }
 
 
-    public User getSelected() {
-        return selected;
+    public User getUser() {
+        return user;
     }
 
-    public void setSelected(User selected) {
-        this.selected = selected;
-    }
 
-    public Editbean(User selected) {
-        this.selected = selected;
-    }
-
-    public String edit(User us){
-
-        System.out.println("editbean.edit(User us)");
-        selected = us;
-
-        System.out.println("selected = "+selected);
-
-        return "edit";
-    }
 
     public String save(){
 
-        System.out.println("save(): selected = "+selected);
 
-        if(selected != null){
+        if(user != null){
 
-            ArrayList<User> list = listbean.getUsers().getDb();
-            int index = list.indexOf(selected);
-            if (index >= 0)
-            {
-                list.set(index,selected);
-                listbean.getUsers().setDb(list);
-                return "list";
-            }
-
-            return "edit";
+            listbean.getSelected().setFirstname(user.getFirstname());
+            listbean.getSelected().setLastname(user.getLastname());
+            return "list";
 
         }
         else {
-            return "edit";
+            return null;
         }
 
     }
 
     public String cancel(){
 
-        selected = new User();
+        user = null;
 
         return "list";
     }

@@ -1,12 +1,46 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html
-        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-    <title></title>
-</head>
-<body>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
 
-</body>
+
+<h:head>
+    <title>
+        Edit user page
+    </title>
+</h:head>
+
+<h:body>
+
+    <h:form>
+
+        <p/>
+
+        <h:outputText value="Edit selected user:"
+                      style="font-weight: bold;color: brown;font-size: 120%;height: 50px;" />
+        <p/>
+
+        <p:panelGrid columns="2">
+
+            <h:outputText value="First name:   " style="width: 120px;"   />
+            <h:inputText value="#{editbean.user.firstname}" style="width: 150px;"/>
+            <h:outputText value="Last name:    "  style="width: 120px;"  />
+            <h:inputText value="#{editbean.user.lastname}" style="width: 150px;"
+                         required="true" requiredMessage="You HAVE to type last name!!"
+                         id="lastname"/>
+            <p:message for="lastname"  style="width: 120px;color: red;"  />
+            <h:outputText value="    "  style="width: 150px" />
+
+            <h:commandButton value="Save" action="#{editbean.save()}" style="width: 120px;" />
+            <h:commandButton value="Cancel" action="#{editbean.cancel()}" style="width: 150px;"  />
+
+
+        </p:panelGrid>
+
+    </h:form>
+
+</h:body>
 </html>

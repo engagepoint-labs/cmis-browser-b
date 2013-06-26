@@ -23,7 +23,7 @@
                       style="font-weight: bold;color: brown;font-size: 120%;height: 50px;" />
         <p/>
 
-        <h:panelGrid columns="2">
+        <p:panelGrid columns="2">
 
             <h:outputText value="First name:   " style="width: 120px;"   />
             <h:inputText value="#{editbean.user.firstname}" style="width: 150px;"/>
@@ -31,14 +31,14 @@
             <h:inputText value="#{editbean.user.lastname}" style="width: 150px;"
                          required="true" requiredMessage="You HAVE to type last name!!"
                     id="lastname"/>
-            <h:message for="lastname"  style="width: 120px;color: red;"  />
+            <p:message for="lastname"  style="width: 120px;color: red;"  />
             <h:outputText value="    "  style="width: 150px" />
 
             <h:commandButton value="Save" action="#{editbean.save()}" style="width: 120px;" />
             <h:commandButton value="Cancel" action="#{editbean.cancel()}" style="width: 150px;"  />
 
 
-        </h:panelGrid>
+        </p:panelGrid>
 
     </h:form>
 

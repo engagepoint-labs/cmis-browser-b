@@ -39,31 +39,8 @@ public class Listbean implements Serializable {
     @PostConstruct
     public void init(){
 
-             for (User us:users.getDb()){
+         //list = users.getDb();
 
-                 System.out.println(us);
-
-             }
-        list = users.getDb();
-
-     /*
-        int id = 0;
-
-        User us = new User(++id, "Ivan", "Petrov");
-        list.add(us);
-        us = new User(++id, "Dmitro","Ivanov");
-        list.add(us);
-        us = new User(++id, "Danila","Severny");
-        list.add(us);
-        us = new User(++id, "Pavlo","Demidov");
-        list.add(us);
-        us = new User(++id, "Sergio","Suvorov");
-        list.add(us);
-        us = new User(++id, "Fedir","Olenev");
-        list.add(us);
-        us = new User(++id, "Stas","Kamarin");
-        list.add(us);
-     */
 
     }
 

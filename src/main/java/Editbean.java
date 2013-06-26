@@ -81,12 +81,12 @@ public class Editbean  implements Serializable {
 
         if(selected != null){
 
-            ArrayList<User> list = listbean.getList();
+            ArrayList<User> list = listbean.getUsers().getDb();
             int index = list.indexOf(selected);
             if (index >= 0)
             {
                 list.set(index,selected);
-                listbean.setList(list);
+                listbean.getUsers().setDb(list);
                 return "list";
             }
 

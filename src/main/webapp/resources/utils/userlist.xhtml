@@ -11,9 +11,10 @@
 
     <composite:attribute name="list" />
 
+    <!--
     <composite:attribute name="selectAction"
                          method-signature="java.lang.String action(User)" />
-
+     -->
 
 </composite:interface>
 
@@ -29,7 +30,7 @@
                 <h:outputText value="#{user.firstname}" style="color: darkgreen;width: 120px;text-align: center;"/>
             </p:column>
             <p:column rowHeader="true" >
-                <h:commandLink action="#{cc.attrs.selectAction(user)}" value="#{user.lastname}"
+                <h:commandLink action="edit" value="#{user.lastname}"
                                style="color: purple;width: 120px;text-align: center;"/>
             </p:column>
 

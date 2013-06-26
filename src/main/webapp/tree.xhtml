@@ -5,6 +5,12 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui">
+
+<f:metadata>
+    <f:viewParam name="id" value="#{treeBean.id}"/>
+    <f:event type="preRenderView" listener="#{treeBean.init}"/>
+</f:metadata>
+
 <h:head>
     <title>Tree</title>
 </h:head>
@@ -18,14 +24,12 @@
                 selection="#{treeBean.selectedNode}">
 
             <p:treeNode>
-                <h:outputText value="#{node}"/>
+                <h:outputLink value="/tree.html">
+                    <f:param name="id" value="#{treeBean.id}" />
+                </h:outputLink>
+
             </p:treeNode>
         </p:tree>
-
-        <p:commandButton value="Display Selected"
-                         update="messages"
-                         actionListener="#{treeBean.displaySelectedSingle}"
-                         id="btnDisplay"/>
 
     </h:form>
 </h:body>

@@ -7,10 +7,9 @@ package com.engagepoint.university.ep2013b.browser.showcase;
  * Time: 4:23 PM
  * To change this template use File | Settings | File Templates.
  */
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Logger;
+import org.primefaces.model.DefaultTreeNode;
+import org.primefaces.model.TreeNode;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -18,9 +17,8 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ComponentSystemEvent;
-
-import org.primefaces.model.DefaultTreeNode;
-import org.primefaces.model.TreeNode;
+import java.io.Serializable;
+import java.util.List;
 
 @ManagedBean(name = "treeBean", eager = true)
 @ViewScoped
@@ -30,6 +28,7 @@ public class TreeBean implements Serializable {
     private Long id;
     private String lastName;
     private String firstName;
+    private String marker="ZZZ";
 
     private TreeNode root;
     private TreeNode selectedNode;
@@ -55,6 +54,7 @@ public class TreeBean implements Serializable {
             if (user.getId().equals(getId())) {
                 tempRoot.setSelected(true);
                 isSelected = true;
+                marker =  user.getLastName();
                 TreeNode parent = tempRoot.getParent();
                 while (parent != null) {
                     parent.setExpanded(true);
@@ -132,4 +132,11 @@ public class TreeBean implements Serializable {
         this.listBean = listBean;
     }
 
+    public String getMarker() {
+        return marker;
+    }
+
+    public void setMarker(String marker) {
+        this.marker = marker;
+    }
 }

@@ -9,6 +9,9 @@ package core;
  */
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -31,6 +34,8 @@ public class TreeBean implements Serializable {
     private TreeNode root;
     private TreeNode selectedNode;
 
+    private List<TreeNode> listNodes = new ArrayList<TreeNode>();
+
     @ManagedProperty("#{listBean}")
     private ListBean listBean;
 
@@ -39,24 +44,20 @@ public class TreeBean implements Serializable {
 
     public void init(ComponentSystemEvent event) {
         root = new DefaultTreeNode("Root", null);
+        createNode(listBean.getUsers(), root);
+    }
 
-        TreeNode node0 = new DefaultTreeNode(new User(1L, "root", "Ivanov"), root);
-        TreeNode node1 = new DefaultTreeNode(new User(4L, "root2", "Timkov"), root);
-        TreeNode node2 = new DefaultTreeNode(new User(6L, "root3", "Panov"), root);
+    private void createNode(List<User> list, TreeNode node) {
+        for (User user : list) {
 
-        TreeNode node01 = new DefaultTreeNode(new User(2L, "rootChild1", "Ivanov"), node0);
-        TreeNode node02 = new DefaultTreeNode(new User(3L, "rootChild2", "Petrov"), node0);
+            TreeNode tempRoot = new DefaultTreeNode(user, node);
 
-        TreeNode node10 = new DefaultTreeNode(new User(5L, "root2Child1", "Senkov"), node1);
+            if (user.getChildren().size() != 0) {
+                createNode(user.getChildren(), tempRoot);
+            }
+        }
 
-        node1.setSelected(true);
-
-//        for (User user : listBean.getUsers()) {
-//
-//            if(id.equals(user.getId())) {
-//
-//            }
-//        }
+        listNodes.get(1).setSelected(true);
     }
 
     public TreeNode getRoot() {
@@ -122,5 +123,13 @@ public class TreeBean implements Serializable {
 
     public void setListBean(ListBean listBean) {
         this.listBean = listBean;
+    }
+
+    public List<TreeNode> getListNodes() {
+        return listNodes;
+    }
+
+    public void setListNodes(List<TreeNode> listNodes) {
+        this.listNodes = listNodes;
     }
 }

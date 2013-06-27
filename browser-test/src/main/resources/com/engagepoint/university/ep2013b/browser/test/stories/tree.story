@@ -14,5 +14,5 @@ Then Find title Hallo user
 Scenario: User clicks tree
 
 Given user is on Home page
-When  user clicks on tree root
-Then Find text User1
+When  user clicks tree level1
+Then node id=1 is selected

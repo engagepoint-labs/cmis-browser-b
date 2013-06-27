@@ -19,6 +19,17 @@ public class Home extends AbstractPage {
     public void treeClick(String linktext){
 
         //findElement(By.linkText(linktext)).click();
-        findElement(By.name(linktext)).click();
+        //findElement(By.name(linktext)).click();
+        findElement(By.xpath("id('form:tree:0:link')")).click();
     }
+
+    public void treeCheck(String linktext){
+
+        //findElement(By.linkText(linktext)).click();
+        //findElement(By.name(linktext)).click();
+        //findElement(By.xpath(linktext)).getAttribute("aria-selected");
+    }
+
+
+
 }

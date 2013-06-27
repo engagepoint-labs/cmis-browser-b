@@ -29,7 +29,7 @@
 
             <p:treeNode id="node" >
 
-                <h:outputLink id="link" value="/tree.xhtml" >
+                <h:outputLink id="link" value="home.xhtml" >
                     <h:outputText value="#{node.name}" />
 
                     <f:param name="id" value="#{node.id}" />
@@ -37,6 +37,9 @@
 
             </p:treeNode>
         </p:tree>
+
+        <p/>
+        <h:outputText> #{treeBean.selectedNode.data.lastname} </h:outputText>
 
     </h:form>
 

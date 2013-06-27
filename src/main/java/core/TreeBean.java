@@ -35,8 +35,6 @@ public class TreeBean implements Serializable {
     private TreeNode root;
     private TreeNode selectedNode;
 
-    private List<TreeNode> listNodes = new ArrayList<TreeNode>();
-
     @ManagedProperty("#{listBean}")
     private ListBean listBean;
 
@@ -46,7 +44,7 @@ public class TreeBean implements Serializable {
     public void init(ComponentSystemEvent event) {
         root = new DefaultTreeNode("Root", null);
         createNode(listBean.getUsers(), root);
-        if (!isSelected && root.getChildCount()>0){
+        if (!isSelected && root.getChildCount() > 0) {
             root.getChildren().get(0).setSelected(true);
         }
     }
@@ -55,11 +53,11 @@ public class TreeBean implements Serializable {
         for (User user : list) {
 
             TreeNode tempRoot = new DefaultTreeNode(user, node);
-            if (user.getId().equals(getId())){
+            if (user.getId().equals(getId())) {
                 tempRoot.setSelected(true);
                 isSelected = true;
                 TreeNode parent = tempRoot.getParent();
-                while(parent!=null){
+                while (parent != null) {
                     parent.setExpanded(true);
                     parent = parent.getParent();
                 }
@@ -68,8 +66,6 @@ public class TreeBean implements Serializable {
                 createNode(user.getChildren(), tempRoot);
             }
         }
-
-
     }
 
     public TreeNode getRoot() {
@@ -137,11 +133,4 @@ public class TreeBean implements Serializable {
         this.listBean = listBean;
     }
 
-    public List<TreeNode> getListNodes() {
-        return listNodes;
-    }
-
-    public void setListNodes(List<TreeNode> listNodes) {
-        this.listNodes = listNodes;
-    }
 }

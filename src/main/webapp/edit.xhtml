@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+<f:metadata>
+    <f:viewParam name="id" value="#{editBean.id}"/>
+    <f:event type="preRenderView" listener="#{editBean.init}"/>
+</f:metadata>
+
+<h:head>
+    <title>Edit</title>
+</h:head>
+
+<h:body>
+    <h:form id="form">
+
+        <h:inputHidden id="id" value="#{editBean.user.id}"/>
+        <h:panelGrid columns="2">
+            <h:outputText value="Name"/>
+            <p:inputText value="#{editBean.firstName}"/>
+            <h:outputText value="Last Name"/>
+            <p:inputText value="#{editBean.lastName}" id="lastMessage" required="true"
+                         requiredMessage="Last name cannot be empty ">
+                <p:message for="lastMessage"/>
+            </p:inputText>
+        </h:panelGrid>
+
+        <p:commandButton value="Save"
+                         action="#{editBean.check}"
+                         oncomplete="if (!args.validationFailed) {dialog.show()}
+                         else {confirmation.show()}"
+        />
+
+        <p:commandButton value="Cancel"
+                         action="list"
+                         immediate="true"
+                         ajax="false"/>
+
+        <p:dialog widgetVar="dialog">
+            <h:outputText value="Do you want to save data?" />
+            <br></br>
+            <p:commandButton value="Save"
+                             action="#{editBean.save}"
+                             ajax="false"/>
+            <p:commandButton value="Cancel"
+                             onclick="dialog.hide()"
+                             immediate="true"
+                             ajax="false"/>
+        </p:dialog>
+
+        <p:confirmDialog widgetVar="confirmation" message="Last name is required!"
+                         header="Error">
+            <p:commandButton value="OK" onclick="confirmation.hide()"/>
+        </p:confirmDialog>
+
+    </h:form>
+</h:body>
+</html>

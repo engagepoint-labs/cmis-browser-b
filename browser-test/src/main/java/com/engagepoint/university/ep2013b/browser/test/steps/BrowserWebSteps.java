@@ -3,6 +3,7 @@ package com.engagepoint.university.ep2013b.browser.test.steps;
 import com.engagepoint.university.ep2013b.browser.test.pages.Pages;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
+import org.jbehave.core.annotations.When;
 
 public class BrowserWebSteps {
 
@@ -33,6 +34,15 @@ public class BrowserWebSteps {
         pages.index().found(title);
     }
 
+    @When("user clicks tree $root")
+    public void userClickTreeNode(String root){
+        pages.home().treeClick(root);
+    }
+
+    @Then("node $node is selected")
+    public void treeNodeIsSelected(String node){
+        pages.home().found(node);
+    }
 
 
 }

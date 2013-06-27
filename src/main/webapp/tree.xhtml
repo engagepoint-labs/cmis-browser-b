@@ -19,13 +19,13 @@
 
         <p:growl id="messages" showDetail="true"/>
 
-        <p:tree id="treeSingle" value="#{treeBean.root}" var="node"
+        <p:tree id="tree" value="#{treeBean.root}" var="node"
                 selectionMode="single"
                 selection="#{treeBean.selectedNode}">
 
-            <p:treeNode>
+            <p:treeNode id="node" >
 
-                <h:outputLink value="/tree.xhtml" >
+                <h:outputLink id="link" value="/tree.xhtml" >
                     <h:outputText value="#{node.name}" />
 
                     <f:param name="id" value="#{node.id}" />

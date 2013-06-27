@@ -26,6 +26,7 @@ import org.primefaces.model.TreeNode;
 @ManagedBean(name = "treeBean", eager = true)
 @ViewScoped
 public class TreeBean implements Serializable {
+    boolean isSelected = false;
     private User user;
     private Long id;
     private String lastName;
@@ -45,19 +46,30 @@ public class TreeBean implements Serializable {
     public void init(ComponentSystemEvent event) {
         root = new DefaultTreeNode("Root", null);
         createNode(listBean.getUsers(), root);
+        if (!isSelected && root.getChildCount()>0){
+            root.getChildren().get(0).setSelected(true);
+        }
     }
 
     private void createNode(List<User> list, TreeNode node) {
         for (User user : list) {
 
             TreeNode tempRoot = new DefaultTreeNode(user, node);
-
+            if (user.getId().equals(getId())){
+                tempRoot.setSelected(true);
+                isSelected = true;
+                TreeNode parent = tempRoot.getParent();
+                while(parent!=null){
+                    parent.setExpanded(true);
+                    parent = parent.getParent();
+                }
+            }
             if (user.getChildren().size() != 0) {
                 createNode(user.getChildren(), tempRoot);
             }
         }
 
-        listNodes.get(1).setSelected(true);
+
     }
 
     public TreeNode getRoot() {

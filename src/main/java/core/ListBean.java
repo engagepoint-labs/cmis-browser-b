@@ -25,20 +25,20 @@ public class ListBean implements Serializable {
 
     @PostConstruct
     public void init() {
-        User root = new User(1L, "root", "Ivanov");
-        User rootChild1 = new User(2L, "rootChild1", "Ivanov");
-        User rootChild2 = new User(3L, "rootChild2", "Petrov");
+        User root = new User(1L, "level1", "Ivanov");
+        User rootChild1 = new User(2L, "level1Child1", "Ivanov");
+        User rootChild2 = new User(3L, "level1Child2", "Petrov");
         root.addChild(rootChild1);
         root.addChild(rootChild2);
 
         users.add(root);
-        User root2 = new User(4L, "root2", "Timkov");
+        User root2 = new User(4L, "level2", "Timkov");
 
-        User root2Child1 = new User(5L, "root2Child1", "Senkov");
+        User root2Child1 = new User(5L, "level2Child1", "Senkov");
         root2.addChild(root2Child1);
         users.add(root2);
 
-        User root3 = new User(6L, "root3", "Panov");
+        User root3 = new User(6L, "level3", "Panov");
         users.add(root3);
     }
 

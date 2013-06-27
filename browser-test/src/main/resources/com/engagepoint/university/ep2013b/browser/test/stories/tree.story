@@ -14,5 +14,5 @@ Then Find title Hallo user
 Scenario: User clicks tree
 
 Given user is on Home page
-When  user clicks tree level1
-Then node id=1 is selected
+When user clicks tree level1
+Then node h:outputText is selected

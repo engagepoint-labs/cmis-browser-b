@@ -24,8 +24,9 @@
                 selection="#{treeBean.selectedNode}">
 
             <p:treeNode>
-                <h:outputLink value="/tree.html">
-                    <f:param name="id" value="#{treeBean.id}" />
+                <h:outputLink value="/tree.html" >
+
+                    <f:param name="id" value="#{node.id}" />
                 </h:outputLink>
 
             </p:treeNode>

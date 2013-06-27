@@ -9,19 +9,36 @@ package core;
  */
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class User implements Serializable {
     private Long id;
     private String name;
     private String lastName;
+    private List<User> children;
 
     public User() {
+        children = new ArrayList<User>();
     }
 
     public User(Long id, String name, String lastName) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
+        children = new ArrayList<User>();
+    }
+
+    public List<User> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<User> children) {
+        this.children = children;
+    }
+
+    public void addChild(User user) {
+        children.add(user);
     }
 
     public String getName() {

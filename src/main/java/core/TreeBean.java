@@ -9,13 +9,9 @@ package core;
  */
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -24,7 +20,7 @@ import javax.faces.event.ComponentSystemEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
-@ManagedBean(name = "treeBean", eager=true)
+@ManagedBean(name = "treeBean", eager = true)
 @ViewScoped
 public class TreeBean implements Serializable {
     private User user;
@@ -38,26 +34,29 @@ public class TreeBean implements Serializable {
     @ManagedProperty("#{listBean}")
     private ListBean listBean;
 
-    public TreeBean() {}
+    public TreeBean() {
+    }
 
     public void init(ComponentSystemEvent event) {
         root = new DefaultTreeNode("Root", null);
-        TreeNode node0 = new DefaultTreeNode("Node 0", root);
-        TreeNode node1 = new DefaultTreeNode("Node 1", root);
-        TreeNode node2 = new DefaultTreeNode("Node 2", root);
 
-        TreeNode node00 = new DefaultTreeNode("Node 0.0", node0);
-        TreeNode node01 = new DefaultTreeNode("Node 0.1", node0);
+        TreeNode node0 = new DefaultTreeNode(new User(1L, "root", "Ivanov"), root);
+        TreeNode node1 = new DefaultTreeNode(new User(4L, "root2", "Timkov"), root);
+        TreeNode node2 = new DefaultTreeNode(new User(6L, "root3", "Panov"), root);
 
-        TreeNode node10 = new DefaultTreeNode("Node 1.0", node1);
-        TreeNode node11 = new DefaultTreeNode("Node 1.1", node1);
+        TreeNode node01 = new DefaultTreeNode(new User(2L, "rootChild1", "Ivanov"), node0);
+        TreeNode node02 = new DefaultTreeNode(new User(3L, "rootChild2", "Petrov"), node0);
 
-        TreeNode node000 = new DefaultTreeNode("Node 0.0.0", node00);
-        TreeNode node001 = new DefaultTreeNode("Node 0.0.1", node00);
-        TreeNode node010 = new DefaultTreeNode("Node 0.1.0", node01);
+        TreeNode node10 = new DefaultTreeNode(new User(5L, "root2Child1", "Senkov"), node1);
 
-        TreeNode node100 = new DefaultTreeNode("Node 1.0.0", node10);
-        node01.setSelected(true);
+        node1.setSelected(true);
+
+//        for (User user : listBean.getUsers()) {
+//
+//            if(id.equals(user.getId())) {
+//
+//            }
+//        }
     }
 
     public TreeNode getRoot() {
@@ -73,7 +72,7 @@ public class TreeBean implements Serializable {
     }
 
     public void displaySelectedSingle(ActionEvent event) {
-        if(selectedNode != null) {
+        if (selectedNode != null) {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
                     "Selected", selectedNode.getData().toString());
 

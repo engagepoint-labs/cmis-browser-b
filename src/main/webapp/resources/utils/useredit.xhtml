@@ -24,7 +24,7 @@
 <composite:implementation>
 
 
-<h:form>
+
 
         <p/>
 
@@ -44,12 +44,12 @@
             <h:outputText value="    "  style="width: 150px" />
 
             <h:commandButton value="Save" action="#{cc.attrs.saveAction}" style="width: 120px;" />
-            <h:commandButton value="Cancel" action="#{cc.attrs.cancelAction}" style="width: 150px;"  />
+            <h:commandButton value="Cancel" action="#{cc.attrs.cancelAction}" style="width: 150px;" immediate="true" />
 
 
         </p:panelGrid>
 
-    </h:form>
+
 </composite:implementation>
 
 

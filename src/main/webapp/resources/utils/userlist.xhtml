@@ -9,34 +9,32 @@
 
 <composite:interface>
 
-    <composite:attribute name="list" />
+    <composite:attribute name="bean" />
 
-    <!--
-    <composite:attribute name="selectAction"
-                         method-signature="java.lang.String action(User)" />
-     -->
+
+
 
 </composite:interface>
 
 <composite:implementation>
 
 
-<h:form>
 
-        <p:dataTable var="user" value="#{cc.attrs.list}" title="Choose user for editing:" border="1"
+
+        <p:dataTable var="user" value="#{cc.attrs.bean.list}" title="Choose user for editing:" border="1"
                      style="width: 250px;" >
 
-            <p:column rowHeader="true"  >
+            <p:column rowHeader="true">
                 <h:outputText value="#{user.firstname}" style="color: darkgreen;width: 120px;text-align: center;"/>
             </p:column>
             <p:column rowHeader="true" >
-                <h:commandLink action="edit" value="#{user.lastname}"
+                <h:commandLink action="#{cc.attrs.bean.select(user)}" value="#{user.lastname}"
                                style="color: purple;width: 120px;text-align: center;"/>
             </p:column>
 
         </p:dataTable>
 
-    </h:form>
+
 </composite:implementation>
 
 </html>

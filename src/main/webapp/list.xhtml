@@ -18,21 +18,7 @@
 
     <h:form>
 
-        <p:dataTable var="user" value="#{listbean.list}" title="Choose user for editing:" border="1"
-                              style="width: 250px;" >
-
-                     <p:column rowHeader="true"  >
-                         <h:outputText value="#{user.firstname}" style="color: darkgreen;width: 120px;text-align: center;"/>
-                     </p:column>
-                     <p:column rowHeader="true" >
-                         <h:commandLink action="#{listbean.select(user)}" value="#{user.lastname}"
-                                        style="color: purple;width: 120px;text-align: center;"/>
-                     </p:column>
-
-                 </p:dataTable>
-
-        <p/>
-        <utils:userlist  list="#{listbean.list}"  />
+        <utils:userlist  bean="#{listbean}"  />
 
 
     </h:form>

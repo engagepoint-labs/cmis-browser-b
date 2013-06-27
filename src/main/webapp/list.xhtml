@@ -13,7 +13,7 @@
 
         <p:dataTable var="user" value="#{listBean.lazyModel}"  paginator="true" rows="10"
                      paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-                     rowsPerPageTemplate="5,10,15" selectionMode="single" selection="#{listBean.getUser}" id="carTable" lazy="true">>
+                     rowsPerPageTemplate="5,10,15" id="carTable" lazy="true">>
 
             <p:column headerText="UserName" sortBy="#{user.name}" filterBy="#{user.name}">
                 <h:outputText value="#{user.name}"/>

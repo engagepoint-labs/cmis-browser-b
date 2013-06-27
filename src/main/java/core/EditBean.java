@@ -8,7 +8,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.event.ComponentSystemEvent;
 
 
-@ManagedBean(name = "editBean", eager = true)
+@ManagedBean(name = "editBean")
 @ViewScoped
 public class EditBean {
     private User user;
@@ -16,21 +16,22 @@ public class EditBean {
     private String lastName;
     private String firstName;
 
-    @ManagedProperty("#{listBean}")
-    ListBean listBean;
+    @ManagedProperty("#{usersBean}")
+    UsersBean usersBean;
 
+    public UsersBean getUsersBean() {
+        return usersBean;
+    }
+
+    public void setUsersBean(UsersBean usersBean) {
+        this.usersBean = usersBean;
+    }
 
     public EditBean() {
     }
 
 
-    public ListBean getListBean() {
-        return listBean;
-    }
 
-    public void setListBean(ListBean listBean) {
-        this.listBean = listBean;
-    }
 
     public Long getId() {
         return id;
@@ -57,14 +58,12 @@ public class EditBean {
     }
 
     public void init(ComponentSystemEvent event) {
-        user = listBean.getUserById(getId());
+        user = usersBean.getUserById(getId());
         lastName = user.getLastName();
         firstName = user.getName();
     }
 
-    public String check() {
-        return "check";
-    }
+
 
     public String save() {
         user.setName(firstName);

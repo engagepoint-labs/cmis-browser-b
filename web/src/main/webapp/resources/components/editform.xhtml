@@ -12,13 +12,14 @@
     <c:attribute name="firstname"/>
     <c:attribute name="lastname"/>
 
-    <c:editableValueHolder name="valitadeFirstname" targets="#{cc.clientId}:firstname"/>
+    <c:editableValueHolder name="validateFirstname" targets="myform:firstname"/>
     <c:attribute name="cancel" method-signature="java.lang.String action()"/>
     <c:attribute name="save" method-signature="java.lang.String action()"/>
 </c:interface>
 
 <c:implementation>
-    <h:form>
+    <!-- Should be careful with id for validation while using many same component -->
+    <h:form id="myform">
         <h:panelGrid columns="2">
             <h:outputLabel value="ID:"/>
             <h:outputText value="#{cc.attrs.identifier}"/>
@@ -26,9 +27,9 @@
             <h:outputLabel value="Fist name:"/>
             <h:panelGroup>
                 <h:inputText
-                    id="#{cc.clientId}:firstname"
+                    id="firstname"
                     value="#{cc.attrs.firstname}"/>
-                <h:message for="#{cc.clientId}:firstname" style="color:red"/>
+                <h:message for="firstname" style="color:red"/>
             </h:panelGroup>
 
             <h:outputLabel value="Last name:"/>

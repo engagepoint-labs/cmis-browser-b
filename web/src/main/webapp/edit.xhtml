@@ -5,21 +5,20 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:cc="http://java.sun.com/jsf/composite/components">
+      xmlns:component="http://java.sun.com/jsf/composite/components">
 
 <f:event listener="#{editbean.init}" type="preRenderView"/>
 
 <h:body>
     <h1>Edit</h1>
-    <cc:editform
+    <component:editform
             identifier="#{editbean.editable.id}"
             lastname="#{editbean.editable.lastname}"
             firstname="#{editbean.editable.firstname}"
 
             save="#{editbean.save()}"
             cancel="#{editbean.cancel()}">
-        <!--<f:validator  validatorId="simplejsf.NonDigitsValidator" for="form1:bla" />-->
-        <f:validateRegex pattern="^(\D{1,})$" for="valitadeFirstname"/>
-    </cc:editform>
+        <f:validator  validatorId="simplejsf.NonDigitsValidator" for="validateFirstname"/>
+    </component:editform>
 </h:body>
 </html>

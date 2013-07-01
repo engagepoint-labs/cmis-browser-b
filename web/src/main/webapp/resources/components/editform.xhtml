@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsf/composite">
+
+<c:interface>
+    <c:attribute name="identifier"/>
+    <c:attribute name="firstname"/>
+    <c:attribute name="lastname"/>
+
+    <!--<c:attribute name="validator" method-signature="void action(javax.faces.event.ComponentSystemEvent)"/>-->
+    <c:attribute name="cancel" method-signature="java.lang.String action()"/>
+    <c:attribute name="save" method-signature="java.lang.String action()"/>
+</c:interface>
+
+<c:implementation>
+    <h:form>
+        <h:panelGrid columns="2">
+            <h:outputLabel value="ID:"/>
+            <h:outputText value="#{cc.attrs.identifier}"/>
+
+            <h:outputLabel value="Fist name:"/>
+            <h:inputText value="#{cc.attrs.firstname}"/>
+            <!--<h:panelGroup>-->
+            <!--<h:inputText-->
+            <!--id="#{cc.clientId}:firstname"-->
+            <!--value="#{cc.attrs.firstname}"/>-->
+            <!--<f:event type="postValidate" listener="#{cc.attrs.validator}"/>-->
+            <!--<h:message for="{cc.clientId}:firstname" style="color:red"/>-->
+            <!--</h:panelGroup>-->
+
+            <h:outputLabel value="Last name:"/>
+            <h:inputText value="#{cc.attrs.lastname}"/>
+
+            <h:commandButton action="#{cc.attrs.cancel}" value="Cancel" immediate="true"/>
+            <h:commandButton action="#{cc.attrs.save}" value="Save"/>
+        </h:panelGrid>
+    </h:form>
+</c:implementation>
+</html>

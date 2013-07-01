@@ -31,7 +31,6 @@ public class TreeBean implements Serializable {
     private String firstName;
 
     private TreeNode root;
-    private TreeNode selectedNode;
 
     @ManagedProperty("#{listBean}")
     private ListBean listBean;
@@ -68,14 +67,6 @@ public class TreeBean implements Serializable {
 
     public TreeNode getRoot() {
         return root;
-    }
-
-    public TreeNode getSelectedNode() {
-        return selectedNode;
-    }
-
-    public void setSelectedNode(TreeNode selectedNode) {
-        this.selectedNode = selectedNode;
     }
 
     public User getUser() {

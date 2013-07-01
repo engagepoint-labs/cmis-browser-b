@@ -1,6 +1,7 @@
 package com.engagepoint.university.ep2013b.browser.test.pages;
 
 import org.jbehave.web.selenium.WebDriverProvider;
+import org.openqa.selenium.By;
 
 import java.util.concurrent.TimeUnit;
 
@@ -22,13 +23,16 @@ public class Home extends AbstractPage {
        //WebElement ww  =  findElement(By.xpath("id('form:tree:0_0:link')"));
        // System.out.println(ww.toString());
         //ww.click();
+
+        findElement(By.xpath(".//*[@id='form:tree:0:link']")).click();
+
     }
 
     public void treeCheck(String linktext){
 
         //findElement(By.linkText(linktext)).click();
         //findElement(By.name(linktext)).click();
-        //findElement(By.xpath(linktext)).getAttribute("aria-selected");
+        findElement(By.xpath(".//*[@id='form:tree:0']/span[@aria-selected=='true']"));
     }
 
 

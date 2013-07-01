@@ -17,6 +17,9 @@
             firstname="#{editbean.editable.firstname}"
 
             save="#{editbean.save()}"
-            cancel="#{editbean.cancel()}"/>
+            cancel="#{editbean.cancel()}">
+        <!--<f:validator  validatorId="simplejsf.NonDigitsValidator" for="form1:bla" />-->
+        <f:validateRegex pattern="^(\D{1,})$" for="valitadeFirstname"/>
+    </cc:editform>
 </h:body>
 </html>

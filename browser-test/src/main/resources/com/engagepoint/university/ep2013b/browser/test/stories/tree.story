@@ -11,8 +11,14 @@ Given user is on Home page
 Then Find title Hallo user
 
 
-Scenario: User clicks tree
+Scenario: User clicks tree root
 
 Given user is on Home page
-When user clicks tree level1
-Then node Korolev is selected
+When user clicks tree root
+Then root is selected
+
+Scenario: User expands tree root
+
+Given user is on Home page
+When user clicks root expand
+Then root is expanded

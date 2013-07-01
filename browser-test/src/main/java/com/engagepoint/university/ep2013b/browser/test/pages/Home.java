@@ -16,23 +16,32 @@ public class Home extends AbstractPage {
         manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
     }
 
-    public void treeClick(String linktext){
+    public void treeExpand(){
 
-        //findElement(By.linkText(linktext)).click();
-        //findElement(By.name(linktext)).click();
-       //WebElement ww  =  findElement(By.xpath("id('form:tree:0_0:link')"));
-       // System.out.println(ww.toString());
-        //ww.click();
+         findElement(By.xpath(".//*[@id='form:tree:0']/span/span[1]")).click();
 
-        findElement(By.xpath(".//*[@id='form:tree:0:link']")).click();
+        manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 
     }
 
-    public void treeCheck(String linktext){
+    public void treeClick(){
 
-        //findElement(By.linkText(linktext)).click();
-        //findElement(By.name(linktext)).click();
+        findElement(By.xpath(".//*[@id='form:tree:0:link']")).click();
+
+        manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+
+    }
+
+    public void treeClickCheck(){
+
          findElement(By.xpath(".//*[@id='form:tree:0']/span[@aria-selected='true']"));
+
+    }
+
+    public void treeExpandCheck(){
+
+        findElement(By.xpath(".//*[@id='form:tree:0' and @aria-expanded='true']"));
+
     }
 
 

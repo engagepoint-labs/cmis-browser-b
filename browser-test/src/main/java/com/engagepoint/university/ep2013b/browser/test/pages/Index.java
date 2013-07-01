@@ -19,7 +19,7 @@ public class Index extends AbstractPage  {
 
     public void open() {
         get("http://localhost:8080/browser/index.xhtml"); //  --- > url in story
-        manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+        manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
 }

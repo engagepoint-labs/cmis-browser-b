@@ -34,19 +34,30 @@ public class BrowserWebSteps {
         pages.index().found(title);
     }
 
-    @When("user clicks tree $root")
-    public void userClickTreeNode(String root){
-        pages.home().treeClick(root);
+    @When("user clicks tree root")
+    public void userClickTreeRoot(){
+        pages.home().treeClick();
     }
+
 
     @Then("node $node is found")
     public void treeNodeIsSelected(String node){
         pages.home().found(node);
     }
 
-    @Then("node $node is selected")
-    public void treeNodeSelected(String node){
-        pages.home().treeCheck(node);
+    @Then("root is selected")
+    public void treeRootSelected(){
+        pages.home().treeClickCheck();
+    }
+
+    @When("user clicks root expand")
+    public void userClickRootChild(){
+        pages.home().treeExpand();
+    }
+
+    @Then("root is expanded")
+    public void treeRootChildSelected(){
+        pages.home().treeExpandCheck();
     }
 
 }

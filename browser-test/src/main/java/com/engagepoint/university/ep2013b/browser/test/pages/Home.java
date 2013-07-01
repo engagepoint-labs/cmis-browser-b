@@ -32,7 +32,7 @@ public class Home extends AbstractPage {
 
         //findElement(By.linkText(linktext)).click();
         //findElement(By.name(linktext)).click();
-        findElement(By.xpath(".//*[@id='form:tree:0']/span[@aria-selected=='true']"));
+         findElement(By.xpath(".//*[@id='form:tree:0']/span[@aria-selected='true']"));
     }
 
 

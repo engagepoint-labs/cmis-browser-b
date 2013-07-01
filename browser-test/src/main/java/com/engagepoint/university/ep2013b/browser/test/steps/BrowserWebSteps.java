@@ -39,10 +39,14 @@ public class BrowserWebSteps {
         pages.home().treeClick(root);
     }
 
-    @Then("node $node is selected")
+    @Then("node $node is found")
     public void treeNodeIsSelected(String node){
         pages.home().found(node);
     }
 
+    @Then("node $node is selected")
+    public void treeNodeSelected(String node){
+        pages.home().treeCheck(node);
+    }
 
 }

@@ -5,10 +5,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core">
+
 <h:body>
     <h:form>
 
-        <h:dataTable value="#{mainbean.getData()}" var="person">
+        <h:dataTable value="#{mainbean.data}" var="person">
 
             <h:column>
                 <f:facet name="header">ID</f:facet>
@@ -16,14 +17,17 @@
             </h:column>
 
             <h:column>
-                <f:facet name="header">Last name</f:facet>
-                <h:commandLink action="#{mainbean.edit(person)}" value="#{person.lastname}"/>
-            </h:column>
-
-            <h:column>
                 <f:facet name="header">First name</f:facet>
                 <h:outputText value="#{person.firstname}"/>
             </h:column>
+
+            <h:column>
+                <f:facet name="header">Last name</f:facet>
+                <h:commandLink action="edit.xhtml" value="#{person.lastname}">
+                    <f:param name="id" value="#{person.id}"/>
+                </h:commandLink>
+            </h:column>
+
         </h:dataTable>
 
     </h:form>

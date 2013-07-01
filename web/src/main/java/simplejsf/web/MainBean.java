@@ -6,14 +6,14 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.faces.bean.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 @ManagedBean(name = "mainbean")
 @RequestScoped
 public class MainBean implements Serializable
 {
-    private Person editable = new Person();
+    protected List data;
+
 
     public MainBean()
     {
@@ -22,8 +22,9 @@ public class MainBean implements Serializable
     @PostConstruct
     public void init()
     {
-        Log.println("");
-        Log.println("MainBean.init() ---------------------------------");
+        Log.println("\nMainBean.init()");
+
+        data = Storage.select();
     }
 
     @PreDestroy
@@ -32,34 +33,9 @@ public class MainBean implements Serializable
         Log.println("MainBean.destroy()");
     }
 
-    public Person getEditable()
+
+    public List getData()
     {
-        Log.println("MainBean.getEditable()");
-
-        return editable;
-    }
-
-    public List<Person> getData()
-    {
-        Log.println("MainBean.getData()");
-
-        return Storage.select();
-    }
-
-    public String edit(Person selected)
-    {
-        Log.println("MainBean.edit(" + selected.getId() + ")");
-        this.editable = selected;
-
-        return "edit.xhtml";
-    }
-
-    public String update()
-    {
-        Log.println("MainBean.update(" + editable.getId() + ")");
-
-        Storage.update(editable);
-
-        return "list.xhtml";
+        return data;
     }
 }

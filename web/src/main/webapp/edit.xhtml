@@ -5,27 +5,30 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core">
+
+<f:event listener="#{editbean.init}" type="preRenderView"/>
+
 <h:body>
     <h:form>
 
         <h:panelGrid columns="2">
-            <!-- TODO: ID should be read-only -->
             <h:outputLabel value="ID:"/>
-            <h:inputText value="#{mainbean.editable.id}"/>
+            <h:outputText value="#{editbean.editable.id}"/>
 
             <h:outputLabel value="Fist name:"/>
             <h:panelGroup>
-                <h:inputText id="firstname" value="#{mainbean.editable.firstname}">
-                    <f:validateRegex pattern="^(\D{1,})$" />
-                </h:inputText>
-                <h:message for="firstname"/>
+                <h:inputText
+                        id="firstname"
+                        value="#{editbean.editable.firstname}"
+                        validator="#{editbean.validate}"/>
+                <h:message for="firstname" style="color:red"/>
             </h:panelGroup>
 
             <h:outputLabel value="Last name:"/>
-            <h:inputText value="#{mainbean.editable.lastname}"/>
+            <h:inputText value="#{editbean.editable.lastname}"/>
 
             <h:commandButton action="list.xhtml" value="Cancel" immediate="true"/>
-            <h:commandButton action="#{mainbean.update()}" value="Save"/>
+            <h:commandButton action="#{editbean.save()}" value="Save"/>
         </h:panelGrid>
 
     </h:form>

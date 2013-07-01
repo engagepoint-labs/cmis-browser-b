@@ -78,15 +78,6 @@ public class TreeBean implements Serializable {
         this.selectedNode = selectedNode;
     }
 
-    public void displaySelectedSingle(ActionEvent event) {
-        if (selectedNode != null) {
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-                    "Selected", selectedNode.getData().toString());
-
-            FacesContext.getCurrentInstance().addMessage(null, message);
-        }
-    }
-
     public User getUser() {
         return user;
     }

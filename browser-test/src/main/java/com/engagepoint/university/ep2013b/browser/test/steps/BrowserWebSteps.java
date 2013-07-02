@@ -39,7 +39,6 @@ public class BrowserWebSteps {
         pages.home().treeClick();
     }
 
-
     @Then("node $node is found")
     public void treeNodeIsSelected(String node){
         pages.home().found(node);
@@ -58,6 +57,7 @@ public class BrowserWebSteps {
     @Then("root is expanded")
     public void treeRootChildSelected(){
         pages.home().treeExpandCheck();
+
     }
 
 }

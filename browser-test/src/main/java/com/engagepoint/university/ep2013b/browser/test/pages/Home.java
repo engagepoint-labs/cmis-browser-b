@@ -16,9 +16,12 @@ public class Home extends AbstractPage {
         manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
     }
 
-    public void treeExpand(){
+    public void treeExpand(String str_xpath){
 
-         findElement(By.xpath(".//*[@id='form:tree:0']/span/span[1]")).click();
+        System.out.println("str_xpath == "+str_xpath);
+         //findElement(By.xpath(".//*[@id='form:tree:0']/span/span[1]")).click();
+        ///    .//*[@id='form:tree:0']//*[contains(@class,'ui-tree-toggler')]
+        findElement(By.xpath(str_xpath)).click();
 
         manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 
@@ -38,9 +41,10 @@ public class Home extends AbstractPage {
 
     }
 
-    public void treeExpandCheck(){
+    public void treeExpandCheck(String str_xpath){
 
-        findElement(By.xpath(".//*[@id='form:tree:0' and @aria-expanded='true']"));
+        //findElement(By.xpath(".//*[@id='form:tree:0' and @aria-expanded='true']"));
+        //  .//*[@id='form:tree:0']//*[contains(@class,'ui-treenode-content')]
 
     }
 

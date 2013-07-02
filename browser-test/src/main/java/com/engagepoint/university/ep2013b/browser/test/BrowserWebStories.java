@@ -5,12 +5,9 @@ import com.engagepoint.university.ep2013b.browser.test.steps.BrowserWebSteps;
 import com.google.common.util.concurrent.MoreExecutors;
 import org.jbehave.core.Embeddable;
 import org.jbehave.core.configuration.Configuration;
-import org.jbehave.core.configuration.MostUsefulConfiguration;
 import org.jbehave.core.embedder.Embedder;
-import org.jbehave.core.embedder.executors.SameThreadExecutors;
 import org.jbehave.core.io.LoadFromClasspath;
 import org.jbehave.core.io.StoryFinder;
-import org.jbehave.core.io.UnderscoredCamelCaseResolver;
 import org.jbehave.core.junit.JUnitStories;
 import org.jbehave.core.reporters.StoryReporterBuilder;
 import org.jbehave.core.steps.InjectableStepsFactory;
@@ -84,4 +81,8 @@ public class BrowserWebStories extends JUnitStories {
 
     }
 
+    @Override
+    public void useConfiguration(Configuration configuration) {
+        super.useConfiguration(configuration);    //To change body of overridden methods use File | Settings | File Templates.
+    }
 }

@@ -49,15 +49,15 @@ public class BrowserWebSteps {
         pages.home().treeClickCheck();
     }
 
-    @When("user clicks root expand")
-    public void userClickRootChild(){
-        pages.home().treeExpand();
+    @When("user clicks root expand $strPath")
+    public void userClickRootChild(String strPath){
+        pages.home().treeExpand(strPath);
     }
 
-    @Then("root is expanded")
-    public void treeRootChildSelected(){
-        pages.home().treeExpandCheck();
-
+    @Then("root is expanded by path '$strPath'")
+    public void treeRootChildSelected(String strPath){
+        pages.home().treeExpandCheck(strPath);
     }
+
 
 }

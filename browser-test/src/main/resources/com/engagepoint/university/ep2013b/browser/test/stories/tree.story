@@ -20,5 +20,5 @@ Then root is selected
 Scenario: User expands tree root
 
 Given user is on Home page
-When user clicks root expand
-Then root is expanded
+When user clicks root expand .//*[@id='form:tree:0']/span/span[1]
+Then root is expanded by path './/*[@id='form:tree:0' and @aria-expanded='true']'

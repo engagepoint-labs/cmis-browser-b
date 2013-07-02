@@ -1,10 +1,9 @@
 package com.engagepoint.university.ep2013b.browser.component;
 
+
 import java.io.IOException;
-import java.io.Serializable;
 
 import javax.faces.component.FacesComponent;
-import javax.faces.component.UIComponentBase;
 import javax.faces.context.FacesContext;
 
 /**
@@ -15,7 +14,7 @@ import javax.faces.context.FacesContext;
  * To change this template use File | Settings | File Templates.
  */
 @FacesComponent("BrowserComponent")
-public class BrowserComponent extends UIComponentBase implements Serializable {
+public class BrowserComponent extends org.primefaces.component.tree.Tree {
 
     @Override
     public String getFamily() {

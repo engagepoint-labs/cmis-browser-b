@@ -12,5 +12,18 @@
     <artifactId>browser-api</artifactId>
     <packaging>jar</packaging>
 
+    <dependencies>
+        <!-- OpenCMIS -->
+        <dependency>
+            <groupId>org.apache.chemistry.opencmis</groupId>
+            <artifactId>chemistry-opencmis-client-impl</artifactId>
+        </dependency>
 
+        <!-- JUnit -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>

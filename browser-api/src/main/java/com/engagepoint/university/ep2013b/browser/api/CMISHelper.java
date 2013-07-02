@@ -1,6 +1,7 @@
-package com.engagepoint.university.ep2013b.browser.cmis;
+package com.engagepoint.university.ep2013b.browser.api;
 
-import com.engagepoint.university.ep2013b.browser.api.BrowserItem;
+import com.engagepoint.university.ep2013b.browser.spi.DataService;
+
 import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
@@ -12,9 +13,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CMISHelper
+public class CMISHelper implements DataService
 {
-    public Session connect(){
+    public Session connect()
+    {
         SessionFactory sessionFactory = SessionFactoryImpl.newInstance();
         Map<String, String> parameter = new HashMap<String, String>();
 
@@ -42,7 +44,8 @@ public class CMISHelper
         return sessionFactory.createSession(parameter);
     }
 
-    public List<BrowserItem> getRootFolder() {
+    public List<BrowserItem> getRootFolder()
+    {
         Folder root = connect().getRootFolder();
         ItemIterable<CmisObject> children = root.getChildren();
 

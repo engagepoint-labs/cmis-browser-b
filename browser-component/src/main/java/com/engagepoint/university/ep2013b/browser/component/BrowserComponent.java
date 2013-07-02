@@ -6,8 +6,6 @@ import java.io.Serializable;
 import javax.faces.component.FacesComponent;
 import javax.faces.component.UIComponentBase;
 import javax.faces.context.FacesContext;
-import java.io.IOException;
-import java.io.Serializable;
 
 /**
  * Created with IntelliJ IDEA.

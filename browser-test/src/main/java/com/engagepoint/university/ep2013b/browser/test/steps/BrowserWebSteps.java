@@ -14,14 +14,19 @@ public class BrowserWebSteps {
         this.pages = pages;
     }
 
-    @Given("user is on Home page")
-    public void userIsOnHomePage(){
-        pages.home().open();
+    @Given("user goes on page by url '$url'")
+    public void userIsOnHomePage(String url){
+        pages.home().openByURL(url);
     }
 
-    @Then("Find title $title user")
-    public void findTitle(String title){
-        pages.home().found(title);
+    @Then("page is shown")
+    public void pageIsShown() {
+        pages.home().found("browser-showcase");
+    }
+
+    @Then("find text '$text'")
+    public void findTitle(String text){
+        pages.home().found(text);
     }
 
     @Given("user is on Index page")
@@ -29,34 +34,44 @@ public class BrowserWebSteps {
         pages.index().open();
     }
 
-    @Then("Find text $title")
-    public void findText(String title){
-        pages.index().found(title);
+    @When("user clicks tree leaf by xpath '$strPath'")
+    public void userClickTreeLeafByXpath(String strPath){
+        pages.home().clickByXpath(strPath);
     }
 
-    @When("user clicks tree root")
-    public void userClickTreeRoot(){
-        pages.home().treeClick();
+    @Then("in tree leaf by xpath '$strPath' is selected")
+    public void treeLeafIsSelectedByXpath(String strPath){
+        pages.home().isSelectedByXpath(strPath);
     }
 
-    @Then("node $node is found")
-    public void treeNodeIsSelected(String node){
-        pages.home().found(node);
+    @When("user clicks tree leaf by name '$strPath'")
+    public void userClickTreeLeafByName(String strPath){
+        pages.home().clickByName(strPath);
     }
 
-    @Then("root is selected")
-    public void treeRootSelected(){
-        pages.home().treeClickCheck();
+    @Then("in tree leaf by name '$strPath' is selected")
+    public void treeLeafIsSelectedByName(String strPath){
+        pages.home().isSelectedByName(strPath);
     }
 
-    @When("user clicks root expand $strPath")
-    public void userClickRootChild(String strPath){
-        pages.home().treeExpand(strPath);
+    @When("user clicks tree leaf by id '$strPath'")
+    public void userClickTreeLeafById(String strPath){
+        pages.home().clickById(strPath);
     }
 
-    @Then("root is expanded by path '$strPath'")
-    public void treeRootChildSelected(String strPath){
-        pages.home().treeExpandCheck(strPath);
+    @Then("in tree leaf by id '$strPath' is selected")
+    public void treeLeafIsSelectedById(String strPath){
+        pages.home().isSelectedById(strPath);
+    }
+
+    @When("user clicks tree leaf expand by xpath '$strPath'")
+    public void userClickTreeLeaf(String strPath){
+        pages.home().treeLeafExpandByXpath(strPath);
+    }
+
+    @Then("tree leaf by xpath '$strPath' is expanded")
+    public void treeLeafSelected(String strPath){
+        pages.home().treeExpandCheckByXpath(strPath);
     }
 
 

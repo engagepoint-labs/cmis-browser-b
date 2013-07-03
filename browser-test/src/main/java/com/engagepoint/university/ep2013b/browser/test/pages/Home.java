@@ -11,43 +11,115 @@ public class Home extends AbstractPage {
         super(driverProvider);
     }
 
-    public void open() {
-        get("http://localhost:8080/browser/home.xhtml"); //  --- > url in story
-        manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+    public void openByURL(String url) {
+
+        get(url); //  --- > url in story
+        manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
-    public void treeExpand(String str_xpath){
+    public void findText(String text){
 
-        System.out.println("str_xpath == "+str_xpath);
-         //findElement(By.xpath(".//*[@id='form:tree:0']/span/span[1]")).click();
-        ///    .//*[@id='form:tree:0']//*[contains(@class,'ui-tree-toggler')]
-        findElement(By.xpath(str_xpath)).click();
-
-        manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-
+        found(text);
+        manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
-    public void treeClick(){
 
-        findElement(By.xpath(".//*[@id='form:tree:0:link']")).click();
 
-        manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+    //// ==========================================================
+    //// locations by all three ways :
+    ////  by xpath
+    public void clickByXpath(String strPath){
 
+        findElement(By.xpath(strPath)).click();
+        manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
-    public void treeClickCheck(){
+    public void isSelectedByXpath(String strPath){
 
-         findElement(By.xpath(".//*[@id='form:tree:0']/span[@aria-selected='true']"));
-
+         findElement(By.xpath(strPath)).isSelected();
+        manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
-    public void treeExpandCheck(String str_xpath){
+    public void isEnabledByXpath(String strPath){
 
-        //findElement(By.xpath(".//*[@id='form:tree:0' and @aria-expanded='true']"));
-        //  .//*[@id='form:tree:0']//*[contains(@class,'ui-treenode-content')]
-
+        findElement(By.xpath(strPath)).isEnabled();
+        manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
+    public void isDisplayedByXpath(String strPath){
+
+        findElement(By.xpath(strPath)).isDisplayed();
+        manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+    }
+
+
+    //// by id
+    public void clickById(String strPath){
+
+        findElement(By.id(strPath)).click();
+        manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+    }
+
+    public void isSelectedById(String strPath){
+
+        findElement(By.id(strPath)).isSelected();
+        manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+    }
+
+    public void isEnabledById(String strPath){
+
+        findElement(By.id(strPath)).isEnabled();
+        manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+    }
+
+    public void isDisplayedById(String strPath){
+
+        findElement(By.id(strPath)).isDisplayed();
+        manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+    }
+
+    //// by name
+    public void clickByName(String strPath){
+
+        findElement(By.name(strPath)).click();
+
+        manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+    }
+
+    public void isSelectedByName(String strPath){
+
+        findElement(By.name(strPath)).isSelected();
+        manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+    }
+
+    public void isEnabledByName(String strPath){
+
+        findElement(By.name(strPath)).isEnabled();
+        manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+    }
+
+    public void isDisplayedByName(String strPath){
+
+        findElement(By.name(strPath)).isDisplayed();
+        manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+    }
+
+
+    //// =============================================================
+    ////  tree toggler  - only by xpath (there are no id and name)
+
+    public void treeLeafExpandByXpath(String strXpath){
+
+        findElement(By.xpath(strXpath)).click();
+        manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+    }
+
+    public void treeExpandCheckByXpath(String strXpath){
+
+        //// ".//*[@id='form:tree:0']//*[contains(@class,'ui-treenode-children')]"
+        findElement(By.xpath(strXpath)).isDisplayed();
+        manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+    }
 
 
 }

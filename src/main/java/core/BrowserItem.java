@@ -1,6 +1,8 @@
 package core;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,12 +14,14 @@ import java.io.Serializable;
 public class BrowserItem implements Serializable {
     private String type;
     private String name;
-    private long id;
+    private String id;
+    private List<BrowserItem> children;
 
-    public BrowserItem(long id, String name, String type) {
+    public BrowserItem(String id, String name, String type) {
         this.name = name;
         this.type = type;
         this.id = id;
+        children = new ArrayList<BrowserItem>();
     }
 
     public String getName() {
@@ -28,11 +32,19 @@ public class BrowserItem implements Serializable {
         return type;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
+    }
+
+    public List<BrowserItem> getChildren() {
+        return children;
+    }
+
+    public void addChild(BrowserItem item) {
+        children.add(item);
     }
 }

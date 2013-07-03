@@ -11,16 +11,14 @@
     </cc:interface>
 
     <cc:implementation>
-
+       <h:panelGroup id="qq">
         <p:tree id="tree" value="#{cc.root}" var="node"
-                selectionMode="single">
+                selectionMode="single" >
 
             <p:ajax event="expand"
                     listener="#{cc.onNodeExpand}" />
-            <p:ajax event="collapse"
-                    listener="#{cc.onNodeCollapse}" />
 
-            <p:treeNode id="node">
+            <p:treeNode id="node" >
 
                 <h:outputLink value="/browser.xhtml">
                     <h:outputText value="#{node.name}"/>
@@ -30,6 +28,6 @@
 
             </p:treeNode>
         </p:tree>
-
+       </h:panelGroup>
     </cc:implementation>
 </ui:composition>

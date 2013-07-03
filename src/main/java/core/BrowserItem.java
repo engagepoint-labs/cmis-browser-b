@@ -12,10 +12,12 @@ import java.io.Serializable;
 public class BrowserItem implements Serializable {
     private String type;
     private String name;
+    private long id;
 
-    public BrowserItem(String name, String type) {
+    public BrowserItem(long id, String name, String type) {
         this.name = name;
         this.type = type;
+        this.id = id;
     }
 
     public String getName() {
@@ -26,4 +28,11 @@ public class BrowserItem implements Serializable {
         return type;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 }

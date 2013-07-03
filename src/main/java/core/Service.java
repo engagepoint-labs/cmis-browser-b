@@ -15,16 +15,16 @@ public class Service {
     private static List<BrowserItem> list = new ArrayList<BrowserItem>();
 
     public static List<BrowserItem> getItems() {
-        list.add(new BrowserItem("name1","type1"));
-        list.add(new BrowserItem("name2","type1"));
-        list.add(new BrowserItem("name3","type2"));
-        list.add(new BrowserItem("name4","type1"));
-        list.add(new BrowserItem("name5","type2"));
-        list.add(new BrowserItem("name6","type2"));
-        list.add(new BrowserItem("name7","type2"));
-        list.add(new BrowserItem("name8","type1"));
-        list.add(new BrowserItem("name9","type1"));
-        list.add(new BrowserItem("name10","type1"));
+        list.add(new BrowserItem(1, "name1","type1"));
+        list.add(new BrowserItem(2, "name2","type1"));
+        list.add(new BrowserItem(3, "name3","type2"));
+        list.add(new BrowserItem(4, "name4","type1"));
+        list.add(new BrowserItem(5, "name5","type2"));
+        list.add(new BrowserItem(6, "name6","type2"));
+        list.add(new BrowserItem(7, "name7","type2"));
+        list.add(new BrowserItem(8, "name8","type1"));
+        list.add(new BrowserItem(9, "name9","type1"));
+        list.add(new BrowserItem(10, "name10","type1"));
 
         return list;
     }

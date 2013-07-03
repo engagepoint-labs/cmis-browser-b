@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+</h:head>
+
+<h:body>
+    <h:form>
+        <h1>Root's Folder:</h1>
+
+        <h3>Message:</h3>#{bean.message}
+        <p/>
+
+
+        <p:dataList value="#{bean.list}" var="f" itemType="disc">
+            <b>#{f.name}</b> (#{f.type})
+        </p:dataList>
+
+        <h1>Table</h1>
+
+        <p:dataTable var="f" value="#{bean.list}">
+            <p:column headerText="Name">
+                <h:outputText value="#{f.name}" />
+            </p:column>
+
+            <p:column headerText="Type">
+                <h:outputText value="#{f.type}" />
+            </p:column>
+
+        </p:dataTable>
+    </h:form>
+</h:body>
+</html>
+

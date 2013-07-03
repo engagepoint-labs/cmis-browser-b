@@ -36,6 +36,7 @@ public class Service {
         BrowserItem root2Child0 = new BrowserItem("9", "name9", "type2");
         root2.addChild(root2Child0);
         list.add(root2);
+        System.out.println(list);
         return list;
     }
 }

@@ -12,7 +12,7 @@
 
     <cc:implementation>
        <h:panelGroup id="qq">
-        <p:tree id="tree" value="#{cc.root}" var="node"
+        <p:tree id="tree" value="#{cc.root}" var="node" propagateSelectionUp="true"
                 selectionMode="single" >
 
             <p:ajax event="expand"

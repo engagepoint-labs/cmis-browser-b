@@ -1,5 +1,6 @@
 package core;
 
+import org.primefaces.event.NodeCollapseEvent;
 import org.primefaces.event.NodeExpandEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
@@ -26,8 +27,9 @@ public class BrowserComponent extends UIComponentBase implements NamingContainer
     private List<BrowserItem> browserItemsList;
 
     public BrowserComponent() {
+        root = new DefaultTreeNode("Root", null);
         browserItemsList = Service.getItems();
-        makeTree(browserItemsList);
+        makeTree(browserItemsList, root);
     }
 
     @Override
@@ -35,8 +37,15 @@ public class BrowserComponent extends UIComponentBase implements NamingContainer
         return UINamingContainer.COMPONENT_FAMILY;
     }
 
-    public void onNodeExpand(NodeExpandEvent event) {
+    public void onNodeExpand(NodeExpandEvent event) throws IOException {
         System.out.println("Expanded");
+        System.out.println(browserItemsList.size());
+        root = new DefaultTreeNode("Root2", null);
+        makeTree(browserItemsList, root);
+    }
+
+    public void onNodeCollapse(NodeCollapseEvent event) {
+        System.out.println("Collapsed");
 
     }
 
@@ -45,8 +54,7 @@ public class BrowserComponent extends UIComponentBase implements NamingContainer
         super.encodeBegin(arg0);
     }
 
-    private void makeTree(List<BrowserItem> list) {
-        root = new DefaultTreeNode("Root", null);
+    private void makeTree(List<BrowserItem> list, TreeNode root) {
         TreeNode node0 = new DefaultTreeNode(list.get(0), root);
         TreeNode node1 = new DefaultTreeNode(list.get(1), root);
         TreeNode node2 = new DefaultTreeNode(list.get(2), root);

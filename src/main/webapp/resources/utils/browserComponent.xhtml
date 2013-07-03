@@ -11,13 +11,12 @@
     </cc:interface>
 
     <cc:implementation>
-                    ihiuhihui
             <p:tree id="tree" value="#{cc.root}" var="node"
                     selectionMode="single">
 
                 <p:treeNode id="node">
 
-                    <h:outputLink id="link" value="/tree.xhtml">
+                    <h:outputLink value="/browser.xhtml">
                         <h:outputText value="#{node.name}"/>
 
                         <f:param name="id" value="#{node.id}"/>

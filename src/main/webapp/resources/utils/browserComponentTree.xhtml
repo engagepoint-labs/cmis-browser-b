@@ -11,21 +11,22 @@
     </cc:interface>
 
     <cc:implementation>
-            <p:tree id="tree" value="#{cc.root}" var="node"
-                    selectionMode="single">
 
-                <p:treeNode id="node">
+        <p:tree id="tree" value="#{cc.root}" var="node"
+                selectionMode="single">
 
-                    <h:outputLink value="/browser.xhtml">
-                        <h:outputText value="#{node.name}"/>
+            <p:ajax event="expand"
+                    listener="#{cc.onNodeExpand}" />
 
-                        <f:param name="id" value="#{node.id}"/>
-                    </h:outputLink>
+            <p:treeNode id="node">
 
-                </p:treeNode>
+                <h:outputLink value="/browser.xhtml">
+                    <h:outputText value="#{node.name}"/>
 
-            </p:tree>
+                    <f:param name="id" value="#{node.id}"/>
+                </h:outputLink>
 
+            </p:treeNode>
+        </p:tree>
     </cc:implementation>
-
 </ui:composition>

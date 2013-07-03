@@ -1,16 +1,16 @@
 package core;
 
-import org.primefaces.component.tree.Tree;
+import org.primefaces.event.NodeExpandEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.component.FacesComponent;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponentBase;
 import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -22,22 +22,28 @@ import java.util.List;
  */
 @FacesComponent("browserComponent")
 public class BrowserComponent extends UIComponentBase implements NamingContainer {
-     private TreeNode root;
-     private TreeNode node;
+    private TreeNode root;
+    private List<BrowserItem> browserItemsList;
 
     @Override
     public String getFamily() {
         return UINamingContainer.COMPONENT_FAMILY;
     }
 
-    //listener on expand
+    public void onNodeExpand(NodeExpandEvent event) {
+
+    }
 
     @Override
     public void encodeBegin(FacesContext arg0) throws IOException {
+        browserItemsList = Service.getItems();
+        makeTree(browserItemsList);
 
+        super.encodeBegin(arg0);
+    }
+
+    private void makeTree(List<BrowserItem> list) {
         root = new DefaultTreeNode("Root", null);
-        List<BrowserItem> list = Service.getItems();
-
         TreeNode node0 = new DefaultTreeNode(list.get(0), root);
         TreeNode node1 = new DefaultTreeNode(list.get(1), root);
         TreeNode node2 = new DefaultTreeNode(list.get(2), root);
@@ -48,11 +54,13 @@ public class BrowserComponent extends UIComponentBase implements NamingContainer
         TreeNode node7 = new DefaultTreeNode(list.get(7), node3);
         TreeNode node8 = new DefaultTreeNode(list.get(8), node7);
         TreeNode node9 = new DefaultTreeNode(list.get(9), node3);
-
-        super.encodeBegin(arg0);
     }
 
     public TreeNode getRoot() {
         return root;
+    }
+
+    public List<BrowserItem> getBrowserItemsList() {
+        return browserItemsList;
     }
 }

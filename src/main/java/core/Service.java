@@ -12,9 +12,10 @@ import java.util.List;
  */
 public class Service {
 
-    private static List<BrowserItem> list = new ArrayList<BrowserItem>();
+    private static List<BrowserItem> list;
 
     public static List<BrowserItem> getItems() {
+        list = new ArrayList<BrowserItem>();
         list.add(new BrowserItem(1, "name1","type1"));
         list.add(new BrowserItem(2, "name2","type1"));
         list.add(new BrowserItem(3, "name3","type2"));

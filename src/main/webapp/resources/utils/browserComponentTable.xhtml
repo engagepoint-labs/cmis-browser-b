@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <cc:interface componentType="browserComponent">
+        <cc:attribute name="link" />
+    </cc:interface>
+
+    <cc:implementation>
+
+        <p:dataTable var="item" value="#{cc.browserItemsList}" paginator="true" rows="10"
+                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                     id="itemsTable" lazy="true">>
+
+            <p:column headerText="Id" sortBy="#{item.id}" filterBy="#{item.id}">
+                <h:outputText value="#{item.id}"/>
+            </p:column>
+
+            <p:column headerText="Name" sortBy="#{item.name}" filterBy="#{item.name}">
+                <h:outputText value="#{item.name}"/>
+            </p:column>
+
+            <p:column headerText="Type" sortBy="#{item.type}" filterBy="#{item.type}">
+                <h:outputText value="#{item.type}"/>
+            </p:column>
+
+        </p:dataTable>
+    </cc:implementation>
+</ui:composition>

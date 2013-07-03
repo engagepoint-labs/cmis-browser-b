@@ -17,16 +17,16 @@
     <h:body>
         <h:form>
 
-            <p:dataTable var="user" value="#{cc.attrs.tableComponent.users}" paginator="true" rows="10"
+            <p:dataTable var="item" value="#{cc.attrs.tableComponent.users}" paginator="true" rows="10"
                          paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
                          id="carTable" lazy="true">>
 
-                <p:column headerText="UserName" sortBy="#{user.name}" filterBy="#{user.name}">
-                    <h:outputText value="#{user.name}"/>
+                <p:column headerText="UserName" sortBy="#{item.name}" filterBy="#{item.name}">
+                    <h:outputText value="#{item.name}"/>
                 </p:column>
 
-                <p:column headerText="UserLastName" sortBy="#{user.lastName}" filterBy="#{user.lastName}">
-                        <h:outputText value="#{user.lastName}"/>
+                <p:column headerText="UserLastName" sortBy="#{item.lastName}" filterBy="#{item.lastName}">
+                        <h:outputText value="#{item.lastName}"/>
                 </p:column>
 
             </p:dataTable>

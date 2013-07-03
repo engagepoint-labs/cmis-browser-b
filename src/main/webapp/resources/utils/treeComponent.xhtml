@@ -4,20 +4,19 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:cc="http://java.sun.com/jsf/composite"
       xmlns:p="http://primefaces.org/ui">
 
-<composite:interface>
-    <composite:attribute name="bean"/>
-</composite:interface>
+<cc:interface >
+    <cc:attribute name="treeComponent"/>
+</cc:interface>
 
-
-<composite:implementation>
+<cc:implementation>
 
     <h:form id="form">
-        <p:tree id="tree" value="#{cc.attrs.bean.root}" var="node"
+        <p:tree id="tree" value="#{cc.attrs.treeComponent.root}" var="node"
                 selectionMode="single">
-
+            event onexpand
             <p:treeNode id="node">
 
                 <h:outputLink id="link" value="/tree.xhtml">
@@ -27,9 +26,10 @@
                 </h:outputLink>
 
             </p:treeNode>
-        </p:tree>
 
+        </p:tree>
     </h:form>
-</composite:implementation>
+
+</cc:implementation>
 
 </html>

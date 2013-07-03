@@ -37,7 +37,6 @@ public class BrowserComponent extends UIComponentBase implements NamingContainer
 
     public void onNodeExpand(NodeExpandEvent event) {
         System.out.println("Expanded");
-        event.getTreeNode().setSelected(true);
 
     }
 

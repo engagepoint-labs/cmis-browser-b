@@ -16,17 +16,17 @@
     <url>http://maven.apache.org</url>
 
     <dependencies>
-
-        <!-- ep2013b -->
+        <!-- browser-api -->
         <dependency>
             <groupId>com.engagepoint.university.ep2013b</groupId>
             <artifactId>browser-api</artifactId>
             <version>${project.version}</version>
         </dependency>
 
+        <!-- browser-component -->
         <dependency>
             <groupId>com.engagepoint.university.ep2013b</groupId>
-            <artifactId>browser-cmis</artifactId>
+            <artifactId>browser-component</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -52,7 +52,7 @@
             <version>3.5</version>
         </dependency>
 
-        <!-- Chemistry -->
+        <!-- OpenCMIS -->
         <dependency>
             <groupId>org.apache.chemistry.opencmis</groupId>
             <artifactId>chemistry-opencmis-server-inmemory</artifactId>

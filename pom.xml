@@ -27,12 +27,14 @@
                 <scope>test</scope>
             </dependency>
 
+            <!-- OpenCMIS -->
             <dependency>
                 <groupId>org.apache.chemistry.opencmis</groupId>
                 <artifactId>chemistry-opencmis-server-inmemory</artifactId>
                 <type>war</type>
                 <version>0.9.0-EP-SNAPSHOT</version>
             </dependency>
+
             <dependency>
                 <groupId>org.apache.chemistry.opencmis</groupId>
                 <artifactId>chemistry-opencmis-client-impl</artifactId>
@@ -99,93 +101,93 @@
             </plugins>
         </pluginManagement>
 
-        <plugins>
+        <!--<plugins>-->
 
-            <!-- Maven versions plugin-->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>versions-maven-plugin</artifactId>
-                <version>2.1</version>
-            </plugin>
+            <!--&lt;!&ndash; Maven versions plugin&ndash;&gt;-->
+            <!--<plugin>-->
+                <!--<groupId>org.codehaus.mojo</groupId>-->
+                <!--<artifactId>versions-maven-plugin</artifactId>-->
+                <!--<version>2.1</version>-->
+            <!--</plugin>-->
 
-            <!-- JaCoCo plugin -->
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.6.3.201306030806</version>
+            <!--&lt;!&ndash; JaCoCo plugin &ndash;&gt;-->
+            <!--<plugin>-->
+                <!--<groupId>org.jacoco</groupId>-->
+                <!--<artifactId>jacoco-maven-plugin</artifactId>-->
+                <!--<version>0.6.3.201306030806</version>-->
 
-                <executions>
-                    <execution>
-                        <id>prepare-agent</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>report</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>check</id>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                        <configuration>
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>prepare-agent</id>-->
+                        <!--<goals>-->
+                            <!--<goal>prepare-agent</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                    <!--<execution>-->
+                        <!--<id>report</id>-->
+                        <!--<phase>prepare-package</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>report</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                    <!--<execution>-->
+                        <!--<id>check</id>-->
+                        <!--<goals>-->
+                            <!--<goal>check</goal>-->
+                        <!--</goals>-->
+                        <!--<configuration>-->
 
-                            <rules>
-                                <rule>
-                                    <element>BUNDLE</element>
-                                    <limits>
+                            <!--<rules>-->
+                                <!--<rule>-->
+                                    <!--<element>BUNDLE</element>-->
+                                    <!--<limits>-->
 
-                                        <limit>
-                                            <counter>INSTRUCTION</counter>
-                                            <value>COVEREDRATIO</value>
-                                            <minimum>0</minimum>
-                                        </limit>
+                                        <!--<limit>-->
+                                            <!--<counter>INSTRUCTION</counter>-->
+                                            <!--<value>COVEREDRATIO</value>-->
+                                            <!--<minimum>0</minimum>-->
+                                        <!--</limit>-->
 
-                                        <limit>
-                                            <counter>BRANCH</counter>
-                                            <value>COVEREDRATIO</value>
-                                            <minimum>0</minimum>
-                                        </limit>
+                                        <!--<limit>-->
+                                            <!--<counter>BRANCH</counter>-->
+                                            <!--<value>COVEREDRATIO</value>-->
+                                            <!--<minimum>0</minimum>-->
+                                        <!--</limit>-->
 
-                                        <limit>
-                                            <counter>COMPLEXITY</counter>
-                                            <value>MISSEDCOUNT</value>
-                                            <maximum>50</maximum>
-                                        </limit>
+                                        <!--<limit>-->
+                                            <!--<counter>COMPLEXITY</counter>-->
+                                            <!--<value>MISSEDCOUNT</value>-->
+                                            <!--<maximum>50</maximum>-->
+                                        <!--</limit>-->
 
-                                        <limit>
-                                            <counter>LINE</counter>
-                                            <value>MISSEDCOUNT</value>
-                                            <maximum>50</maximum>
-                                        </limit>
+                                        <!--<limit>-->
+                                            <!--<counter>LINE</counter>-->
+                                            <!--<value>MISSEDCOUNT</value>-->
+                                            <!--<maximum>50</maximum>-->
+                                        <!--</limit>-->
 
-                                        <limit>
-                                            <counter>METHOD</counter>
-                                            <value>MISSEDCOUNT</value>
-                                            <maximum>50</maximum>
-                                        </limit>
+                                        <!--<limit>-->
+                                            <!--<counter>METHOD</counter>-->
+                                            <!--<value>MISSEDCOUNT</value>-->
+                                            <!--<maximum>50</maximum>-->
+                                        <!--</limit>-->
 
-                                        <limit>
-                                            <counter>CLASS</counter>
-                                            <value>MISSEDCOUNT</value>
-                                            <maximum>50</maximum>
-                                        </limit>
+                                        <!--<limit>-->
+                                            <!--<counter>CLASS</counter>-->
+                                            <!--<value>MISSEDCOUNT</value>-->
+                                            <!--<maximum>50</maximum>-->
+                                        <!--</limit>-->
 
-                                    </limits>
+                                    <!--</limits>-->
 
-                                </rule>
-                            </rules>
-                        </configuration>
-                    </execution>
-                </executions>
+                                <!--</rule>-->
+                            <!--</rules>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+                <!--</executions>-->
 
-            </plugin>
-        </plugins>
+            <!--</plugin>-->
+        <!--</plugins>-->
     </build>
 
 </project>

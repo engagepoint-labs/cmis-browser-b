@@ -13,8 +13,7 @@
     <packaging>jar</packaging>
 
     <dependencies>
-
-        <!-- ep2013b -->
+        <!-- browser-api -->
         <dependency>
             <groupId>com.engagepoint.university.ep2013b</groupId>
             <artifactId>browser-api</artifactId>
@@ -33,7 +32,15 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
+    <build>
+        <resources>
+            <!-- Include implementations of Service Provided Interface -->
+            <resource>
+                <directory>src/main/resources/META-INF/services</directory>
+                <targetPath>META-INF/services</targetPath>
+            </resource>
+        </resources>
+    </build>
 </project>

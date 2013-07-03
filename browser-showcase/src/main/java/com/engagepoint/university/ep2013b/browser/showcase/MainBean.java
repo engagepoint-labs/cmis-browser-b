@@ -1,7 +1,8 @@
 package com.engagepoint.university.ep2013b.browser.showcase;
 
 import com.engagepoint.university.ep2013b.browser.api.BrowserItem;
-import com.engagepoint.university.ep2013b.browser.cmis.CMISHelper;
+import com.engagepoint.university.ep2013b.browser.api.BrowserService;
+import com.engagepoint.university.ep2013b.browser.component.BrowserFactory;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -16,7 +17,6 @@ import java.util.List;
 public class MainBean implements Serializable
 {
     private String message = "Working!!!";
-//    private CMISHelper core = new CMISHelper();
     private List<BrowserItem> list = new ArrayList<BrowserItem>();
 
     public MainBean() {
@@ -27,8 +27,11 @@ public class MainBean implements Serializable
     }
 
     @PostConstruct
-    public void  initItemList(){
-        list =  new CMISHelper().getRootFolder();
+    public void  initItemList()
+    {
+        // Request data from convenient data service provider
+        BrowserService data = BrowserFactory.getInstance("CMIS");
+        list = data.getRootFolder();
     }
 
     public List<BrowserItem> getList() {
@@ -38,11 +41,4 @@ public class MainBean implements Serializable
     public void setList(List<BrowserItem> list) {
         this.list = list;
     }
-
-
-//    public List<BrowserItem> getList() {
-//        return core.getRootFolder();
-//    }
-
-
 }

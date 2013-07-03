@@ -1,10 +1,9 @@
-package com.engagepoint.university.ep2013b.browser.api;
+package com.engagepoint.university.ep2013b.browser.cmis;
 
-import com.engagepoint.university.ep2013b.browser.spi.DataService;
-
+import com.engagepoint.university.ep2013b.browser.api.BrowserItem;
+import com.engagepoint.university.ep2013b.browser.api.BrowserService;
 import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
-import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
 import org.apache.chemistry.opencmis.commons.enums.BindingType;
 
@@ -13,17 +12,43 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CMISHelper implements DataService
+public class CMISHelper implements BrowserService
 {
+    // Unique Service Provider name
+    private static final String SERVICE_NAME = "CMIS";
+
+    // Should return SERVICE_NAME
+    @Override
+    public String getServiceName()
+    {
+        return SERVICE_NAME;
+    }
+
+    public List<BrowserItem> getRootFolder()
+    {
+        Folder root = connect().getRootFolder();
+        ItemIterable<CmisObject> children = root.getChildren();
+
+        List<BrowserItem> list = new ArrayList<BrowserItem>();
+
+        BrowserItem item;
+
+        for (CmisObject o : children)
+        {
+            item = new BrowserItem();
+            item.setName(o.getName());
+            item.setType((o instanceof Folder) ? BrowserItem.TYPE.FOLDER: BrowserItem.TYPE.FILE);
+
+            list.add(item);
+        }
+
+        return list;
+    }
+
     public Session connect()
     {
         SessionFactory sessionFactory = SessionFactoryImpl.newInstance();
         Map<String, String> parameter = new HashMap<String, String>();
-
-        // ATOM
-        //final String url = "http://localhost:8080/server/atom11";
-        //parameter.put(SessionParameter.ATOMPUB_URL, url);
-        //parameter.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
 
         // WSDL
         final String url = "http://localhost:8080/server/services/";
@@ -42,24 +67,5 @@ public class CMISHelper implements DataService
         parameter.put(SessionParameter.REPOSITORY_ID, repository.getId());
 
         return sessionFactory.createSession(parameter);
-    }
-
-    public List<BrowserItem> getRootFolder()
-    {
-        Folder root = connect().getRootFolder();
-        ItemIterable<CmisObject> children = root.getChildren();
-
-        List<BrowserItem> list = new ArrayList<BrowserItem>();
-
-        BrowserItem file;
-
-        for (CmisObject o : children) {
-            Property<String> p = o.getProperty(PropertyIds.CREATION_DATE);
-
-            file = new BrowserItem(o.getName(), p.getValueAsString());
-            list.add(file);
-        }
-
-        return list;
     }
 }

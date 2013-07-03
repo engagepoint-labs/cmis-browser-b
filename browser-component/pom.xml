@@ -12,5 +12,19 @@
     <artifactId>browser-component</artifactId>
     <packaging>jar</packaging>
 
+    <dependencies>
+        <!-- browser-api -->
+        <dependency>
+            <groupId>com.engagepoint.university.ep2013b</groupId>
+            <artifactId>browser-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
+        <!-- browser-cmis -->
+        <dependency>
+            <groupId>com.engagepoint.university.ep2013b</groupId>
+            <artifactId>browser-cmis</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 </project>

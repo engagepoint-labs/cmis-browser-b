@@ -10,7 +10,7 @@
     <description>Simple JSF Application</description>
 
     <welcome-file-list>
-        <welcome-file>tree.xhtml</welcome-file>
+        <welcome-file>browser.xhtml</welcome-file>
     </welcome-file-list>
 
     <servlet>

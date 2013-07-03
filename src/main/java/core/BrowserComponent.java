@@ -31,7 +31,12 @@ public class BrowserComponent extends UIComponentBase implements NamingContainer
     }
 
     public void onNodeExpand(NodeExpandEvent event) {
-
+        root = new DefaultTreeNode("Root", null);
+        new DefaultTreeNode(getBrowserItemsList().get(0),root);
+        new DefaultTreeNode(getBrowserItemsList().get(0),root);
+        new DefaultTreeNode(getBrowserItemsList().get(0),root);
+        new DefaultTreeNode(getBrowserItemsList().get(0),root);
+        event.setTreeNode(root);
     }
 
     @Override

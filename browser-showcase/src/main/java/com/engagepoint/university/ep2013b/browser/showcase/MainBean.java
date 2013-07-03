@@ -6,7 +6,6 @@ import com.engagepoint.university.ep2013b.browser.cmis.CMISHelper;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

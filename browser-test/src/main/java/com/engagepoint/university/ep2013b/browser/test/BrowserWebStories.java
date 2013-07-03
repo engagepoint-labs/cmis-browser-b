@@ -1,16 +1,13 @@
 package com.engagepoint.university.ep2013b.browser.test;
 
-import com.engagepoint.university.ep2013b.browser.test.pages.Pages;
+import com.engagepoint.university.ep2013b.browser.test.pages.TestedPage;
 import com.engagepoint.university.ep2013b.browser.test.steps.BrowserWebSteps;
 import com.google.common.util.concurrent.MoreExecutors;
 import org.jbehave.core.Embeddable;
 import org.jbehave.core.configuration.Configuration;
-import org.jbehave.core.configuration.MostUsefulConfiguration;
 import org.jbehave.core.embedder.Embedder;
-import org.jbehave.core.embedder.executors.SameThreadExecutors;
 import org.jbehave.core.io.LoadFromClasspath;
 import org.jbehave.core.io.StoryFinder;
-import org.jbehave.core.io.UnderscoredCamelCaseResolver;
 import org.jbehave.core.junit.JUnitStories;
 import org.jbehave.core.reporters.StoryReporterBuilder;
 import org.jbehave.core.steps.InjectableStepsFactory;
@@ -34,7 +31,7 @@ public class BrowserWebStories extends JUnitStories {
 
     private WebDriverProvider driverProvider = new PropertyWebDriverProvider();
     private WebDriverSteps lifecycleSteps = new PerStoriesWebDriverSteps(driverProvider);
-    private Pages pages = new Pages(driverProvider);
+    private TestedPage testedPage = new TestedPage(driverProvider);
     private SeleniumContext context = new SeleniumContext();
     private ContextView contextView = new LocalFrameContextView().sized(500, 100);
 
@@ -63,7 +60,7 @@ public class BrowserWebStories extends JUnitStories {
     public InjectableStepsFactory stepsFactory() {
         Configuration configuration = configuration();
         return new InstanceStepsFactory(configuration,
-                new BrowserWebSteps(pages),
+                new BrowserWebSteps(testedPage),
                 lifecycleSteps,
                 new WebDriverScreenshotOnFailure(driverProvider, configuration.storyReporterBuilder()));
     }

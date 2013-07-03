@@ -2,13 +2,45 @@
 <!DOCTYPE html
         PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-    <title>
-        Hallo user
-    </title>
-</head>
-<body>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
 
-</body>
+<f:metadata>
+    <f:viewParam name="id" value="#{treeBean.id}"/>
+    <f:event type="preRenderView" listener="#{treeBean.init}"/>
+</f:metadata>
+
+<h:head>
+    <title>
+        browser-showcase
+    </title>
+</h:head>
+<h:body>
+
+    <h:form id="form">
+
+        <p:growl id="messages" showDetail="true"/>
+
+        <p:tree id="tree" value="#{treeBean.root}" var="node"
+                selectionMode="single"
+                selection="#{treeBean.selectedNode}"  >
+
+            <p:treeNode id="node" >
+
+                <h:outputLink id="link" value="home.xhtml" >
+                    <h:outputText value="#{node.name}" />
+
+                    <f:param name="id" value="#{node.id}" />
+                </h:outputLink>
+
+            </p:treeNode>
+        </p:tree>
+
+        <p/>
+
+    </h:form>
+
+</h:body>
 </html>

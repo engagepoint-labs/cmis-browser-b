@@ -25,21 +25,24 @@ public class BrowserComponent extends UIComponentBase implements NamingContainer
     private TreeNode root;
     private List<BrowserItem> browserItemsList;
 
+    public BrowserComponent() {
+        browserItemsList = Service.getItems();
+        makeTree(browserItemsList);
+    }
+
     @Override
     public String getFamily() {
         return UINamingContainer.COMPONENT_FAMILY;
     }
 
     public void onNodeExpand(NodeExpandEvent event) {
+        System.out.println("Expanded");
         event.getTreeNode().setSelected(true);
 
     }
 
     @Override
     public void encodeBegin(FacesContext arg0) throws IOException {
-        browserItemsList = Service.getItems();
-        makeTree(browserItemsList);
-
         super.encodeBegin(arg0);
     }
 

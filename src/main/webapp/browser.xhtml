@@ -13,13 +13,24 @@
 
 <h:body>
 
-    <h:form id="formTree">
-        <utils:browserComponentTree/>
-    </h:form>
+    <table>
+        <tr>
 
-    <h:form id="formTable">
-        <utils:browserComponentTable/>
-    </h:form>
+            <td>
+                Tree
+                <h:form id="formTree">
+                    <utils:browserComponentTree/>
+                </h:form>
+            </td>
+            <td>
+                Table
+                <h:form id="formTable">
+                    <utils:browserComponentTable/>
+                </h:form>
+            </td>
+        </tr>
+    </table>
+
 
 </h:body>
 </html>

@@ -41,20 +41,20 @@ public class CMISBrowserServiceIT {
 
    // }
 
-//    @Test
-//    public void test_findFolderByPath() throws Exception{
-//
-//        String path="/My_Folder-0-0/My_Folder-1-1";
-//        BrowserItem item = cmisBrowserService.findFolderById(path);
-//        assertEquals("My_Folder-1-1", item.getName());
-//        assertEquals("My_Document-2-0", item.getChildren().get(0).getName());
-//        assertEquals("My_Folder-0-0",item.getParent().getName());
-//        assertEquals("My_Document-1-0",item.getParent().getChildren().get(0).getName());
-//        assertEquals("RootFolder",item.getParent().getParent().getName());
-//        assertEquals("My_Document-0-0",item.getParent().getParent().getChildren().get(0).getName());
-//
-//
-//    }
+    @Test
+    public void test_findFolderByPath() throws Exception{
+
+        String path="/My_Folder-0-0/My_Folder-1-1";
+        BrowserItem item = cmisBrowserService.findFolderByPath(path);
+        assertEquals("My_Folder-1-1", item.getName());
+        assertEquals("My_Document-2-0", item.getChildren().get(0).getName());
+        assertEquals("My_Folder-0-0",item.getParent().getName());
+        assertEquals("My_Document-1-0",item.getParent().getChildren().get(0).getName());
+        assertEquals("RootFolder",item.getParent().getParent().getName());
+        assertEquals("My_Document-0-0",item.getParent().getParent().getChildren().get(0).getName());
+
+
+    }
 
 
 

@@ -6,18 +6,17 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
-    <cc:interface componentType="browserComponent">
-        <cc:attribute name="link1" />
+    <cc:interface componentType="browserComponentTree">
+        <cc:attribute name="link" />
     </cc:interface>
 
     <cc:implementation>
-
         <p:tree id="tree" value="#{cc.root}" var="node"
                 selectionMode="single" >
 
             <p:treeNode id="node" >
 
-                <h:outputLink value="#{cc.attrs.link1}">
+                <h:outputLink value="#{cc.attrs.link}">
                     <h:outputText value="#{node.name}"/>
 
                     <f:param name="id" value="#{node.id}"/>

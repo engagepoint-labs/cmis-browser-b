@@ -22,13 +22,13 @@ import java.util.List;
  * Time: 3:17 PM
  * To change this template use File | Settings | File Templates.
  */
-@FacesComponent("browserComponent")
-public class BrowserComponent extends UINamingContainer {
+@FacesComponent("browserComponentTree")
+public class BrowserComponentTree extends UINamingContainer {
     private TreeNode root;
     private List<BrowserItem> browserItemsList;
     private boolean isSelected = false;
 
-    public BrowserComponent() {
+    public BrowserComponentTree() {
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         String requestId = request.getParameter("id");
 

@@ -19,6 +19,23 @@
             <artifactId>browser-api</artifactId>
             <version>${project.version}</version>
         </dependency>
+    <dependencies>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>6.0</version>
+        </dependency>
+
+        <!-- PrimeFaces -->
+        <dependency>
+            <groupId>org.primefaces</groupId>
+            <artifactId>primefaces</artifactId>
+            <version>3.5</version>
+        </dependency>
+
+    </dependencies>
+
+
 
         <!-- browser-cmis -->
         <dependency>

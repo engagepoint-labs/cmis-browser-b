@@ -50,6 +50,7 @@ public class BrowserComponentTree extends UINamingContainer {
                 isSelected = true;
                 tempRoot.setExpanded(true);
 
+
                 TreeNode parent = tempRoot.getParent();
                 while (parent != null) {
                     parent.setExpanded(true);
@@ -69,4 +70,5 @@ public class BrowserComponentTree extends UINamingContainer {
     public List<BrowserItem> getBrowserItemsList() {
         return browserItemsList;
     }
+
 }

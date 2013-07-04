@@ -12,9 +12,9 @@
 
     <cc:implementation>
 
-        <p:dataTable var="item" value="#{cc.browserItemsList}" paginator="true" rows="10"
+        <p:dataTable var="item" value="#{cc.lazyModel}" paginator="true" rows="2"
                      paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-                     id="itemsTable" lazy="true">>
+                     id="table" lazy="true">>
 
             <p:column headerText="Id">
                 <h:outputText value="#{item.id}"/>

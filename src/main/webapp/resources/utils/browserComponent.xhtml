@@ -4,19 +4,29 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:cc="http://java.sun.com/jsf/composite"
       xmlns:utils="http://java.sun.com/jsf/composite/utils"
       xmlns:p="http://primefaces.org/ui">
 
-<composite:interface>
-    <composite:attribute name="link"/>
-</composite:interface>
+<cc:interface>
+    <cc:attribute name="link"/>
+</cc:interface>
 
-<composite:implementation>
+<cc:implementation>
 
-        <utils:browserComponentTree link="#{cc.attrs.link}"/>
-        <utils:browserComponentTable link="#{cc.attrs.link}"/>
+    <p:layout style="min-width:400px;min-height:400px;" id="layout">
+        <p:layoutUnit position="west" header="Tree" resizable="true" size="350" minSize="200" maxSize="400">
+            <utils:browserComponentTree link="#{cc.attrs.link}"/>
 
-</composite:implementation>
+        </p:layoutUnit>
+
+        <p:layoutUnit position="center" header="Table" resizable="true" size="200" minSize="200" maxSize="400">
+            <utils:browserComponentTable link="#{cc.attrs.link}"/>
+
+        </p:layoutUnit>
+    </p:layout>
+
+
+</cc:implementation>
 
 </html>

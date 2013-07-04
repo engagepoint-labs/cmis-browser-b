@@ -7,16 +7,15 @@ import javax.faces.component.FacesComponent;
 import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.swing.tree.TreeNode;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
- * User: vladimir.ovcharov
- * Date: 7/2/13
- * Time: 3:17 PM
- * To change this template use File | Settings | File Templates.
- */
+* Created with IntelliJ IDEA.
+* User: vladimir.ovcharov
+* Date: 7/2/13
+* Time: 3:17 PM
+* To change this template use File | Settings | File Templates.
+*/
 @FacesComponent("browserComponentTree")
 public class BrowserComponentTree extends UINamingContainer {
     private TreeNode root;

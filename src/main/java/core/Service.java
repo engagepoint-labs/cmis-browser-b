@@ -21,7 +21,12 @@ public class Service {
         BrowserItem root0Child1 = new BrowserItem("5", "name5", "type2");
         BrowserItem root0Child2 = new BrowserItem("6", "name6", "type1");
         root0.addChild(root0Child0);
+
+        BrowserItem root0Child1Child0 = new BrowserItem("10", "name10", "type2");
+        root0Child1.addChild(root0Child1Child0);
+
         root0.addChild(root0Child1);
+
         root0.addChild(root0Child2);
         list.add(root0);
 

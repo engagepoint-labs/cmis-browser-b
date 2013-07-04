@@ -7,20 +7,17 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
     <cc:interface componentType="browserComponent">
-        <cc:attribute name="link" />
+        <cc:attribute name="link1" />
     </cc:interface>
 
     <cc:implementation>
-       <h:panelGroup id="qq">
+
         <p:tree id="tree" value="#{cc.root}" var="node"
                 selectionMode="single" >
 
-            <p:ajax event="expand"
-                    listener="#{cc.onNodeExpand}" />
-
             <p:treeNode id="node" >
 
-                <h:outputLink value="/browser.xhtml">
+                <h:outputLink value="#{cc.attrs.link1}">
                     <h:outputText value="#{node.name}"/>
 
                     <f:param name="id" value="#{node.id}"/>
@@ -28,6 +25,6 @@
 
             </p:treeNode>
         </p:tree>
-       </h:panelGroup>
+
     </cc:implementation>
 </ui:composition>

@@ -26,45 +26,30 @@ import java.util.List;
 public class BrowserComponent extends UINamingContainer {
     private TreeNode root;
     private List<BrowserItem> browserItemsList;
-    boolean isSelected = false;
-    private String id;
-    private String requestId;
-
+    private boolean isSelected = false;
 
     public BrowserComponent() {
-        HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
-        requestId = request.getParameter("id");
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        String requestId = request.getParameter("id");
 
         browserItemsList = Service.getItems();
         root = new DefaultTreeNode("Root", null);
-        createNode(browserItemsList, root);
+        createNode(browserItemsList, root, requestId);
 
         if (!isSelected && root.getChildCount() > 0) {
             root.getChildren().get(0).setSelected(true);
         }
-
-
-//        makeTree(browserItemsList, root, id);
     }
 
-
-    public void onNodeExpand(NodeExpandEvent event) throws IOException {
-        new DefaultTreeNode(new BrowserItem("11","XXXX","sdsdasds"),event.getTreeNode() );
-
-    }
-
-    @Override
-    public void encodeBegin(FacesContext arg0) throws IOException {
-        super.encodeBegin(arg0);
-    }
-
-    private void createNode(List<BrowserItem> list, TreeNode node) {
+    private void createNode(List<BrowserItem> list, TreeNode node, String requestId) {
         for (BrowserItem item : list) {
 
             TreeNode tempRoot = new DefaultTreeNode(item, node);
             if (item.getId().equals(requestId)) {
                 tempRoot.setSelected(true);
                 isSelected = true;
+                tempRoot.setExpanded(true);
+
                 TreeNode parent = tempRoot.getParent();
                 while (parent != null) {
                     parent.setExpanded(true);
@@ -72,22 +57,9 @@ public class BrowserComponent extends UINamingContainer {
                 }
             }
             if (item.getChildren().size() != 0) {
-                createNode(item.getChildren(), tempRoot);
+                createNode(item.getChildren(), tempRoot, requestId);
             }
         }
-    }
-
-    private void makeTree(List<BrowserItem> list, TreeNode root, String id) {
-
-
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public TreeNode getRoot() {

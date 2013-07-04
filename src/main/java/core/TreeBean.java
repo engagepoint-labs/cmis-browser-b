@@ -24,7 +24,7 @@ import org.primefaces.model.TreeNode;
 @ManagedBean(name = "treeBean", eager = true)
 @ViewScoped
 public class TreeBean implements Serializable {
-    boolean isSelected = false;
+    private boolean isSelected = false;
     private User user;
     private Long id;
     private String lastName;

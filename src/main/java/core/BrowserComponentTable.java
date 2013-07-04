@@ -1,5 +1,7 @@
 package core;
 
+import org.primefaces.component.datatable.DataTable;
+import org.primefaces.event.data.PageEvent;
 import org.primefaces.model.LazyDataModel;
 
 import javax.el.ELContext;
@@ -26,39 +28,14 @@ public class BrowserComponentTable extends UINamingContainer {
     private List<BrowserItem> childrenList;
     private LazyDataModel<BrowserItem> lazyModel;
     private Service service;
-
-    enum PropertyKeys {
-        collapsed
-    }
-
-    public boolean isCollapsed() {
-        return (Boolean) getStateHelper().eval(PropertyKeys.collapsed, Boolean.FALSE);
-    }
-
-    public void setCollapsed(boolean collapsed) {
-        getStateHelper().put(PropertyKeys.collapsed, collapsed);
-    }
-
-    @SuppressWarnings("UnusedDeclaration")
-    public void toggle(ActionEvent e) {
-        setCollapsed(!isCollapsed());
-        setCollapsedValueExpression();
-    }
-
-    private void setCollapsedValueExpression() {
-        ELContext ctx = FacesContext.getCurrentInstance().getELContext();
-        ValueExpression ve = getValueExpression(PropertyKeys.collapsed.name());
-        if (ve != null) {
-            ve.setValue(ctx, isCollapsed());
-        }
-    }
+    private String folderId;
 
 
     public BrowserComponentTable() {
         service = new Service();
         browserItemsList = Service.getItems();
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-        String requestId = request.getParameter("id");
+        folderId= request.getParameter("folderId");
 
         lazyModel = new LazyItemModel(service);
 
@@ -69,20 +46,20 @@ public class BrowserComponentTable extends UINamingContainer {
 //        }
     }
 
-    public List<BrowserItem> findChildren(List<BrowserItem> list, String requestId) {
-        List<BrowserItem> tempList = new ArrayList<BrowserItem>();
-
-        for (BrowserItem item : list) {
-
-            if (item.getId().equals(requestId)) {
-                return item.getChildren();
-            }
-            if (item.getChildren().size() != 0) {
-                findChildren(item.getChildren(), requestId);
-            }
-        }
-        return tempList;
-    }
+//    public List<BrowserItem> findChildren(List<BrowserItem> list, String requestId) {
+//        List<BrowserItem> tempList = new ArrayList<BrowserItem>();
+//
+//        for (BrowserItem item : list) {
+//
+//            if (item.getId().equals(requestId)) {
+//                return item.getChildren();
+//            }
+//            if (item.getChildren().size() != 0) {
+//                findChildren(item.getChildren(), requestId);
+//            }
+//        }
+//        return tempList;
+//    }
 
     public List<BrowserItem> getBrowserItemsList() {
         return browserItemsList;
@@ -98,5 +75,9 @@ public class BrowserComponentTable extends UINamingContainer {
 
     public void setLazyModel(LazyDataModel<BrowserItem> lazyModel) {
         this.lazyModel = lazyModel;
+    }
+
+    public String getFolderId() {
+        return folderId;
     }
 }

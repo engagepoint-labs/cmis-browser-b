@@ -12,10 +12,8 @@
 
     <cc:implementation>
 
-        <p:dataTable var="item" value="#{cc.lazyModel}" paginator="true" rows="2"
-                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-                     id="table" lazy="true"
-                     >>
+
+        <p:dataTable var="item" value="#{cc.lazyModel}">
 
             <p:column headerText="Id">
                 <h:outputText value="#{item.id}"/>
@@ -28,7 +26,13 @@
             <p:column headerText="Type">
                 <h:outputText value="#{item.type}"/>
             </p:column>
-
+                  <f:facet name="footer">
+                      <h:commandButton value="prev" disabled="#{cc.fromRow-cc.rowsCount >0}">
+                          <f:param name="folderId" value="#{cc.folderId}"/>
+                          <f:param name="fromRow" value="#{cc.fromRow-cc.rowsCount}"/>
+                          <f:param name="rowsCount" value="#{cc.toRowCount-cc.rowsCount}"/>
+                      </h:commandButton>
+                  </f:facet>
         </p:dataTable>
     </cc:implementation>
 </ui:composition>

@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:utils="http://java.sun.com/jsf/composite/custom"
+      xmlns:p="http://primefaces.org/ui">
+
+<cc:interface>
+    <cc:attribute name="link"/>
+</cc:interface>
+
+<cc:implementation>
+
+    <p:layout style="min-width:400px;min-height:400px;" id="layout">
+        <p:layoutUnit position="west" header="Tree" collapsible="true" resizable="true" size="350" minSize="200" maxSize="400">
+            <utils:browserComponentTree link="#{cc.attrs.link}"/>
+
+        </p:layoutUnit>
+
+        <p:layoutUnit position="center" header="Table" resizable="true" size="200" minSize="200" maxSize="400">
+            <utils:browserComponentTable link="#{cc.attrs.link}"/>
+
+        </p:layoutUnit>
+    </p:layout>
+
+
+</cc:implementation>
+
+</html>

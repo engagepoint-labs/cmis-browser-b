@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <cc:interface componentType="browserComponentTree">
+        <cc:attribute name="link" />
+    </cc:interface>
+
+    <cc:implementation>
+        <p:tree id="tree" value="#{cc.root}" var="node"
+                selectionMode="single" >
+
+            <p:treeNode id="node" >
+
+                <h:outputLink value="#{cc.attrs.link}">
+                    <h:outputText value="#{node.name}"/>
+
+                    <f:param name="id" value="#{node.id}"/>
+                </h:outputLink>
+
+            </p:treeNode>
+        </p:tree>
+
+    </cc:implementation>
+</ui:composition>

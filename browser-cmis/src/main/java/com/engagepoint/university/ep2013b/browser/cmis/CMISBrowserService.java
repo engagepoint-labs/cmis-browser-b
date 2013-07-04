@@ -3,27 +3,135 @@ package com.engagepoint.university.ep2013b.browser.cmis;
 import com.engagepoint.university.ep2013b.browser.api.BrowserItem;
 import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
-import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
-import org.apache.chemistry.opencmis.commons.data.PropertyData;
 import org.apache.chemistry.opencmis.commons.enums.BindingType;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+public class CMISBrowserService
+{
+    // Unique Service Provider name
+    private static final String SERVICE_NAME = "CMIS";
+    private Session session;
+
+    public CMISBrowserService()
+    {
+        session = connect();
+    }
+
+    // Should return SERVICE_NAME
+
+    public String getServiceName()
+    {
+        return SERVICE_NAME;
+    }
+
+    private List<BrowserItem> findParents(Folder current)
+    {
+        List<BrowserItem> parents = new ArrayList<BrowserItem>();
+
+        // Create all parents folders
+        Folder parent;
+        BrowserItem item;
+
+        while (!current.isRootFolder())
+        {
+            parent = current.getParents().get(0);
+
+            item = new BrowserItem();
+            item.setId(current.getId());
+            item.setName(current.getName());
+            item.setType(BrowserItem.TYPE.FOLDER);
+
+            parents.add(item);
+
+            current = parent;
+        }
+
+        item = new BrowserItem();
+        item.setId(current.getId());
+        item.setName(current.getName());
+        item.setType(BrowserItem.TYPE.FOLDER);
+
+        parents.add(item);
 
 
-public class CMISBrowserService  {
+        for (int i = 0; i < parents.size()-1; ++i)
+        {
+            parents.get(i).setParent(parents.get(i+1));
+        }
 
-    private Session connect(){
+        return parents;
+    }
+
+    private BrowserItem findFolder(Folder current, boolean includeOnlyFolders)
+    {
+        BrowserItem result;
+        List<BrowserItem> parents = findParents(current);
+
+        for(BrowserItem i : parents)
+        {
+            System.out.println(i);
+        }
+
+        result = parents.get(0);
+
+        // Fill children of each parent folder
+        for(BrowserItem i : parents)
+        {
+            current = (Folder)session.getObject(i.getId());
+            ItemIterable<CmisObject> children = current.getChildren();
+            for (CmisObject o : children)
+            {
+                if (!(o instanceof Folder) && includeOnlyFolders) continue;
+
+                BrowserItem child;
+
+                // check if already exists (is one of the parents)
+                BrowserItem find = new BrowserItem();
+                find.setId(o.getId());
+                int index = parents.indexOf(find);
+
+                if (index == -1)
+                {
+                    child = new BrowserItem();
+                    child.setId(o.getId());
+                    child.setName(o.getName());
+                    child.setType((o instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE);
+                    child.setParent(i);
+
+                    i.setChild(child);
+                }
+                else
+                {
+                    child = parents.get(index);
+                    i.setChild(child);
+                }
+            }
+        }
+
+        return result;
+    }
+
+
+    public BrowserItem findFolderById(String id, boolean includeOnlyFolders)
+    {
+        Folder current = (Folder)session.getObject(id);
+        return findFolder(current, includeOnlyFolders);
+    }
+
+
+    public BrowserItem findFolderByPath(String path, boolean includeOnlyFolders)
+    {
+        Folder current = (Folder)session.getObjectByPath(path);
+        return findFolder(current, includeOnlyFolders);
+    }
+
+
+    public Session connect()
+    {
         SessionFactory sessionFactory = SessionFactoryImpl.newInstance();
         Map<String, String> parameter = new HashMap<String, String>();
-
-        // ATOM
-        //final String url = "http://localhost:8080/server/atom11";
-        //parameter.put(SessionParameter.ATOMPUB_URL, url);
-        //parameter.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
 
         // WSDL
         final String url = "http://localhost:8080/server/services/";
@@ -40,88 +148,7 @@ public class CMISBrowserService  {
 
         Repository repository = sessionFactory.getRepositories(parameter).get(0);
         parameter.put(SessionParameter.REPOSITORY_ID, repository.getId());
+
         return sessionFactory.createSession(parameter);
     }
-
-
-    public List<BrowserItem> reachToRootFolder(Folder folder){
-        List<BrowserItem> parentList = new ArrayList<BrowserItem>();
-        List<BrowserItem> childrenList = new ArrayList<BrowserItem>();
-        BrowserItem file;
-        BrowserItem parent;
-        while (!folder.isRootFolder()){
-            ItemIterable<CmisObject> children =folder.getChildren();
-
-            for (CmisObject o : children)
-            {
-                file = new BrowserItem(o.getId(),o.getName(),
-                        (folder instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE,
-                        new BrowserItem(folder.getName()));
-
-                childrenList.add(file);
-
-            }
-
-            parent = new BrowserItem(folder.getId(),folder.getName(),
-                    (folder instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE,
-                    childrenList);
-            parentList.add(parent);
-            folder = folder.getFolderParent();
-
-        }
-
-        return parentList;
-    }
-
-
-    public BrowserItem findFolderById(String id) {
-        List<BrowserItem> findItems=new ArrayList<BrowserItem>();
-
-        Folder folderById =(Folder) connect().getObject(id);
-        findItems = reachToRootFolder(folderById);
-
-        for(BrowserItem bi:findItems){
-            System.out.println("parent "+ bi.getId()+"   "+bi.getName());
-            if(id.equals(bi.getId())){
-                return bi;
-            }
-
-            else{
-                for (BrowserItem chi:bi.getChildren()){
-                    System.out.println("children "+ chi.getId()+"   "+chi.getName());
-                   if(id.equals(chi.getId())){
-                        return chi;
-                    }
-                }
-            }
-        }
-      return null;
-    }
-
-
-    public BrowserItem findFolderByPath(String path) {
-        List<BrowserItem> findItems=new ArrayList<BrowserItem>();
-
-        Folder folderByPath =(Folder) connect().getObject(path);
-         String id=folderByPath.getId();
-        findItems = reachToRootFolder(folderByPath);
-
-        for(BrowserItem bi:findItems){
-            System.out.println("parent "+ bi.getId()+"   "+bi.getName());
-            if(id.equals(bi.getId())){
-                return bi;
-            }
-
-            else{
-                for (BrowserItem chi:bi.getChildren()){
-                    System.out.println("children "+ chi.getId()+"   "+chi.getName());
-                    if(id.equals(chi.getId())){
-                        return chi;
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
 }

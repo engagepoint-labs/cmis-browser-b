@@ -21,7 +21,7 @@ public class CMISBrowserServiceIT {
     public void test_findFolderById_getName() throws Exception {
 
       String id="108";
-       BrowserItem item = cmisBrowserService.findFolderById(id);
+       BrowserItem item = cmisBrowserService.findFolderById(id,false);
         assertEquals("My_Folder-1-1", item.getName());
         assertEquals("My_Document-2-0", item.getChildren().get(0).getName());
         assertEquals("My_Folder-0-0",item.getParent().getName());
@@ -35,7 +35,7 @@ public class CMISBrowserServiceIT {
     public void test_findFolderById_getChildren_not_empty() throws Exception {
 
         String id="108";
-        BrowserItem item = cmisBrowserService.findFolderById(id);
+        BrowserItem item = cmisBrowserService.findFolderById(id,false);
         assertFalse(item.getChildren().isEmpty());
     }
 
@@ -45,7 +45,7 @@ public class CMISBrowserServiceIT {
     public void test_findFolderByPath() throws Exception{
 
         String path="/My_Folder-0-0/My_Folder-1-1";
-        BrowserItem item = cmisBrowserService.findFolderByPath(path);
+        BrowserItem item = cmisBrowserService.findFolderByPath(path,false);
         assertEquals("My_Folder-1-1", item.getName());
         assertEquals("My_Document-2-0", item.getChildren().get(0).getName());
         assertEquals("My_Folder-0-0",item.getParent().getName());

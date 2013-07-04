@@ -16,7 +16,6 @@ import java.util.Map;
 
 public class CMISBrowserService {
 
-
     public Session connect(){
         SessionFactory sessionFactory = SessionFactoryImpl.newInstance();
         Map<String, String> parameter = new HashMap<String, String>();
@@ -44,141 +43,134 @@ public class CMISBrowserService {
         return sessionFactory.createSession(parameter);
     }
 
-    public List<BrowserItem> getRootFolder() {
-        Folder root = connect().getRootFolder();
+
+    public List<BrowserItem> findFolderById(String id) {
+
+        Folder root =(Folder) connect().getObject(id);
         ItemIterable<CmisObject> children = root.getChildren();
 
-        List<BrowserItem> list = new ArrayList<BrowserItem>();
+        Folder parent = root.getFolderParent();
+        ItemIterable<CmisObject> childrenOfParent = parent.getChildren();
 
-        BrowserItem file;
+        Folder grandParent = parent.getFolderParent();
+        ItemIterable<CmisObject> childrenOfGrandParent = grandParent.getChildren();
+
+
+
+        List<BrowserItem> list = new ArrayList<BrowserItem>();
+        List<BrowserItem> listForChildren = new ArrayList<BrowserItem>();
+        List<BrowserItem> listForParentChildren = new ArrayList<BrowserItem>();
+        List<BrowserItem> listForGrandParentChildren = new ArrayList<BrowserItem>();
+
+
+
+        BrowserItem fileForList;
+        BrowserItem fileForChildren;
+        BrowserItem fileForParentChildren;
+        BrowserItem fileForGrandParentChildren;
+
 
         for (CmisObject o : children) {
-            Property<String> p = o.getProperty(PropertyIds.CREATION_DATE);
 
-            file = new BrowserItem(o.getName(), p.getValueAsString());
-            list.add(file);
+            fileForChildren = new BrowserItem(o.getName(),
+                    (root instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE,
+                    new BrowserItem(root.getName()));
+            listForChildren.add(fileForChildren);
+
+
+            for(CmisObject par: childrenOfParent){
+
+                fileForParentChildren = new BrowserItem(par.getName(),
+                        (root instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE,
+                        new BrowserItem(parent.getName())
+                );
+                listForParentChildren.add(fileForParentChildren);
+
+                for(CmisObject grPar:childrenOfGrandParent){
+                    fileForGrandParentChildren= new BrowserItem(grPar.getName(),
+                            (root instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE,
+                            new BrowserItem(grandParent.getName()));
+                    listForGrandParentChildren.add(fileForGrandParentChildren);
+
+                    fileForList = new BrowserItem(root.getName(),
+                            (root instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE,
+
+                            new BrowserItem(parent.getName(),
+                                    (root instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE,
+                                    new BrowserItem(grandParent.getName(),
+                                            (root instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE,
+                                            listForGrandParentChildren),
+                                    listForParentChildren)
+                            , listForChildren );
+                    list.add(fileForList);
+                }
+            }
         }
 
         return list;
-    }
-
-
-
-    public List<BrowserItem> findFolderById(String id, boolean includeOnlyFolders) {
-
-        ItemIterable<QueryResult> results = connect().query("SELECT cmis:name FROM cmis:folder WHERE IN_FOLDER('" + id + "')", false);
-        ItemIterable<QueryResult> results1 = connect().query("SELECT cmis:path FROM cmis:folder where cmis:objectId LIKE '" + id + "'", false);
-        ItemIterable<QueryResult> results2 = connect().query("SELECT cmis:name FROM cmis:document WHERE IN_FOLDER('" + id + "')", false);
-
-        List<BrowserItem> list = new ArrayList<BrowserItem>();
-
-        BrowserItem file;
-        BrowserItem file1;
-        BrowserItem file2;
-
-        for (QueryResult hit1 : results1) {
-            for (PropertyData<?> property1 : hit1.getProperties()) {
-
-                String queryName1 = property1.getQueryName();
-                Object value1 = property1.getFirstValue();
-
-                file1 = new BrowserItem(value1.toString(), queryName1);
-                list.add(file1);
-            }
-        }
-
-
-        for (QueryResult hit : results) {
-            for (PropertyData<?> property : hit.getProperties()) {
-
-                String queryName = property.getQueryName();
-                Object value = property.getFirstValue();
-
-                file = new BrowserItem(value.toString(), queryName);
-                list.add(file);
-            }
-        }
-
-        if(includeOnlyFolders==false){
-            for (QueryResult hit1 : results2) {
-                for (PropertyData<?> property2 : hit1.getProperties()) {
-
-                    String queryName2 = property2.getQueryName();
-                    Object value2 = property2.getFirstValue();
-
-                    file2 = new BrowserItem(value2.toString(), queryName2);
-                    list.add(file2);
-                }
-            }
-
-        }
-
-
-          return list;
-
 
     }
 
-    public List<BrowserItem> findFolderByPath(String path,boolean includeOnlyFolders) {
+    public List<BrowserItem> findFolderByPath(String path) {
+
+        Folder root =(Folder) connect().getObjectByPath(path);
+        ItemIterable<CmisObject> children = root.getChildren();
+
+        Folder parent = root.getFolderParent();
+        ItemIterable<CmisObject> childrenOfParent = parent.getChildren();
+
+        Folder grandParent = parent.getFolderParent();
+        ItemIterable<CmisObject> childrenOfGrandParent = grandParent.getChildren();
 
 
-
-
-        ItemIterable<QueryResult> results2 = connect().query("SELECT cmis:objectId FROM cmis:folder WHERE cmis:path LIKE '"+path+"'", false);
-        String value2 = "";
-        for (QueryResult hit1 : results2) {
-            for (PropertyData<?> property1 : hit1.getProperties()) {
-                value2 = property1.getFirstValue().toString();
-            }
-        }
-
-
-        ItemIterable<QueryResult> results = connect().query("SELECT cmis:name FROM cmis:folder WHERE IN_FOLDER('" + value2 + "') ", false);
-
-        ItemIterable<QueryResult> results1 = connect().query("SELECT cmis:path FROM cmis:folder where cmis:path LIKE '"+path+"' ", false);
-        ItemIterable<QueryResult> results3 = connect().query("SELECT cmis:name FROM cmis:document WHERE IN_FOLDER('" + value2 + "')", false);
 
         List<BrowserItem> list = new ArrayList<BrowserItem>();
-
-        BrowserItem file;
-        BrowserItem file1;
-        BrowserItem file3;
-
-
-        for (QueryResult hit1 : results1) {
-            for (PropertyData<?> property1 : hit1.getProperties()) {
-
-                String queryName1 = property1.getQueryName();
-                Object value1 = property1.getFirstValue();
-
-                file1 = new BrowserItem(value1.toString(), queryName1);
-                list.add(file1);
-            }
-        }
+        List<BrowserItem> listForChildren = new ArrayList<BrowserItem>();
+        List<BrowserItem> listForParentChildren = new ArrayList<BrowserItem>();
+        List<BrowserItem> listForGrandParentChildren = new ArrayList<BrowserItem>();
 
 
-        for (QueryResult hit : results) {
-            for (PropertyData<?> property : hit.getProperties()) {
 
-                String queryName = property.getQueryName();
-                Object value = property.getFirstValue();
+        BrowserItem fileForList;
+        BrowserItem fileForChildren;
+        BrowserItem fileForParentChildren;
+        BrowserItem fileForGrandParentChildren;
 
-                file = new BrowserItem(value.toString(), queryName);
-                list.add(file);
-            }
-        }
+        for (CmisObject o : children) {
 
-        if(includeOnlyFolders==false){
-            for (QueryResult hit1 : results3) {
-                for (PropertyData<?> property3 : hit1.getProperties()) {
+            fileForChildren = new BrowserItem(o.getName(),
+                    (o instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE,
+                    new BrowserItem(root.getName()));
+            listForChildren.add(fileForChildren);
 
-                    String queryName3 = property3.getQueryName();
-                    Object value3 = property3.getFirstValue();
 
-                    file3 = new BrowserItem(value3.toString(), queryName3);
-                    list.add(file3);
+            for(CmisObject par: childrenOfParent){
+
+                fileForParentChildren = new BrowserItem(par.getName(),
+                    (par instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE,
+                    new BrowserItem(parent.getName())
+                    );
+            listForParentChildren.add(fileForParentChildren);
+
+                for(CmisObject grPar:childrenOfGrandParent){
+                    fileForGrandParentChildren = new BrowserItem(grPar.getName(),
+                            (grPar instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE,
+                            new BrowserItem(grandParent.getName()));
+                    listForGrandParentChildren.add(fileForGrandParentChildren);
+
+                    fileForList = new BrowserItem(root.getName(),
+                        (root instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE,
+
+                        new BrowserItem(parent.getName(),
+                                (root instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE,
+                                new BrowserItem(grandParent.getName(),
+                                        (root instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE,
+                                        listForGrandParentChildren),
+                                listForParentChildren)
+                        , listForChildren );
+                list.add(fileForList);
                 }
-            }
+           }
         }
 
         return list;

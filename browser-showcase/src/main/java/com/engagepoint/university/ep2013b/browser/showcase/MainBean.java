@@ -26,18 +26,18 @@ public class MainBean implements Serializable
         return message;
     }
 
-    @PostConstruct
-    public void  initItemList(){
-        list =  new CMISBrowserService().getRootFolder();
-    }
-
-    public List<BrowserItem> getList() {
-        return list;
-    }
-
-    public void setList(List<BrowserItem> list) {
-        this.list = list;
-    }
+    //@PostConstruct
+//    public void  initItemList(){
+//        list =  new CMISBrowserService().getRootFolder();
+//    }
+//
+//    public List<BrowserItem> getList() {
+//        return list;
+//    }
+//
+//    public void setList(List<BrowserItem> list) {
+//        this.list = list;
+//    }
 
 
 //    public List<BrowserItem> getList() {

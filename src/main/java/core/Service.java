@@ -95,4 +95,17 @@ public class Service {
 
         return lazyList;
     }
+
+    public List<BrowserItem> getItems(int start, int count) {
+        int toIndex = start + count;
+        if (toIndex > getLazyList().size()) {
+            toIndex = getLazyList().size();
+        }
+        return new ArrayList<BrowserItem>(getLazyList().subList(start, toIndex));
+    }
+
+    public int getItemsCount() {
+        return getLazyList().size();
+    }
+
 }

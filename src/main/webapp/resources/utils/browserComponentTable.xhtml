@@ -14,7 +14,8 @@
 
         <p:dataTable var="item" value="#{cc.lazyModel}" paginator="true" rows="2"
                      paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-                     id="table" lazy="true">>
+                     id="table" lazy="true"
+                     >>
 
             <p:column headerText="Id">
                 <h:outputText value="#{item.id}"/>

@@ -13,35 +13,24 @@ import java.util.*;
  * To change this template use File | Settings | File Templates.
  */
 public class LazyItemModel extends LazyDataModel<BrowserItem> {
-    private List<BrowserItem> datasource;
+    private Service service;
 
-    public LazyItemModel(List<BrowserItem> datasource) {
-        this.datasource = datasource;
+    public LazyItemModel(Service service) {
+        this.service = service;
     }
 
     @Override
     public List<BrowserItem> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,String> filters) {
-        List<BrowserItem> data = new ArrayList<BrowserItem>();
-
-        //rowCount
-        int dataSize = data.size();
-        this.setRowCount(dataSize);
-
-        //paginate
-        if(dataSize > pageSize) {
-            try {
-                return data.subList(first, first + pageSize);
-            }
-            catch(IndexOutOfBoundsException e) {
-                return data.subList(first, first + (dataSize % pageSize));
-            }
-        }
-        else {
-            return data;
-        }
+        return service.getItems(first, pageSize);
     }
 
-    public List<BrowserItem> getDatasource() {
-        return datasource;
+    @Override
+    public Object getRowKey(BrowserItem item) {
+        return item.getId();
+    }
+
+    @Override
+    public int getRowCount() {
+        return service.getItemsCount();
     }
 }

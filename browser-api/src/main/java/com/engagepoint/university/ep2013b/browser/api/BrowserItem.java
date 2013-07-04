@@ -10,6 +10,7 @@ public class BrowserItem implements Serializable
     public enum TYPE {FILE, FOLDER}
 
     private String id ;
+    private String path ;
     private TYPE type ;
     private String name ;
     private BrowserItem parent;
@@ -18,6 +19,14 @@ public class BrowserItem implements Serializable
 
     public BrowserItem()
     {
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public BrowserItem(String name)
@@ -60,6 +69,22 @@ public class BrowserItem implements Serializable
         this.children = children;
     }
 
+    public BrowserItem(String id, String name, TYPE type,  BrowserItem parent) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.parent = parent;
+
+
+    }
+
+    public BrowserItem(String id, String name, TYPE type, List<BrowserItem> children) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.children = children;
+
+    }
 
     public String getId()
     {

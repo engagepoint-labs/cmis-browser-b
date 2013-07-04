@@ -14,9 +14,9 @@ import java.util.List;
 import java.util.Map;
 
 
-public class CMISBrowserService {
+public class CMISBrowserService  {
 
-    public Session connect(){
+    private Session connect(){
         SessionFactory sessionFactory = SessionFactoryImpl.newInstance();
         Map<String, String> parameter = new HashMap<String, String>();
 
@@ -44,135 +44,84 @@ public class CMISBrowserService {
     }
 
 
-    public List<BrowserItem> findFolderById(String id) {
+    public List<BrowserItem> reachToRootFolder(Folder folder){
+        List<BrowserItem> parentList = new ArrayList<BrowserItem>();
+        List<BrowserItem> childrenList = new ArrayList<BrowserItem>();
+        BrowserItem file;
+        BrowserItem parent;
+        while (!folder.isRootFolder()){
+            ItemIterable<CmisObject> children =folder.getChildren();
 
-        Folder root =(Folder) connect().getObject(id);
-        ItemIterable<CmisObject> children = root.getChildren();
+            for (CmisObject o : children)
+            {
+                file = new BrowserItem(o.getId(),o.getName(),
+                        (folder instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE,
+                        new BrowserItem(folder.getName()));
 
-        Folder parent = root.getFolderParent();
-        ItemIterable<CmisObject> childrenOfParent = parent.getChildren();
+                childrenList.add(file);
 
-        Folder grandParent = parent.getFolderParent();
-        ItemIterable<CmisObject> childrenOfGrandParent = grandParent.getChildren();
+            }
 
+            parent = new BrowserItem(folder.getId(),folder.getName(),
+                    (folder instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE,
+                    childrenList);
+            parentList.add(parent);
+            folder = folder.getFolderParent();
 
+        }
 
-        List<BrowserItem> list = new ArrayList<BrowserItem>();
-        List<BrowserItem> listForChildren = new ArrayList<BrowserItem>();
-        List<BrowserItem> listForParentChildren = new ArrayList<BrowserItem>();
-        List<BrowserItem> listForGrandParentChildren = new ArrayList<BrowserItem>();
-
-
-
-        BrowserItem fileForList;
-        BrowserItem fileForChildren;
-        BrowserItem fileForParentChildren;
-        BrowserItem fileForGrandParentChildren;
-
-
-        for (CmisObject o : children) {
-
-            fileForChildren = new BrowserItem(o.getName(),
-                    (root instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE,
-                    new BrowserItem(root.getName()));
-            listForChildren.add(fileForChildren);
+        return parentList;
+    }
 
 
-            for(CmisObject par: childrenOfParent){
+    public BrowserItem findFolderById(String id) {
+        List<BrowserItem> findItems=new ArrayList<BrowserItem>();
 
-                fileForParentChildren = new BrowserItem(par.getName(),
-                        (root instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE,
-                        new BrowserItem(parent.getName())
-                );
-                listForParentChildren.add(fileForParentChildren);
+        Folder folderById =(Folder) connect().getObject(id);
+        findItems = reachToRootFolder(folderById);
 
-                for(CmisObject grPar:childrenOfGrandParent){
-                    fileForGrandParentChildren= new BrowserItem(grPar.getName(),
-                            (root instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE,
-                            new BrowserItem(grandParent.getName()));
-                    listForGrandParentChildren.add(fileForGrandParentChildren);
+        for(BrowserItem bi:findItems){
+            System.out.println("parent "+ bi.getId()+"   "+bi.getName());
+            if(id.equals(bi.getId())){
+                return bi;
+            }
 
-                    fileForList = new BrowserItem(root.getName(),
-                            (root instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE,
-
-                            new BrowserItem(parent.getName(),
-                                    (root instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE,
-                                    new BrowserItem(grandParent.getName(),
-                                            (root instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE,
-                                            listForGrandParentChildren),
-                                    listForParentChildren)
-                            , listForChildren );
-                    list.add(fileForList);
+            else{
+                for (BrowserItem chi:bi.getChildren()){
+                    System.out.println("children "+ chi.getId()+"   "+chi.getName());
+                   if(id.equals(chi.getId())){
+                        return chi;
+                    }
                 }
             }
         }
-
-        return list;
-
+      return null;
     }
 
-    public List<BrowserItem> findFolderByPath(String path) {
 
-        Folder root =(Folder) connect().getObjectByPath(path);
-        ItemIterable<CmisObject> children = root.getChildren();
+    public BrowserItem findFolderByPath(String path) {
+        List<BrowserItem> findItems=new ArrayList<BrowserItem>();
 
-        Folder parent = root.getFolderParent();
-        ItemIterable<CmisObject> childrenOfParent = parent.getChildren();
+        Folder folderByPath =(Folder) connect().getObject(path);
+         String id=folderByPath.getId();
+        findItems = reachToRootFolder(folderByPath);
 
-        Folder grandParent = parent.getFolderParent();
-        ItemIterable<CmisObject> childrenOfGrandParent = grandParent.getChildren();
+        for(BrowserItem bi:findItems){
+            System.out.println("parent "+ bi.getId()+"   "+bi.getName());
+            if(id.equals(bi.getId())){
+                return bi;
+            }
 
-
-
-        List<BrowserItem> list = new ArrayList<BrowserItem>();
-        List<BrowserItem> listForChildren = new ArrayList<BrowserItem>();
-        List<BrowserItem> listForParentChildren = new ArrayList<BrowserItem>();
-        List<BrowserItem> listForGrandParentChildren = new ArrayList<BrowserItem>();
-
-
-
-        BrowserItem fileForList;
-        BrowserItem fileForChildren;
-        BrowserItem fileForParentChildren;
-        BrowserItem fileForGrandParentChildren;
-
-        for (CmisObject o : children) {
-
-            fileForChildren = new BrowserItem(o.getName(),
-                    (o instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE,
-                    new BrowserItem(root.getName()));
-            listForChildren.add(fileForChildren);
-
-
-            for(CmisObject par: childrenOfParent){
-
-                fileForParentChildren = new BrowserItem(par.getName(),
-                    (par instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE,
-                    new BrowserItem(parent.getName())
-                    );
-            listForParentChildren.add(fileForParentChildren);
-
-                for(CmisObject grPar:childrenOfGrandParent){
-                    fileForGrandParentChildren = new BrowserItem(grPar.getName(),
-                            (grPar instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE,
-                            new BrowserItem(grandParent.getName()));
-                    listForGrandParentChildren.add(fileForGrandParentChildren);
-
-                    fileForList = new BrowserItem(root.getName(),
-                        (root instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE,
-
-                        new BrowserItem(parent.getName(),
-                                (root instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE,
-                                new BrowserItem(grandParent.getName(),
-                                        (root instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE,
-                                        listForGrandParentChildren),
-                                listForParentChildren)
-                        , listForChildren );
-                list.add(fileForList);
+            else{
+                for (BrowserItem chi:bi.getChildren()){
+                    System.out.println("children "+ chi.getId()+"   "+chi.getName());
+                    if(id.equals(chi.getId())){
+                        return chi;
+                    }
                 }
-           }
+            }
         }
-
-        return list;
+        return null;
     }
+
 }

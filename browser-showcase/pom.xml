@@ -16,13 +16,6 @@
     <url>http://maven.apache.org</url>
 
     <dependencies>
-        <!-- browser-api -->
-        <dependency>
-            <groupId>com.engagepoint.university.ep2013b</groupId>
-            <artifactId>browser-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
         <!-- browser-component -->
         <dependency>
             <groupId>com.engagepoint.university.ep2013b</groupId>

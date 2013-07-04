@@ -70,11 +70,6 @@ public class CMISBrowserService implements BrowserService
         BrowserItem result;
         List<BrowserItem> parents = findParents(current);
 
-        for(BrowserItem i : parents)
-        {
-            System.out.println(i);
-        }
-
         result = parents.get(0);
 
         // Fill children of each parent folder

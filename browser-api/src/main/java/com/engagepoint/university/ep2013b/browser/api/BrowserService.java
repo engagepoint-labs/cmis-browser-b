@@ -10,9 +10,8 @@ public interface BrowserService
     // should return unique name of service for search
     public String getServiceName();
 
-    public List<BrowserItem> getRootFolder();
-//    public List<BrowserItem> findFolderById(String id, boolean includeOnlyFolders);
-//    public List<BrowserItem> findFolderByPath(String path, boolean includeOnlyFolders);
+    public BrowserItem findFolderById(String id, boolean includeOnlyFolders);
+    public BrowserItem findFolderByPath(String path, boolean includeOnlyFolders);
 
     // ... add more here ...
 }

@@ -51,6 +51,7 @@
     <build>
 
         <pluginManagement>
+            <!-- Maven -->
             <plugins>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>

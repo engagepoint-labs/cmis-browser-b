@@ -107,4 +107,36 @@ public class BrowserItem implements Serializable
     {
         children.add(child);
     }
+
+    @Override
+    public boolean equals(Object other)
+    {
+        if (!(other instanceof BrowserItem)) return false;
+
+        return (this.getId().equals(((BrowserItem)other).getId()));
+    }
+
+    @Override
+    public String toString()
+    {
+        String result = "BrowserItem ("+getId()+", "+getName()+", "+getType().name()+", ";
+
+        result += (parent == null) ? "null" : parent.getId();
+        result += ", ";
+
+        if (children.isEmpty()) result += "empty";
+        else
+        {
+            result += "[";
+            for (BrowserItem i : children)
+            {
+                result += i.getId() + ", ";
+            }
+            result += "]";
+        }
+
+        result += ")";
+
+        return result;
+    }
 }

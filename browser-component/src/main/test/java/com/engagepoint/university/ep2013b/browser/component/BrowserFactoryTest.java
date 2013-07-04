@@ -1,7 +1,7 @@
 package com.engagepoint.university.ep2013b.browser.component;
 
 import com.engagepoint.university.ep2013b.browser.api.BrowserService;
-import com.engagepoint.university.ep2013b.browser.cmis.CMISHelper;
+import com.engagepoint.university.ep2013b.browser.cmis.CMISBrowserService;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
@@ -15,7 +15,7 @@ public class BrowserFactoryTest
     {
         BrowserService actual = BrowserFactory.getInstance("CMIS");
 
-        assertTrue(actual.getClass().isAssignableFrom(CMISHelper.class));
+        assertTrue(actual.getClass().isAssignableFrom(CMISBrowserService.class));
     }
 
 

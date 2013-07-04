@@ -31,7 +31,8 @@ public class MainBean implements Serializable
     {
         // Request data from convenient data service provider
         BrowserService data = BrowserFactory.getInstance("CMIS");
-        list = data.getRootFolder();
+        BrowserItem folder = data.findFolderByPath("/", false);
+        list = folder.getChildren();
     }
 
     public List<BrowserItem> getList() {

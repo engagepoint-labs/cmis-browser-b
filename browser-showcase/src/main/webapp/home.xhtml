@@ -4,6 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ep2013b="http://java.sun.com/jsf/composite"
       xmlns:p="http://primefaces.org/ui">
 <h:head>
     <title> browser-showcase </title>
@@ -11,33 +12,15 @@
 
 <h:body>
     <h:form>
-        <h1>Root's Folder:</h1>
-
-        <h3>Message:</h3>#{bean.message}
-        <p/>
-
-
-        <p:dataList value="#{bean.list}" var="f" itemType="disc">
-            <b>#{f.name}</b> (#{f.type})
-        </p:dataList>
-
-        <h1>Table</h1>
-
-        <p:dataTable var="f" value="#{bean.list}">
-            <p:column headerText="Name">
-                <h:outputText value="#{f.name}" />
-            </p:column>
-
-            <p:column headerText="Type">
-                <h:outputText value="#{f.type}" />
-            </p:column>
-
-        </p:dataTable>
         <p/>
 
         <p/>
 
         <h:outputText  value="Composite component stub"> </h:outputText>
+        <p/>
+
+        <ep2013b:browserComponent link = "/home.xhtml"/>
+
 
     </h:form>
 </h:body>

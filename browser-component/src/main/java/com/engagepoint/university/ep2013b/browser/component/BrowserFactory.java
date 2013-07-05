@@ -10,15 +10,15 @@ import java.util.ServiceLoader;
 public class BrowserFactory
 {
     // Creating new data service provider for specific name
-    public static BrowserService getInstance(String servicename) throws NullPointerException
+    public static BrowserService getInstance(String serviceName) throws NullPointerException
     {
         ServiceLoader<BrowserService> services = ServiceLoader.load(BrowserService.class);
 
         for (BrowserService i : services)
         {
-            if (i.getServiceName().equalsIgnoreCase(servicename)) return i;
+            if (i.getServiceName().equalsIgnoreCase(serviceName)) return i;
         }
 
-        throw new NullPointerException("Service with name \"" + servicename + "\" not found.");
+        throw new NullPointerException("Service with name \"" + serviceName + "\" not found.");
     }
 }

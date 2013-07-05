@@ -10,8 +10,13 @@ public interface BrowserService
     // should return unique name of service for search
     public String getServiceName();
 
-    public BrowserItem findFolderById(String id, boolean includeOnlyFolders);
-    public BrowserItem findFolderByPath(String path, boolean includeOnlyFolders);
+    public int getTotalPagesFromFolderById(String id, int rowCounts);
+    public int getTotalPagesFromFolderByPath(String id, int rowCounts);
+
+    public BrowserItem findFolderById(String id, int pagenum, int rowCounts);
+    public BrowserItem findFolderByPath(String path, int pagenum, int rowCounts);
+
+
 
     // ... add more here ...
 }

@@ -30,6 +30,10 @@ public class BrowserComponentTable extends UINamingContainer {
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         folderId = request.getParameter("folderId");
 
+        if(folderId == null) {
+            folderId = "100";
+        }
+
         BrowserItem currentFolder = service.findFolderById(folderId, false);
         browserItemsList = currentFolder.getChildren();
 

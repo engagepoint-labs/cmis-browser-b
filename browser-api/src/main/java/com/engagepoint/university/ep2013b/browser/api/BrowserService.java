@@ -16,8 +16,8 @@ public interface BrowserService
     public BrowserItem findFolderById(String id, int pagenum, int rowCounts);
     public BrowserItem findFolderByPath(String path, int pagenum, int rowCounts);
 
-    public BrowserItem findFolderById(String id);
-    public BrowserItem findFolderByPath(String path);
+    public BrowserItem findFolderById(String id, boolean includeOnlyFolders);
+    public BrowserItem findFolderByPath(String path, boolean includeOnlyFolders);
 
     // ... add more here ...
 }

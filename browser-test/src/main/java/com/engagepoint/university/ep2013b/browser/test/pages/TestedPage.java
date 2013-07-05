@@ -160,5 +160,11 @@ public class TestedPage extends WebDriverPage {
     }
 
 
+    public void isVisibleByXpath(String strXpath) {
 
+        //String ss = "";
+        findElement(By.xpath(strXpath)).isDisplayed();
+        manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+
+    }
 }

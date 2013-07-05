@@ -38,6 +38,11 @@ public class BrowserWebSteps {
         testedPage.isSelectedByXpath(strPath);
     }
 
+    @Then("in the table child by xpath '$strPath' is visible")
+    public void treeLeafIsDisplayedByXpath(String strPath){
+        testedPage.isDisplayedByXpath(strPath);
+    }
+
     @When("user clicks tree leaf by name '$strPath'")
     public void userClickTreeLeafByName(String strPath){
         testedPage.clickByName(strPath);

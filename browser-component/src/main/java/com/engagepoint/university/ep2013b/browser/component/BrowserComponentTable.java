@@ -11,12 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
-* Created with IntelliJ IDEA.
-* User: vladimir.ovcharov
-* Date: 7/4/13
-* Time: 10:56 AM
-* To change this template use File | Settings | File Templates.
-*/
+ * Created with IntelliJ IDEA.
+ * User: vladimir.ovcharov
+ * Date: 7/4/13
+ * Time: 10:56 AM
+ * To change this template use File | Settings | File Templates.
+ */
 
 @FacesComponent("browserComponentTable")
 public class BrowserComponentTable extends UINamingContainer {
@@ -30,17 +30,15 @@ public class BrowserComponentTable extends UINamingContainer {
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         folderId = request.getParameter("folderId");
         String paramPageNum = request.getParameter("pageNum");
-        if (paramPageNum == null || "".equals(paramPageNum)){
-            pageNum=1;
-        }   else{
+        if (paramPageNum == null || "".equals(paramPageNum)) {
+            pageNum = 1;
+        } else {
             pageNum = Integer.parseInt(paramPageNum);
         }
-        if(folderId == null) {
+        if (folderId == null) {
             folderId = "100";
             pageNum = 1;
         }
-
-
 
         BrowserItem currentFolder = service.findFolderById(folderId, pageNum, 2);
         browserItemsList = currentFolder.getChildren();
@@ -59,7 +57,7 @@ public class BrowserComponentTable extends UINamingContainer {
         return pageNum;
     }
 
-    public boolean isPrevAllowed(){
-        return pageNum>1;
+    public boolean isPrevAllowed() {
+        return pageNum > 1;
     }
 }

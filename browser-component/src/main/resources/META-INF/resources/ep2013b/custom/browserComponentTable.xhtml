@@ -27,14 +27,14 @@
             </p:column>
 
             <f:facet name="footer">
-                sdfsdf
-                <h:outputLink value="prev" disabled="#{cc.prevAllowed}">
+
+                <h:outputLink disabled="#{cc.prevAllowed}">
                     <h:outputText value="prev"/>
                     <f:param name="folderId" value="#{cc.folderId}"/>
                     <f:param name="pageNum" value="#{cc.pageNum}"/>
                 </h:outputLink>
 
-                <h:outputLink value="next" >
+                <h:outputLink >
                     <h:outputText value="next"/>
                     <f:param name="folderId" value="#{cc.folderId}"/>
                     <f:param name="pageNum" value="#{cc.pageNum + 1}"/>

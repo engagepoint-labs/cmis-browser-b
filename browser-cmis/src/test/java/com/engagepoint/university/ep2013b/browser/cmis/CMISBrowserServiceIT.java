@@ -33,7 +33,7 @@ public class CMISBrowserServiceIT
     }
 
     @Test
-    public void test_findFolderById()
+    public void test_findFolderById_paging()
     {
         BrowserItem item = cmisBrowserService.findFolderById("101", 2, 2);
 
@@ -43,12 +43,32 @@ public class CMISBrowserServiceIT
     }
 
     @Test
-    public void test_findFolderByPath()
+    public void test_findFolderByPath_paging()
     {
         BrowserItem item = cmisBrowserService.findFolderByPath("/My_Folder-0-0", 2, 2);
 
         assertEquals("My_Document-1-2", item.getChildren().get(0).getName());
         assertEquals("My_Folder-1-0", item.getChildren().get(1).getName());
+        assertEquals("RootFolder", item.getParent().getName());
+    }
+
+    @Test
+    public void test_findFolderById_without_paging()
+    {
+        BrowserItem item = cmisBrowserService.findFolderById("101");
+
+        assertEquals("My_Document-1-0", item.getChildren().get(0).getName());
+        assertEquals("My_Document-1-1", item.getChildren().get(1).getName());
+        assertEquals("RootFolder", item.getParent().getName());
+    }
+
+    @Test
+    public void test_findFolderByPath_without_paging()
+    {
+        BrowserItem item = cmisBrowserService.findFolderByPath("/My_Folder-0-0");
+
+        assertEquals("My_Document-1-0", item.getChildren().get(0).getName());
+        assertEquals("My_Document-1-1", item.getChildren().get(1).getName());
         assertEquals("RootFolder", item.getParent().getName());
     }
 }

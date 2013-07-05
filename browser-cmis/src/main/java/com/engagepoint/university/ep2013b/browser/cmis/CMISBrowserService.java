@@ -45,14 +45,28 @@ public class CMISBrowserService implements BrowserService
     public BrowserItem findFolderById(String id, int pagenum, int rowCounts)
     {
         Folder current = (Folder)session.getObject(id);
-        return findFolder(current, pagenum, rowCounts);
+        return findFolder(current, true, pagenum, rowCounts);
     }
 
     @Override
     public BrowserItem findFolderByPath(String path, int pagenum, int rowCounts)
     {
         Folder current = (Folder)session.getObjectByPath(path);
-        return findFolder(current, pagenum, rowCounts);
+        return findFolder(current, true, pagenum, rowCounts);
+    }
+
+    @Override
+    public BrowserItem findFolderById(String id)
+    {
+        Folder current = (Folder)session.getObject(id);
+        return findFolder(current, false, 0, 0);
+    }
+
+    @Override
+    public BrowserItem findFolderByPath(String path)
+    {
+        Folder current = (Folder)session.getObjectByPath(path);
+        return findFolder(current, false, 0, 0);
     }
 
 
@@ -95,7 +109,7 @@ public class CMISBrowserService implements BrowserService
     }
 
 
-    private BrowserItem findFolder(Folder current, int pagenum, int rowCounts)
+    private BrowserItem findFolder(Folder current, boolean isEnablePaging, int pagenum, int rowCounts)
     {
         BrowserItem result;
         List<BrowserItem> parents = findParents(current);
@@ -110,7 +124,7 @@ public class CMISBrowserService implements BrowserService
             ItemIterable<CmisObject> children = current.getChildren();
 
             // Paging only for selected folder
-            if (i.equals(result))
+            if (i.equals(result) && isEnablePaging)
             {
                 long skip = (pagenum-1)*rowCounts;
 

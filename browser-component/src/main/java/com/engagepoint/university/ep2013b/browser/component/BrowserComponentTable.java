@@ -10,13 +10,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-/**
- * Created with IntelliJ IDEA.
- * User: vladimir.ovcharov
- * Date: 7/4/13
- * Time: 10:56 AM
- * To change this template use File | Settings | File Templates.
- */
+
 
 @FacesComponent("browserComponentTable")
 public class BrowserComponentTable extends UINamingContainer {
@@ -25,6 +19,18 @@ public class BrowserComponentTable extends UINamingContainer {
     private String folderId;
     private Integer pageNum;
     private int pagesCount;
+    private BrowserItem selectedItem = null;
+
+
+
+
+    public BrowserItem getSelectedItem() {
+        return selectedItem;
+    }
+
+    public void setSelectedItem(BrowserItem selectedItem) {
+        this.selectedItem = selectedItem;
+    }
 
     public BrowserComponentTable() {
         service = BrowserFactory.getInstance("CMIS");

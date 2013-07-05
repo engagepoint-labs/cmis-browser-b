@@ -12,7 +12,10 @@
 
     <cc:implementation>
 
-        <p:dataTable var="item" value="#{cc.browserItemsList}"  id="table">
+        <p:dataTable var="item" value="#{cc.browserItemsList}"  id="table"
+                     rowKey="#{item.id}"
+                     selection="#{cc.selectedItem}"
+                     selectionMode="single">
 
             <p:column headerText="Id">
                 <h:outputText value="#{item.id}"  id="itemid" />

@@ -65,13 +65,16 @@ public class BrowserComponentTable extends UINamingContainer {
         return pageNum > 1;
     }
 
-
     public boolean isNextAllowed() {
         return pageNum + 1 <= pagesCount;
     }
 
     public int getNextPageNum() {
         return pageNum + 1;
+    }
+
+    public int getPrevPageNum() {
+        return pageNum - 1;
     }
 
     public int getPagesCount() {

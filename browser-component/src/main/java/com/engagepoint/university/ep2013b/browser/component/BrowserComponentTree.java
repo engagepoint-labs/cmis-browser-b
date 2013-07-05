@@ -26,7 +26,6 @@ public class BrowserComponentTree extends UINamingContainer {
     private BrowserService service;
     private String folderId;
 
-
     public BrowserComponentTree() {
         service = BrowserFactory.getInstance("CMIS");
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
@@ -38,7 +37,6 @@ public class BrowserComponentTree extends UINamingContainer {
         } else{
             currentFolder = service.findFolderById(folderId);
         }
-
 
         browserItemsList = currentFolder.getChildren();
 

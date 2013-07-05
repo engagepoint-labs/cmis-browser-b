@@ -27,7 +27,8 @@
             </p:column>
 
             <f:facet name="footer">
-                <h:panelGrid columns="4" width="200">
+                <h:panelGrid columns="4" width="100">
+
                 <h:outputLink rendered="#{cc.prevAllowed}">
                     <h:outputText value="first"/>
                     <f:param name="folderId" value="#{cc.folderId}"/>
@@ -37,7 +38,7 @@
                 <h:outputLink rendered="#{cc.prevAllowed}">
                     <h:outputText value="prev"/>
                     <f:param name="folderId" value="#{cc.folderId}"/>
-                    <f:param name="pageNum" value="#{cc.pageNum}"/>
+                    <f:param name="pageNum" value="#{cc.prevPageNum}"/>
                 </h:outputLink>
 
                 <h:outputLink rendered="#{cc.nextAllowed}">

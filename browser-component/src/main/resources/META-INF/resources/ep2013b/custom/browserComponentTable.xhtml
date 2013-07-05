@@ -35,14 +35,12 @@
                     <f:param name="pageNum" value="1"/>
                 </h:outputLink>
 
-                <h:commandButton value="prev" disabled="#{cc.prevAllowed}" id="butprev"  >
                 <h:outputLink rendered="#{cc.prevAllowed}">
                     <h:outputText value="prev"/>
                     <f:param name="folderId" value="#{cc.folderId}"/>
                     <f:param name="pageNum" value="#{cc.prevPageNum}"/>
                 </h:outputLink>
 
-                <h:commandButton value="next" id="butnext" >
                 <h:outputLink rendered="#{cc.nextAllowed}">
                     <h:outputText value="next"/>
                     <f:param name="folderId" value="#{cc.folderId}"/>

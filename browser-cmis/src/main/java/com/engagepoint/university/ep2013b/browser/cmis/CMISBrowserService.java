@@ -27,6 +27,35 @@ public class CMISBrowserService implements BrowserService
         return SERVICE_NAME;
     }
 
+    @Override
+    public int getTotalPagesFromFolderById(String id, int rowCounts)
+    {
+        Folder current = (Folder)session.getObject(id);
+        return getTotalPagesFromFolder(current, rowCounts);
+    }
+
+    @Override
+    public int getTotalPagesFromFolderByPath(String path, int rowCounts)
+    {
+        Folder current = (Folder)session.getObjectByPath(path);
+        return getTotalPagesFromFolder(current, rowCounts);
+    }
+
+    @Override
+    public BrowserItem findFolderById(String id, int pagenum, int rowCounts)
+    {
+        Folder current = (Folder)session.getObject(id);
+        return findFolder(current, pagenum, rowCounts);
+    }
+
+    @Override
+    public BrowserItem findFolderByPath(String path, int pagenum, int rowCounts)
+    {
+        Folder current = (Folder)session.getObjectByPath(path);
+        return findFolder(current, pagenum, rowCounts);
+    }
+
+
     private List<BrowserItem> findParents(Folder current)
     {
         List<BrowserItem> parents = new ArrayList<BrowserItem>();
@@ -65,15 +94,11 @@ public class CMISBrowserService implements BrowserService
         return parents;
     }
 
-    private BrowserItem findFolder(Folder current, boolean includeOnlyFolders)
+
+    private BrowserItem findFolder(Folder current, int pagenum, int rowCounts)
     {
         BrowserItem result;
         List<BrowserItem> parents = findParents(current);
-
-        for(BrowserItem i : parents)
-        {
-            System.out.println(i);
-        }
 
         result = parents.get(0);
 
@@ -81,10 +106,21 @@ public class CMISBrowserService implements BrowserService
         for(BrowserItem i : parents)
         {
             current = (Folder)session.getObject(i.getId());
+
             ItemIterable<CmisObject> children = current.getChildren();
+
+            // Paging only for selected folder
+            if (i.equals(result))
+            {
+                long skip = (pagenum-1)*rowCounts;
+
+                children = children.skipTo(skip).getPage(rowCounts);
+            }
+
+
             for (CmisObject o : children)
             {
-                if (!(o instanceof Folder) && includeOnlyFolders) continue;
+                if (!(o instanceof Folder) && !(i.equals(result))) continue;
 
                 BrowserItem child;
 
@@ -115,17 +151,14 @@ public class CMISBrowserService implements BrowserService
     }
 
 
-    public BrowserItem findFolderById(String id, boolean includeOnlyFolders)
+    private int getTotalPagesFromFolder(Folder current, int rowCounts)
     {
-        Folder current = (Folder)session.getObject(id);
-        return findFolder(current, includeOnlyFolders);
-    }
+        ItemIterable<CmisObject> children = current.getChildren();
 
-    @Override
-    public BrowserItem findFolderByPath(String path, boolean includeOnlyFolders)
-    {
-        Folder current = (Folder)session.getObjectByPath(path);
-        return findFolder(current, includeOnlyFolders);
+        long total = children.getTotalNumItems();
+        int totalPages = (int)Math.round((float)total/ rowCounts);
+
+        return totalPages;
     }
 
 

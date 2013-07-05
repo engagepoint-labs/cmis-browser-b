@@ -10,46 +10,45 @@ import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
 
-public class CMISBrowserServiceIT {
+public class CMISBrowserServiceIT
+{
     private CMISBrowserService cmisBrowserService = new CMISBrowserService();
 
-
     @Test
-    public void test_findFolderById_getName() throws Exception {
+    public void test_getTotalPagesFromFolderById()
+    {
+        int expected = 3;
+        int actual = cmisBrowserService.getTotalPagesFromFolderById("101", 2);
 
-        String id="108";
-        BrowserItem item = cmisBrowserService.findFolderById(id, false);
-        assertEquals("My_Folder-1-1", item.getName());
-        assertEquals("My_Document-2-0", item.getChildren().get(0).getName());
-        assertEquals("My_Folder-0-0",item.getParent().getName());
-        assertEquals("My_Document-1-0",item.getParent().getChildren().get(0).getName());
-        assertEquals("RootFolder",item.getParent().getParent().getName());
-        assertEquals("My_Document-0-0",item.getParent().getParent().getChildren().get(0).getName());
-
+        assertEquals(expected, actual);
     }
 
     @Test
-    public void test_findFolderById_getChildren_not_empty() throws Exception {
+    public void test_getTotalPagesFromFolderByPath()
+    {
+        int expected = 3;
+        int actual = cmisBrowserService.getTotalPagesFromFolderByPath("/My_Folder-0-0", 2);
 
-        String id="108";
-        BrowserItem item = cmisBrowserService.findFolderById(id, false);
-        assertFalse(item.getChildren().isEmpty());
+        assertEquals(expected, actual);
     }
-
 
     @Test
-    public void test_findFolderByPath() throws Exception{
+    public void test_findFolderById()
+    {
+        BrowserItem item = cmisBrowserService.findFolderById("101", 2, 2);
 
-        String path="/My_Folder-0-0/My_Folder-1-1";
-        BrowserItem item = cmisBrowserService.findFolderByPath(path, false);
-        assertEquals("My_Folder-1-1", item.getName());
-        assertEquals("My_Document-2-0", item.getChildren().get(0).getName());
-        assertEquals("My_Folder-0-0",item.getParent().getName());
-        assertEquals("My_Document-1-0",item.getParent().getChildren().get(0).getName());
-        assertEquals("RootFolder",item.getParent().getParent().getName());
-        assertEquals("My_Document-0-0",item.getParent().getParent().getChildren().get(0).getName());
+        assertEquals("My_Document-1-2", item.getChildren().get(0).getName());
+        assertEquals("My_Folder-1-0", item.getChildren().get(1).getName());
+        assertEquals("RootFolder", item.getParent().getName());
     }
 
+    @Test
+    public void test_findFolderByPath()
+    {
+        BrowserItem item = cmisBrowserService.findFolderByPath("/My_Folder-0-0", 2, 2);
 
-
+        assertEquals("My_Document-1-2", item.getChildren().get(0).getName());
+        assertEquals("My_Folder-1-0", item.getChildren().get(1).getName());
+        assertEquals("RootFolder", item.getParent().getName());
+    }
 }

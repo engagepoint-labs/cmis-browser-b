@@ -32,25 +32,25 @@ public class CMISBrowserServiceIT
 //        assertEquals(expected, actual);
 //    }
 //
-//    @Test
-//    public void test_findFolderById_paging()
-//    {
-//        BrowserItem item = cmisBrowserService.findFolderById("101", 2, 2);
-//
-//        assertEquals("My_Document-1-2", item.getChildren().get(0).getName());
-//        assertEquals("My_Folder-1-0", item.getChildren().get(1).getName());
+    @Test
+    public void test_findFolderById_paging()
+    {
+        BrowserItem item = cmisBrowserService.findFolderById("101", 2, 2);
+
+        assertEquals("My_Document-1-2", item.getChildren().get(0).getName());
+        assertEquals("My_Folder-1-0", item.getChildren().get(1).getName());
 //        assertEquals("RootFolder", item.getParent().getName());
-//    }
-//
-//    @Test
-//    public void test_findFolderByPath_paging()
-//    {
-//        BrowserItem item = cmisBrowserService.findFolderByPath("/My_Folder-0-0", 2, 2);
-//
-//        assertEquals("My_Document-1-2", item.getChildren().get(0).getName());
-//        assertEquals("My_Folder-1-0", item.getChildren().get(1).getName());
+    }
+
+    @Test
+    public void test_findFolderByPath_paging()
+    {
+        BrowserItem item = cmisBrowserService.findFolderByPath("/My_Folder-0-0", 2, 2);
+
+        assertEquals("My_Document-1-2", item.getChildren().get(0).getName());
+        assertEquals("My_Folder-1-0", item.getChildren().get(1).getName());
 //        assertEquals("RootFolder", item.getParent().getName());
-//    }
+    }
 //
 //    @Test
 //    public void test_findFolderById_without_paging()
@@ -72,17 +72,17 @@ public class CMISBrowserServiceIT
 //        assertEquals("RootFolder", item.getParent().getName());
 //    }
 
-    @Test
-    public void test_findFolderByPath_fsdfsdf()
-    {
-        BrowserItem item = cmisBrowserService.findFolderByPath("/My_Folder-0-0", true);
+//    @Test
+//    public void test_findFolderByPath_fsdfsdf()
+//    {
+//        BrowserItem item = cmisBrowserService.findFolderByPath("/My_Folder-0-0", true);
 //        BrowserItem item = cmisBrowserService.findFolderByPath("/My_Folder-0-0/My_Folder-1-0/My_Folder-2-0", true);
 
-        System.out.println("Children");
-        for (BrowserItem i : item.getChildren())
-        {
-            System.out.println(i);
-        }
+//        System.out.println("Children");
+//        for (BrowserItem i : item.getChildren())
+//        {
+//            System.out.println(i);
+//        }
 
 //        System.out.println("Parent 1 level");
 //        for (BrowserItem i : item.getParent().getChildren())
@@ -104,5 +104,5 @@ public class CMISBrowserServiceIT
 //        {
 //            System.out.println(i);
 //        }
-    }
+//    }
 }

@@ -121,6 +121,12 @@ public class CMISBrowserService implements BrowserService
         {
             ItemIterable<CmisObject> children = ((Folder) current).getChildren();
 
+            if(isEnablePaging)
+            {
+                long skip = (pagenum-1)*rowCounts;
+                children = children.skipTo(skip).getPage(rowCounts);
+            }
+
             for (CmisObject o : children)
             {
     //            BrowserItem child = new BrowserItem();

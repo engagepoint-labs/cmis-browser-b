@@ -24,7 +24,6 @@ public class BrowserComponentTable extends UINamingContainer {
     private BrowserService service;
     private String folderId;
 
-
     public BrowserComponentTable() {
         service = BrowserFactory.getInstance("CMIS");
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();

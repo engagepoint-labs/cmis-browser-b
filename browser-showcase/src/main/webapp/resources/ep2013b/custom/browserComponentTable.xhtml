@@ -7,7 +7,7 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
     <cc:interface componentType="browserComponentTable">
-        <cc:attribute name="link" />
+        <cc:attribute name="link"/>
     </cc:interface>
 
     <cc:implementation>
@@ -25,14 +25,19 @@
             <p:column headerText="Type">
                 <h:outputText value="#{item.type}"/>
             </p:column>
-            <!--Custom paging for the future-->
-                  <!--<f:facet name="footer">-->
-                      <!--<h:commandButton value="prev" disabled="#{cc.fromRow-cc.rowsCount >0}">-->
-                          <!--<f:param name="folderId" value="#{cc.folderId}"/>-->
-                          <!--<f:param name="fromRow" value="#{cc.fromRow-cc.rowsCount}"/>-->
-                          <!--<f:param name="rowsCount" value="#{cc.toRowCount-cc.rowsCount}"/>-->
-                      <!--</h:commandButton>-->
-                  <!--</f:facet>-->
+
+            <f:facet name="footer">
+                <h:commandButton value="prev" disabled="">
+                    <f:param name="folderId" value=""/>
+                    <f:param name="fromRow" value=""/>
+                    <f:param name="rowsCount" value=""/>
+                </h:commandButton>
+
+                <h:commandButton value="next" disabled="">
+                </h:commandButton>
+
+            </f:facet>
+
         </p:dataTable>
     </cc:implementation>
 </ui:composition>

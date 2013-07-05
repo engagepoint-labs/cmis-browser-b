@@ -39,6 +39,8 @@ public class BrowserComponentTable extends UINamingContainer {
 
     }
 
+
+
     public List<BrowserItem> getBrowserItemsList() {
         return browserItemsList;
     }

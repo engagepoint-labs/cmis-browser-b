@@ -45,28 +45,28 @@ public class CMISBrowserService implements BrowserService
     public BrowserItem findFolderById(String id, int pagenum, int rowCounts)
     {
         Folder current = (Folder)session.getObject(id);
-        return findFolder(current, true, pagenum, rowCounts);
+        return findFolder(current, false, true, pagenum, rowCounts);
     }
 
     @Override
     public BrowserItem findFolderByPath(String path, int pagenum, int rowCounts)
     {
         Folder current = (Folder)session.getObjectByPath(path);
-        return findFolder(current, true, pagenum, rowCounts);
+        return findFolder(current, false, true, pagenum, rowCounts);
     }
 
     @Override
-    public BrowserItem findFolderById(String id)
+    public BrowserItem findFolderById(String id, boolean includeOnlyFolders)
     {
         Folder current = (Folder)session.getObject(id);
-        return findFolder(current, false, 0, 0);
+        return findFolder(current, includeOnlyFolders, false, 0, 0);
     }
 
     @Override
-    public BrowserItem findFolderByPath(String path)
+    public BrowserItem findFolderByPath(String path, boolean includeOnlyFolders)
     {
         Folder current = (Folder)session.getObjectByPath(path);
-        return findFolder(current, false, 0, 0);
+        return findFolder(current, includeOnlyFolders, false, 0, 0);
     }
 
 
@@ -109,12 +109,10 @@ public class CMISBrowserService implements BrowserService
     }
 
 
-    private BrowserItem findFolder(Folder current, boolean isEnablePaging, int pagenum, int rowCounts)
+    private BrowserItem findFolder(Folder current, boolean includeOnlyFolders, boolean isEnablePaging, int pagenum, int rowCounts)
     {
         BrowserItem result;
         List<BrowserItem> parents = findParents(current);
-
-        result = parents.get(0);
 
         // Fill children of each parent folder
         for(BrowserItem i : parents)
@@ -124,17 +122,17 @@ public class CMISBrowserService implements BrowserService
             ItemIterable<CmisObject> children = current.getChildren();
 
             // Paging only for selected folder
-            if (i.equals(result) && isEnablePaging)
-            {
-                long skip = (pagenum-1)*rowCounts;
-
-                children = children.skipTo(skip).getPage(rowCounts);
-            }
+//            if (i.equals(result) && isEnablePaging)
+//            {
+//                long skip = (pagenum-1)*rowCounts;
+//
+//                children = children.skipTo(skip).getPage(rowCounts);
+//            }
 
 
             for (CmisObject o : children)
             {
-                if (!(o instanceof Folder) && !(i.equals(result))) continue;
+//                if (!(o instanceof Folder) && !(i.equals(result))) continue;
 
                 BrowserItem child;
 
@@ -150,16 +148,51 @@ public class CMISBrowserService implements BrowserService
                     child.setName(o.getName());
                     child.setType((o instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE);
                     child.setParent(i);
+                }
+                else child = parents.get(index);
 
-                    i.setChild(child);
-                }
-                else
+
+//                // Sub Childs
+                if ((o instanceof Folder))
                 {
-                    child = parents.get(index);
-                    i.setChild(child);
+                    Folder level2 = (Folder)session.getObject(child.getId());
+                    ItemIterable<CmisObject> subchildren = level2.getChildren();
+
+                    for (CmisObject s : subchildren)
+                    {
+                        BrowserItem subchild = new BrowserItem();
+                        subchild.setId(s.getId());
+                        subchild.setName(s.getName());
+                        subchild.setType((s instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE);
+                        subchild.setParent(child);
+
+                        child.setChild(subchild);
+                    }
                 }
+
+                i.setChild(child);
             }
         }
+
+        result = parents.get(0);
+
+//        ..............
+//        List<BrowserItem> list = result.getChildren();
+//        List<BrowserItem> a = new ArrayList<BrowserItem>();
+//        for (BrowserItem i : list)
+//        {
+//            if (!((i.getType() == BrowserItem.TYPE.FOLDER) &&
+//                (i.getChildren().isEmpty()) &&
+//                !(i.getName().equals("My_Folder-2-0") &&
+//                   !(i.getName().equals("My_Folder-2-1")))))
+//            {
+//                a.add(i);
+//            }
+//        }
+//
+//        result.setChildren(a);
+//        ...............
+
 
         return result;
     }

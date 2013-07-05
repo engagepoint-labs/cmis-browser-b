@@ -20,7 +20,7 @@ public class BrowserWebSteps {
 
     @Then("page is shown")
     public void pageIsShown() {
-        testedPage.found("browser-showcase");
+        testedPage.pageIsShown();
     }
 
     @Then("find text '$text'")

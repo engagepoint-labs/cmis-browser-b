@@ -27,22 +27,34 @@
             </p:column>
 
             <f:facet name="footer">
+                <h:panelGrid columns="4" width="100">
 
-                <h:outputLink>
-
+                <h:outputLink rendered="#{cc.prevAllowed}">
+                    <h:outputText value="first"/>
+                    <f:param name="folderId" value="#{cc.folderId}"/>
+                    <f:param name="pageNum" value="1"/>
                 </h:outputLink>
 
                 <h:commandButton value="prev" disabled="#{cc.prevAllowed}" id="butprev"  >
+                <h:outputLink rendered="#{cc.prevAllowed}">
+                    <h:outputText value="prev"/>
                     <f:param name="folderId" value="#{cc.folderId}"/>
-                    <f:param name="pageNum" value="#{cc.pageNum}"/>
-                </h:commandButton>
+                    <f:param name="pageNum" value="#{cc.prevPageNum}"/>
+                </h:outputLink>
 
                 <h:commandButton value="next" id="butnext" >
+                <h:outputLink rendered="#{cc.nextAllowed}">
+                    <h:outputText value="next"/>
                     <f:param name="folderId" value="#{cc.folderId}"/>
-                    <f:param name="pageNum" value="#{cc.pageNum + 1}"/>
+                    <f:param name="pageNum" value="#{cc.nextPageNum}"/>
+                </h:outputLink>
 
-                </h:commandButton>
-
+                <h:outputLink rendered="#{cc.nextAllowed}">
+                    <h:outputText value="last"/>
+                    <f:param name="folderId" value="#{cc.folderId}"/>
+                    <f:param name="pageNum" value="#{cc.pagesCount}"/>
+                </h:outputLink>
+                </h:panelGrid>
             </f:facet>
 
         </p:dataTable>

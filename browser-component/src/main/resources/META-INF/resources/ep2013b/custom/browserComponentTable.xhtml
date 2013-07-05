@@ -12,18 +12,21 @@
 
     <cc:implementation>
 
-        <p:dataTable var="item" value="#{cc.browserItemsList}">
+        <p:dataTable var="item" value="#{cc.browserItemsList}"  id="table"
+                     rowKey="#{item.id}"
+                     selection="#{cc.selectedItem}"
+                     selectionMode="single">
 
             <p:column headerText="Id">
-                <h:outputText value="#{item.id}"/>
+                <h:outputText value="#{item.id}"  id="itemid" />
             </p:column>
 
             <p:column headerText="Name">
-                <h:outputText value="#{item.name}"/>
+                <h:outputText value="#{item.name}" id="itemname" />
             </p:column>
 
             <p:column headerText="Type">
-                <h:outputText value="#{item.type}"/>
+                <h:outputText value="#{item.type}" id="itemtype" />
             </p:column>
 
             <f:facet name="footer">

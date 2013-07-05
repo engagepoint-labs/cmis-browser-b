@@ -16,7 +16,7 @@
 
             <p:treeNode id="node" >
 
-                <h:outputLink value="#{cc.attrs.link}">
+                <h:outputLink value="#{cc.attrs.link}" id="treelink" >
                     <h:outputText value="#{node.name}"/>
 
                     <f:param name="folderId" value="#{node.id}"/>

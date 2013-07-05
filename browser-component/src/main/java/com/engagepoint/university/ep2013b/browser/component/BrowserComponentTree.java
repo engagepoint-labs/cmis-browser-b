@@ -25,18 +25,23 @@ public class BrowserComponentTree extends UINamingContainer {
     private boolean isSelected = false;
     private BrowserService service;
     private String folderId;
+    private String pageNum;
+
 
     public BrowserComponentTree() {
+        service = BrowserFactory.getInstance("CMIS");
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         folderId = request.getParameter("folderId");
+        pageNum = request.getParameter("pageNum");
 
         if(folderId == null) {
             folderId = "100";
+            pageNum = "1";
         }
 
-        service = BrowserFactory.getInstance("CMIS");
+        int num = Integer.parseInt(pageNum);
 
-        BrowserItem currentFolder = service.findFolderById(folderId, true);
+        BrowserItem currentFolder = service.findFolderById(folderId, num, 2);
         browserItemsList = currentFolder.getChildren();
 
         root = new DefaultTreeNode("Root", null);

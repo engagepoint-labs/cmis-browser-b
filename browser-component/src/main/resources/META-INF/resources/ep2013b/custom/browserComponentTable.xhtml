@@ -27,13 +27,20 @@
             </p:column>
 
             <f:facet name="footer">
-                <h:commandButton value="prev" disabled="">
-                    <f:param name="folderId" value=""/>
-                    <f:param name="fromRow" value=""/>
-                    <f:param name="rowsCount" value=""/>
+
+                <h:outputLink>
+
+                </h:outputLink>
+
+                <h:commandButton value="prev" disabled="#{cc.prevAllowed}">
+                    <f:param name="folderId" value="#{cc.folderId}"/>
+                    <f:param name="pageNum" value="#{cc.pageNum}"/>
                 </h:commandButton>
 
-                <h:commandButton value="next" disabled="">
+                <h:commandButton value="next" >
+                    <f:param name="folderId" value="#{cc.folderId}"/>
+                    <f:param name="pageNum" value="#{cc.pageNum + 1}"/>
+
                 </h:commandButton>
 
             </f:facet>

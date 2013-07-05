@@ -23,23 +23,29 @@ public class BrowserComponentTable extends UINamingContainer {
     private List<BrowserItem> browserItemsList;
     private BrowserService service;
     private String folderId;
-
+    private Integer pageNum;
 
     public BrowserComponentTable() {
         service = BrowserFactory.getInstance("CMIS");
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         folderId = request.getParameter("folderId");
-
+        String paramPageNum = request.getParameter("pageNum");
+        if (paramPageNum == null || "".equals(paramPageNum)){
+            pageNum=1;
+        }   else{
+            pageNum = Integer.parseInt(paramPageNum);
+        }
         if(folderId == null) {
             folderId = "100";
+            pageNum = 1;
         }
 
-        BrowserItem currentFolder = service.findFolderById(folderId, false);
+
+
+        BrowserItem currentFolder = service.findFolderById(folderId, pageNum, 2);
         browserItemsList = currentFolder.getChildren();
 
     }
-
-
 
     public List<BrowserItem> getBrowserItemsList() {
         return browserItemsList;
@@ -47,5 +53,13 @@ public class BrowserComponentTable extends UINamingContainer {
 
     public String getFolderId() {
         return folderId;
+    }
+
+    public Integer getPageNum() {
+        return pageNum;
+    }
+
+    public boolean isPrevAllowed(){
+        return pageNum>1;
     }
 }

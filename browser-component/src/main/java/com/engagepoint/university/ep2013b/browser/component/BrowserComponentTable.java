@@ -24,6 +24,7 @@ public class BrowserComponentTable extends UINamingContainer {
     private BrowserService service;
     private String folderId;
     private Integer pageNum;
+    private int pagesCount;
 
     public BrowserComponentTable() {
         service = BrowserFactory.getInstance("CMIS");
@@ -35,14 +36,17 @@ public class BrowserComponentTable extends UINamingContainer {
         } else {
             pageNum = Integer.parseInt(paramPageNum);
         }
-        if (folderId == null) {
-            folderId = "100";
-            pageNum = 1;
+        BrowserItem currentFolder = null;
+        if(folderId == null) {
+            currentFolder = service.findFolderByPath("/");
+            folderId = currentFolder.getId();
+        } else{
+            currentFolder = service.findFolderById(folderId, pageNum, 3);
+
         }
 
-        BrowserItem currentFolder = service.findFolderById(folderId, pageNum, 2);
+        pagesCount = service.getTotalPagesFromFolderById(folderId, 3);
         browserItemsList = currentFolder.getChildren();
-
     }
 
     public List<BrowserItem> getBrowserItemsList() {
@@ -59,5 +63,18 @@ public class BrowserComponentTable extends UINamingContainer {
 
     public boolean isPrevAllowed() {
         return pageNum > 1;
+    }
+
+
+    public boolean isNextAllowed() {
+        return pageNum + 1 <= pagesCount;
+    }
+
+    public int getNextPageNum() {
+        return pageNum + 1;
+    }
+
+    public int getPagesCount() {
+        return pagesCount;
     }
 }

@@ -31,12 +31,15 @@ public class BrowserComponentTree extends UINamingContainer {
         service = BrowserFactory.getInstance("CMIS");
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         folderId = request.getParameter("folderId");
-
+        BrowserItem currentFolder = null;
         if(folderId == null) {
-            folderId = "100";
+            currentFolder = service.findFolderByPath("/");
+            folderId = currentFolder.getId();
+        } else{
+            currentFolder = service.findFolderById(folderId);
         }
 
-        BrowserItem currentFolder = service.findFolderById(folderId);
+
         browserItemsList = currentFolder.getChildren();
 
         root = new DefaultTreeNode("Root", null);

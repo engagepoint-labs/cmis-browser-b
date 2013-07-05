@@ -11,12 +11,13 @@ public interface BrowserService
     public String getServiceName();
 
     public int getTotalPagesFromFolderById(String id, int rowCounts);
-    public int getTotalPagesFromFolderByPath(String id, int rowCounts);
+    public int getTotalPagesFromFolderByPath(String path, int rowCounts);
 
     public BrowserItem findFolderById(String id, int pagenum, int rowCounts);
     public BrowserItem findFolderByPath(String path, int pagenum, int rowCounts);
 
-
+    public BrowserItem findFolderById(String id);
+    public BrowserItem findFolderByPath(String path);
 
     // ... add more here ...
 }

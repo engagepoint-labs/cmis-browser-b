@@ -45,28 +45,28 @@ public class CMISBrowserService implements BrowserService
     public BrowserItem findFolderById(String id, int pagenum, int rowCounts)
     {
         Folder current = (Folder)session.getObject(id);
-        return findFolder(current, true, pagenum, rowCounts);
+        return findFolder(current, false, true, pagenum, rowCounts);
     }
 
     @Override
     public BrowserItem findFolderByPath(String path, int pagenum, int rowCounts)
     {
         Folder current = (Folder)session.getObjectByPath(path);
-        return findFolder(current, true, pagenum, rowCounts);
+        return findFolder(current, false, true, pagenum, rowCounts);
     }
 
     @Override
-    public BrowserItem findFolderById(String id)
+    public BrowserItem findFolderById(String id, boolean includeOnlyFolders)
     {
         Folder current = (Folder)session.getObject(id);
-        return findFolder(current, false, 0, 0);
+        return findFolder(current, includeOnlyFolders, false, 0, 0);
     }
 
     @Override
-    public BrowserItem findFolderByPath(String path)
+    public BrowserItem findFolderByPath(String path, boolean includeOnlyFolders)
     {
         Folder current = (Folder)session.getObjectByPath(path);
-        return findFolder(current, false, 0, 0);
+        return findFolder(current, includeOnlyFolders, false, 0, 0);
     }
 
 
@@ -109,55 +109,28 @@ public class CMISBrowserService implements BrowserService
     }
 
 
-    private BrowserItem findFolder(Folder current, boolean isEnablePaging, int pagenum, int rowCounts)
+    private BrowserItem findFolder(CmisObject current, boolean includeOnlyFolders, boolean isEnablePaging, int pagenum, int rowCounts)
     {
-        BrowserItem result;
-        List<BrowserItem> parents = findParents(current);
+        BrowserItem result = new BrowserItem();
 
-        result = parents.get(0);
+        result.setId(current.getId());
+        result.setName(current.getName());
+        result.setType((current instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE);
 
-        // Fill children of each parent folder
-        for(BrowserItem i : parents)
+        if ((current instanceof Folder))
         {
-            current = (Folder)session.getObject(i.getId());
-
-            ItemIterable<CmisObject> children = current.getChildren();
-
-            // Paging only for selected folder
-            if (i.equals(result) && isEnablePaging)
-            {
-                long skip = (pagenum-1)*rowCounts;
-
-                children = children.skipTo(skip).getPage(rowCounts);
-            }
-
+            ItemIterable<CmisObject> children = ((Folder) current).getChildren();
 
             for (CmisObject o : children)
             {
-                if (!(o instanceof Folder) && !(i.equals(result))) continue;
+    //            BrowserItem child = new BrowserItem();
+    //            child.setId(o.getId());
+    //            child.setName(o.getName());
+    //            child.setType((o instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE);
 
-                BrowserItem child;
+                BrowserItem child = findFolder(o, includeOnlyFolders, isEnablePaging, pagenum, rowCounts);
 
-                // check if already exists (is one of the parents)
-                BrowserItem find = new BrowserItem();
-                find.setId(o.getId());
-                int index = parents.indexOf(find);
-
-                if (index == -1)
-                {
-                    child = new BrowserItem();
-                    child.setId(o.getId());
-                    child.setName(o.getName());
-                    child.setType((o instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE);
-                    child.setParent(i);
-
-                    i.setChild(child);
-                }
-                else
-                {
-                    child = parents.get(index);
-                    i.setChild(child);
-                }
+                result.setChild(child);
             }
         }
 

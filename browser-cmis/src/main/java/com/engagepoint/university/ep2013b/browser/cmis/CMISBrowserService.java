@@ -28,47 +28,18 @@ public class CMISBrowserService implements BrowserService
     }
 
     @Override
-    public int getTotalPagesFromFolderById(String id, int rowCounts)
+    public BrowserItem findFolderById(String id)
     {
         Folder current = (Folder)session.getObject(id);
-        return getTotalPagesFromFolder(current, rowCounts);
+        return findFolder(current);
     }
 
     @Override
-    public int getTotalPagesFromFolderByPath(String path, int rowCounts)
+    public BrowserItem findFolderByPath(String path)
     {
         Folder current = (Folder)session.getObjectByPath(path);
-        return getTotalPagesFromFolder(current, rowCounts);
+        return findFolder(current);
     }
-
-    @Override
-    public BrowserItem findFolderById(String id, int pagenum, int rowCounts)
-    {
-        Folder current = (Folder)session.getObject(id);
-        return findFolder(current, false, true, pagenum, rowCounts);
-    }
-
-    @Override
-    public BrowserItem findFolderByPath(String path, int pagenum, int rowCounts)
-    {
-        Folder current = (Folder)session.getObjectByPath(path);
-        return findFolder(current, false, true, pagenum, rowCounts);
-    }
-
-    @Override
-    public BrowserItem findFolderById(String id, boolean includeOnlyFolders)
-    {
-        Folder current = (Folder)session.getObject(id);
-        return findFolder(current, includeOnlyFolders, false, 0, 0);
-    }
-
-    @Override
-    public BrowserItem findFolderByPath(String path, boolean includeOnlyFolders)
-    {
-        Folder current = (Folder)session.getObjectByPath(path);
-        return findFolder(current, includeOnlyFolders, false, 0, 0);
-    }
-
 
     private List<BrowserItem> findParents(Folder current)
     {
@@ -109,49 +80,58 @@ public class CMISBrowserService implements BrowserService
     }
 
 
-    private BrowserItem findFolder(CmisObject current, boolean includeOnlyFolders, boolean isEnablePaging, int pagenum, int rowCounts)
+    private BrowserItem findFolder(Folder current)
     {
-        BrowserItem result = new BrowserItem();
+        BrowserItem result;
+        List<BrowserItem> parents = findParents(current);
 
-        result.setId(current.getId());
-        result.setName(current.getName());
-        result.setType((current instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE);
-
-        if ((current instanceof Folder))
+        // Fill children of each parent folder
+        for(BrowserItem i : parents)
         {
-            ItemIterable<CmisObject> children = ((Folder) current).getChildren();
+            current = (Folder)session.getObject(i.getId());
 
-            if(isEnablePaging)
-            {
-                long skip = (pagenum-1)*rowCounts;
-                children = children.skipTo(skip).getPage(rowCounts);
-            }
+            ItemIterable<CmisObject> children = current.getChildren();
 
             for (CmisObject o : children)
             {
-    //            BrowserItem child = new BrowserItem();
-    //            child.setId(o.getId());
-    //            child.setName(o.getName());
-    //            child.setType((o instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE);
+                BrowserItem child, subchild;
 
-                BrowserItem child = findFolder(o, includeOnlyFolders, isEnablePaging, pagenum, rowCounts);
+                // check if already exists (is one of the parents)
+                BrowserItem find = new BrowserItem();
+                find.setId(o.getId());
+                int index = parents.indexOf(find);
 
-                result.setChild(child);
+                if (index == -1)
+                {
+                    child = new BrowserItem();
+                    child.setId(o.getId());
+                    child.setName(o.getName());
+                    child.setType((o instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE);
+                    child.setParent(i);
+
+                    if (o instanceof Folder)
+                    {
+                        for (CmisObject s : ((Folder) o).getChildren())
+                        {
+                            subchild = new BrowserItem();
+                            subchild.setId(s.getId());
+                            subchild.setName(s.getName());
+                            subchild.setType((s instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE);
+                            subchild.setParent(child);
+
+                            child.setChild(subchild);
+                        }
+                    }
+
+                }
+                else child = parents.get(index);
+
+                i.setChild(child);
             }
         }
 
+        result = parents.get(0);
         return result;
-    }
-
-
-    private int getTotalPagesFromFolder(Folder current, int rowCounts)
-    {
-        ItemIterable<CmisObject> children = current.getChildren();
-
-        long total = children.getTotalNumItems();
-        int totalPages = (int)Math.round((float)total/ rowCounts);
-
-        return totalPages;
     }
 
 
@@ -160,18 +140,23 @@ public class CMISBrowserService implements BrowserService
         SessionFactory sessionFactory = SessionFactoryImpl.newInstance();
         Map<String, String> parameter = new HashMap<String, String>();
 
+        // ATOM
+        final String url = "http://localhost:8080/server/atom11";
+        parameter.put(SessionParameter.ATOMPUB_URL, url);
+        parameter.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
+
         // WSDL
-        final String url = "http://localhost:8080/server/services/";
-        parameter.put(SessionParameter.BINDING_TYPE, BindingType.WEBSERVICES.value());
-        parameter.put(SessionParameter.WEBSERVICES_ACL_SERVICE,             url+"ACLService?wsdl");
-        parameter.put(SessionParameter.WEBSERVICES_DISCOVERY_SERVICE,       url+"DiscoveryService?wsdl");
-        parameter.put(SessionParameter.WEBSERVICES_MULTIFILING_SERVICE,     url+"MultiFilingService?wsdl");
-        parameter.put(SessionParameter.WEBSERVICES_NAVIGATION_SERVICE,      url+"NavigationService?wsdl");
-        parameter.put(SessionParameter.WEBSERVICES_OBJECT_SERVICE,          url+"ObjectService?wsdl");
-        parameter.put(SessionParameter.WEBSERVICES_POLICY_SERVICE,          url+"PolicyService?wsdl");
-        parameter.put(SessionParameter.WEBSERVICES_RELATIONSHIP_SERVICE,    url+"RelationshipService?wsdl");
-        parameter.put(SessionParameter.WEBSERVICES_REPOSITORY_SERVICE,      url+"RepositoryService?wsdl");
-        parameter.put(SessionParameter.WEBSERVICES_VERSIONING_SERVICE,      url+"VersioningService?wsdl");
+//        final String url = "http://localhost:8080/server/services/";
+//        parameter.put(SessionParameter.BINDING_TYPE, BindingType.WEBSERVICES.value());
+//        parameter.put(SessionParameter.WEBSERVICES_ACL_SERVICE,             url+"ACLService?wsdl");
+//        parameter.put(SessionParameter.WEBSERVICES_DISCOVERY_SERVICE,       url+"DiscoveryService?wsdl");
+//        parameter.put(SessionParameter.WEBSERVICES_MULTIFILING_SERVICE,     url+"MultiFilingService?wsdl");
+//        parameter.put(SessionParameter.WEBSERVICES_NAVIGATION_SERVICE,      url+"NavigationService?wsdl");
+//        parameter.put(SessionParameter.WEBSERVICES_OBJECT_SERVICE,          url+"ObjectService?wsdl");
+//        parameter.put(SessionParameter.WEBSERVICES_POLICY_SERVICE,          url+"PolicyService?wsdl");
+//        parameter.put(SessionParameter.WEBSERVICES_RELATIONSHIP_SERVICE,    url+"RelationshipService?wsdl");
+//        parameter.put(SessionParameter.WEBSERVICES_REPOSITORY_SERVICE,      url+"RepositoryService?wsdl");
+//        parameter.put(SessionParameter.WEBSERVICES_VERSIONING_SERVICE,      url+"VersioningService?wsdl");
 
         Repository repository = sessionFactory.getRepositories(parameter).get(0);
         parameter.put(SessionParameter.REPOSITORY_ID, repository.getId());

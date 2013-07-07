@@ -47,11 +47,11 @@ public class BrowserComponentTable extends UINamingContainer {
             currentFolder = service.findFolderByPath("/");
             folderId = currentFolder.getId();
         } else{
-            currentFolder = service.findFolderById(folderId, pageNum, 3);
+            currentFolder = service.findFolderById(folderId);
 
         }
 
-        pagesCount = service.getTotalPagesFromFolderById(folderId, 3);
+//        pagesCount = service.getTotalPagesFromFolderById(folderId);
         browserItemsList = currentFolder.getChildren();
     }
 

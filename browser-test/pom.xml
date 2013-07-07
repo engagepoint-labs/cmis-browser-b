@@ -91,7 +91,6 @@
      </dependencies>
 
     <build>
-
         <resources>
             <resource>
                 <directory>src/main/java</directory>
@@ -105,6 +104,7 @@
                 <filtering>true</filtering>
             </resource>
         </resources>
+
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -118,50 +118,50 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+
         <plugins>
+            <!--<plugin>-->
+                <!--<groupId>org.jbehave</groupId>-->
+                <!--<artifactId>jbehave-maven-plugin</artifactId>-->
+                <!--<version>${jbehave.core.version}</version>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>unpack-view-resources</id>-->
+                        <!--<phase>process-resources</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>unpack-view-resources</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
+            <!--<plugin>-->
+                <!--<groupId>org.jbehave</groupId>-->
+                <!--<artifactId>jbehave-maven-plugin</artifactId>-->
+                <!--<version>4.0-beta-3</version>-->
 
-            <plugin>
-                <groupId>org.jbehave</groupId>
-                <artifactId>jbehave-maven-plugin</artifactId>
-                <version>${jbehave.core.version}</version>
-                <executions>
-                    <execution>
-                        <id>unpack-view-resources</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>unpack-view-resources</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.jbehave</groupId>
-                <artifactId>jbehave-maven-plugin</artifactId>
-                <version>4.0-beta-3</version>
-
-                <executions>
-                    <execution>
-                        <id>run-stories</id>
-                        <phase>integration-test</phase>
-                        <configuration>
-                            <includes>
-                                <include>**/*Stories.java</include>
-                            </includes>
-                            <executorsClass>org.jbehave.core.embedder.executors.SameThreadExecutors</executorsClass>
-                        </configuration>
-                        <goals>
-                            <goal>run-stories-as-embeddables</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.google.guava</groupId>
-                        <artifactId>guava</artifactId>
-                        <version>11.0.1</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>run-stories</id>-->
+                        <!--<phase>integration-test</phase>-->
+                        <!--<configuration>-->
+                            <!--<includes>-->
+                                <!--<include>**/*Stories.java</include>-->
+                            <!--</includes>-->
+                            <!--<executorsClass>org.jbehave.core.embedder.executors.SameThreadExecutors</executorsClass>-->
+                        <!--</configuration>-->
+                        <!--<goals>-->
+                            <!--<goal>run-stories-as-embeddables</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+                <!--<dependencies>-->
+                    <!--<dependency>-->
+                        <!--<groupId>com.google.guava</groupId>-->
+                        <!--<artifactId>guava</artifactId>-->
+                        <!--<version>11.0.1</version>-->
+                    <!--</dependency>-->
+                <!--</dependencies>-->
+            <!--</plugin>-->
 
             <!-- Cargo -->
             <plugin>
@@ -176,15 +176,20 @@
                         <goals>
                             <goal>start</goal>
                         </goals>
-
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                        </configuration>
                     </execution>
+
                     <execution>
                         <id>stop-container</id>
                         <phase>post-integration-test</phase>
                         <goals>
                             <goal>stop</goal>
                         </goals>
-
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                        </configuration>
                     </execution>
                 </executions>
 

@@ -35,7 +35,7 @@ public class BrowserComponentTree extends UINamingContainer {
             currentFolder = service.findFolderByPath("/", false);
             folderId = currentFolder.getId();
         } else{
-            currentFolder = service.findFolderById(folderId);
+            currentFolder = service.findFolderById(folderId, false);
         }
 
         browserItemsList = currentFolder.getChildren();

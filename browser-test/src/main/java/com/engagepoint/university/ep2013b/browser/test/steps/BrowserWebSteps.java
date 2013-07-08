@@ -8,6 +8,9 @@ import org.jbehave.core.annotations.When;
 public class BrowserWebSteps {
 
     private final TestedPage testedPage;
+    private String prevSelectedFolder = null;
+    private String currSelectedFolder = null;
+
 
     public BrowserWebSteps(TestedPage page) {
         this.testedPage = page;
@@ -43,6 +46,7 @@ public class BrowserWebSteps {
     @When("user clicks in the tree folder by xpath '$strPath'")
     public void userClickTreeLeafByXpath(String strPath){
         testedPage.clickByXpath(strPath);
+        setSelectedValues(strPath);
     }
 
     @Then("in the tree folder by xpath '$strPath' is selected")
@@ -58,6 +62,7 @@ public class BrowserWebSteps {
     @When("user clicks in the tree folder by name '$strPath'")
     public void userClickTreeLeafByName(String strPath){
         testedPage.clickByName(strPath);
+        setSelectedValues(strPath);
     }
 
     @Then("in the tree folder by name '$strPath' is selected")
@@ -68,6 +73,7 @@ public class BrowserWebSteps {
     @When("user clicks tree folder by id '$strPath'")
     public void userClickTreeLeafById(String strPath){
         testedPage.clickById(strPath);
+        setSelectedValues(strPath);
     }
 
     @Then("in the tree folder by id '$strPath' is selected")
@@ -85,7 +91,57 @@ public class BrowserWebSteps {
         testedPage.treeExpandCheckByXpath(strPath);
     }
 
+    ////   table pagination buttons
 
+    @When("user clicks table button by xpath '$strPath'")
+    public void userClickTableButton(String strPath){
+        testedPage.clickByXpath(strPath);
+    }
+
+    @Then("in the table button by xpath '$strPath' is enabled")
+    public void tableButtonIsEnabled(String strPath){
+        testedPage.isEnabledByXpath(strPath);
+    }
+
+    @Then("in the table button by xpath '$strPath' is disabled")
+    public void tableButtonIsDisabled(String strPath){
+        testedPage.isDisabledByXpath(strPath);
+    }
+
+    //// native navigation buttons
+
+    private void setSelectedValues(String currPath){
+
+        prevSelectedFolder = currSelectedFolder;
+        currSelectedFolder = currPath;
+    }
+
+
+    @When("user clicks navigation button Back")
+    public void userClickBack(){
+        //testedPage.clickByXpath();
+        testedPage.navigate().back();
+
+    }
+
+    @When("user clicks navigation button Forward")
+    public void userClickForward(){
+        //testedPage.clickByXpath();
+        testedPage.navigate().forward();
+
+    }
+
+    // after Back move
+    @Then("in the tree folder by previous xpath is selected")
+    public void treeFolderPrevIsSelected(){
+        testedPage.isSelectedByXpath(prevSelectedFolder);
+    }
+
+    // after Forward move
+    @Then("in the tree folder by current xpath is selected")
+    public void treeFolderCurrIsSelected(){
+        testedPage.isSelectedByXpath(currSelectedFolder);
+    }
 
 
 }

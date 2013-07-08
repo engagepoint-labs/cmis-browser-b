@@ -7,6 +7,7 @@ import org.openqa.selenium.By;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
 public class TestedPage extends WebDriverPage {
@@ -82,6 +83,13 @@ public class TestedPage extends WebDriverPage {
         findElement(By.xpath(strPath)).isEnabled();
         manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
+
+    public void isDisabledByXpath(String strPath) {
+
+        assertFalse(findElement(By.xpath(strPath)).isEnabled());
+        manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+    }
+
 
     public void isDisplayedByXpath(String strPath){
 
@@ -165,4 +173,6 @@ public class TestedPage extends WebDriverPage {
         manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
     }
+
+
 }

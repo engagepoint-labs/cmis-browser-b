@@ -91,6 +91,7 @@ public class BrowserWebSteps {
         testedPage.treeExpandCheckByXpath(strPath);
     }
 
+    //// ==================================================================
     ////   table pagination buttons
 
     @When("user clicks table button by xpath '$strPath'")
@@ -108,6 +109,7 @@ public class BrowserWebSteps {
         testedPage.isDisabledByXpath(strPath);
     }
 
+    //// ==================================================================
     //// native navigation buttons
 
     private void setSelectedValues(String currPath){

@@ -7,22 +7,11 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
     <cc:interface componentType="browserComponentTree">
-        <cc:attribute name="link" />
     </cc:interface>
 
     <cc:implementation>
-        <p:tree id="tree" value="#{cc.root}" var="node" selectionMode="single">
 
-            <p:treeNode id="node" >
-
-                <h:outputLink value="#{cc.attrs.link}" id="treelink" >
-                    <h:outputText value="#{node.name}"/>
-
-                    <f:param name="folderId" value="#{node.id}"/>
-                </h:outputLink>
-
-            </p:treeNode>
-        </p:tree>
+        <h:outputText value="#{cc.currentLocation}"/>
 
     </cc:implementation>
 </ui:composition>

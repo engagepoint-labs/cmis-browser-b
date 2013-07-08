@@ -21,7 +21,8 @@ public class BrowserComponentTable extends UINamingContainer {
     private int pagesCount;
     private BrowserItem selectedItem = null;
 
-
+    // Maximum of rows per page
+    private static final int rowCounts = 2;
 
 
     public BrowserItem getSelectedItem() {
@@ -37,21 +38,24 @@ public class BrowserComponentTable extends UINamingContainer {
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         folderId = request.getParameter("folderId");
         String paramPageNum = request.getParameter("pageNum");
+
+
         if (paramPageNum == null || "".equals(paramPageNum)) {
             pageNum = 1;
         } else {
             pageNum = Integer.parseInt(paramPageNum);
         }
+
+
         BrowserItem currentFolder = null;
-        if(folderId == null) {
-            currentFolder = service.findFolderByPath("/",false);
+        if(folderId == null)
+        {
+            currentFolder = service.findFolderByPath("/", 1, rowCounts);
             folderId = currentFolder.getId();
-        } else{
-            currentFolder = service.findFolderById(folderId, pageNum, 3);
-
         }
+        else currentFolder = service.findFolderById(folderId, pageNum, rowCounts);
 
-        pagesCount = service.getTotalPagesFromFolderById(folderId, 3);
+        pagesCount = service.getTotalPagesFromFolderById(folderId, rowCounts);
         browserItemsList = currentFolder.getChildren();
     }
 

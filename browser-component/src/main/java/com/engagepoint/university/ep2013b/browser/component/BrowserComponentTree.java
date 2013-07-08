@@ -23,6 +23,7 @@ public class BrowserComponentTree extends UINamingContainer {
     private boolean isSelected = false;
     private BrowserService service;
     private String folderId;
+    private String currentLocation;
 
 
     public BrowserComponentTree()
@@ -44,6 +45,7 @@ public class BrowserComponentTree extends UINamingContainer {
         // create tree from RootFolder (for showing all parents of current folder)
         BrowserItem rootFolder = getRootFolder(currentFolder);
         makeTree(rootFolder, root);
+        currentLocation = service.getCurrentLocationById(folderId);
     }
 
     // Find Root from any folder
@@ -88,4 +90,7 @@ public class BrowserComponentTree extends UINamingContainer {
         return root;
     }
 
+    public String getCurrentLocation() {
+        return currentLocation;
+    }
 }

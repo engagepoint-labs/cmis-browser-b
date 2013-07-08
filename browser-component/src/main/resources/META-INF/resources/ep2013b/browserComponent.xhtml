@@ -15,6 +15,11 @@
 <cc:implementation>
 
     <p:layout id="layout">
+
+        <p:layoutUnit position="north" size="50">
+            <custom:browserInfoPanel />
+        </p:layoutUnit>
+
         <p:layoutUnit position="west" header="Tree">
             <custom:browserComponentTree link="#{cc.attrs.link}"/>
 

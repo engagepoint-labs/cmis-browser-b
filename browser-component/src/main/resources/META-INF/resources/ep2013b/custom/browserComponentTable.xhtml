@@ -12,10 +12,7 @@
 
     <cc:implementation>
 
-        <p:dataTable var="item" value="#{cc.browserItemsList}"  id="table"
-                     rowKey="#{item.id}"
-                     selection="#{cc.selectedItem}"
-                     selectionMode="single">
+        <p:dataTable var="item" value="#{cc.browserItemsList}"  id="table" >
 
             <p:column headerText="Id">
                 <h:outputText value="#{item.id}"  id="itemid" />
@@ -32,25 +29,25 @@
             <f:facet name="footer">
                 <h:panelGrid columns="4" width="100">
 
-                <h:outputLink rendered="#{cc.prevAllowed}">
+                <h:outputLink rendered="#{cc.prevAllowed}" id="butfirst" >
                     <h:outputText value="first"/>
                     <f:param name="folderId" value="#{cc.folderId}"/>
                     <f:param name="pageNum" value="1"/>
                 </h:outputLink>
 
-                <h:outputLink rendered="#{cc.prevAllowed}">
+                <h:outputLink rendered="#{cc.prevAllowed}" id="butprev">
                     <h:outputText value="prev"/>
                     <f:param name="folderId" value="#{cc.folderId}"/>
                     <f:param name="pageNum" value="#{cc.prevPageNum}"/>
                 </h:outputLink>
 
-                <h:outputLink rendered="#{cc.nextAllowed}">
+                <h:outputLink rendered="#{cc.nextAllowed}" id="butnext">
                     <h:outputText value="next"/>
                     <f:param name="folderId" value="#{cc.folderId}"/>
                     <f:param name="pageNum" value="#{cc.nextPageNum}"/>
                 </h:outputLink>
 
-                <h:outputLink rendered="#{cc.nextAllowed}">
+                <h:outputLink rendered="#{cc.nextAllowed}" id="butlast">
                     <h:outputText value="last"/>
                     <f:param name="folderId" value="#{cc.folderId}"/>
                     <f:param name="pageNum" value="#{cc.pagesCount}"/>

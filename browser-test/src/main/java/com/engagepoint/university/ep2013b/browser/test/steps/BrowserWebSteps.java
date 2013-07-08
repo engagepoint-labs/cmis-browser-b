@@ -20,7 +20,7 @@ public class BrowserWebSteps {
 
     @Then("page is shown")
     public void pageIsShown() {
-        testedPage.found("browser-showcase");
+        testedPage.pageIsShown();
     }
 
     @Then("find text '$text'")
@@ -28,50 +28,64 @@ public class BrowserWebSteps {
         testedPage.found(text);
     }
 
-    @When("user clicks tree leaf by xpath '$strPath'")
+    @Then("on the page the tree by xpath '$strPath' is visible")
+    public void pageTreeIsDisplayedByXpath(String strPath){
+        testedPage.isDisplayedByXpath(strPath);
+    }
+
+
+    @Then("on the page the table by xpath '$strPath' is visible")
+    public void pageTableIsDisplayedByXpath(String strPath){
+        testedPage.isDisplayedByXpath(strPath);
+    }
+
+
+    @When("user clicks in the tree folder by xpath '$strPath'")
     public void userClickTreeLeafByXpath(String strPath){
         testedPage.clickByXpath(strPath);
     }
 
-    @Then("in tree leaf by xpath '$strPath' is selected")
+    @Then("in the tree folder by xpath '$strPath' is selected")
     public void treeLeafIsSelectedByXpath(String strPath){
         testedPage.isSelectedByXpath(strPath);
     }
 
-    @Then("in the table child by xpath '$strPath' is visible")
+    @Then("in the table folder child by xpath '$strPath' is visible")
     public void treeLeafIsDisplayedByXpath(String strPath){
         testedPage.isDisplayedByXpath(strPath);
     }
 
-    @When("user clicks tree leaf by name '$strPath'")
+    @When("user clicks in the tree folder by name '$strPath'")
     public void userClickTreeLeafByName(String strPath){
         testedPage.clickByName(strPath);
     }
 
-    @Then("in tree leaf by name '$strPath' is selected")
+    @Then("in the tree folder by name '$strPath' is selected")
     public void treeLeafIsSelectedByName(String strPath){
         testedPage.isSelectedByName(strPath);
     }
 
-    @When("user clicks tree leaf by id '$strPath'")
+    @When("user clicks tree folder by id '$strPath'")
     public void userClickTreeLeafById(String strPath){
         testedPage.clickById(strPath);
     }
 
-    @Then("in tree leaf by id '$strPath' is selected")
+    @Then("in the tree folder by id '$strPath' is selected")
     public void treeLeafIsSelectedById(String strPath){
         testedPage.isSelectedById(strPath);
     }
 
-    @When("user clicks tree leaf expand by xpath '$strPath'")
+    @When("user clicks tree folder toggler by xpath '$strPath'")
     public void userClickTreeLeaf(String strPath){
         testedPage.treeLeafExpandByXpath(strPath);
     }
 
-    @Then("tree leaf by xpath '$strPath' is expanded")
+    @Then("in the tree folder by xpath '$strPath' is expanded")
     public void treeLeafSelected(String strPath){
         testedPage.treeExpandCheckByXpath(strPath);
     }
+
+
 
 
 }

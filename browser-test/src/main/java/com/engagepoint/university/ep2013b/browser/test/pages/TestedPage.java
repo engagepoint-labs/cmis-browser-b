@@ -9,13 +9,6 @@ import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.fail;
 
-/**
- * Created with IntelliJ IDEA.
- * User: iryna.domachuk
- * Date: 7/3/13
- * Time: 6:17 PM
- * To change this template use File | Settings | File Templates.
- */
 public class TestedPage extends WebDriverPage {
 
     private final WebDriverProvider driverProvider;
@@ -62,6 +55,11 @@ public class TestedPage extends WebDriverPage {
         manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
+    public void pageIsShown(){
+
+        found("browser-showcase");
+        manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+    }
 
 
     //// ==========================================================

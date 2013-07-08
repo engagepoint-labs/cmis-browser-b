@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <cc:interface componentType="browserComponentTable">
+        <cc:attribute name="link"/>
+    </cc:interface>
+
+    <cc:implementation>
+
+        <p:dataTable var="item" value="#{cc.browserItemsList}"  id="table"
+                     rowKey="#{item.id}"
+                     selection="#{cc.selectedItem}"
+                     selectionMode="single">
+
+            <p:column headerText="Id">
+                <h:outputText value="#{item.id}"  id="itemid" />
+            </p:column>
+
+            <p:column headerText="Name">
+                <h:outputText value="#{item.name}" id="itemname" />
+            </p:column>
+
+            <p:column headerText="Type">
+                <h:outputText value="#{item.type}" id="itemtype" />
+            </p:column>
+
+            <f:facet name="footer">
+                <h:panelGrid columns="4" width="100">
+
+                <h:outputLink rendered="#{cc.prevAllowed}">
+                    <h:outputText value="first"/>
+                    <f:param name="folderId" value="#{cc.folderId}"/>
+                    <f:param name="pageNum" value="1"/>
+                </h:outputLink>
+
+                <h:outputLink rendered="#{cc.prevAllowed}">
+                    <h:outputText value="prev"/>
+                    <f:param name="folderId" value="#{cc.folderId}"/>
+                    <f:param name="pageNum" value="#{cc.prevPageNum}"/>
+                </h:outputLink>
+
+                <h:outputLink rendered="#{cc.nextAllowed}">
+                    <h:outputText value="next"/>
+                    <f:param name="folderId" value="#{cc.folderId}"/>
+                    <f:param name="pageNum" value="#{cc.nextPageNum}"/>
+                </h:outputLink>
+
+                <h:outputLink rendered="#{cc.nextAllowed}">
+                    <h:outputText value="last"/>
+                    <f:param name="folderId" value="#{cc.folderId}"/>
+                    <f:param name="pageNum" value="#{cc.pagesCount}"/>
+                </h:outputLink>
+                </h:panelGrid>
+            </f:facet>
+
+        </p:dataTable>
+    </cc:implementation>
+</ui:composition>

@@ -10,13 +10,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-/**
- * Created with IntelliJ IDEA.
- * User: vladimir.ovcharov
- * Date: 7/4/13
- * Time: 10:56 AM
- * To change this template use File | Settings | File Templates.
- */
+
 
 @FacesComponent("browserComponentTable")
 public class BrowserComponentTable extends UINamingContainer {
@@ -25,27 +19,43 @@ public class BrowserComponentTable extends UINamingContainer {
     private String folderId;
     private Integer pageNum;
     private int pagesCount;
+    private BrowserItem selectedItem = null;
+
+    // Maximum of rows per page
+    private static final int rowCounts = 2;
+
+
+    public BrowserItem getSelectedItem() {
+        return selectedItem;
+    }
+
+    public void setSelectedItem(BrowserItem selectedItem) {
+        this.selectedItem = selectedItem;
+    }
 
     public BrowserComponentTable() {
         service = BrowserFactory.getInstance("CMIS");
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         folderId = request.getParameter("folderId");
         String paramPageNum = request.getParameter("pageNum");
+
+
         if (paramPageNum == null || "".equals(paramPageNum)) {
             pageNum = 1;
         } else {
             pageNum = Integer.parseInt(paramPageNum);
         }
+
+
         BrowserItem currentFolder = null;
-        if(folderId == null) {
-            currentFolder = service.findFolderByPath("/", true);
+        if(folderId == null)
+        {
+            currentFolder = service.findFolderByPath("/", 1, rowCounts);
             folderId = currentFolder.getId();
-        } else{
-            currentFolder = service.findFolderById(folderId, pageNum, 3);
-
         }
+        else currentFolder = service.findFolderById(folderId, pageNum, rowCounts);
 
-        pagesCount = service.getTotalPagesFromFolderById(folderId, 3);
+        pagesCount = service.getTotalPagesFromFolderById(folderId, rowCounts);
         browserItemsList = currentFolder.getChildren();
     }
 

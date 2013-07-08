@@ -9,7 +9,6 @@ import javax.faces.component.FacesComponent;
 import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 /**
 * Created with IntelliJ IDEA.
@@ -21,63 +20,72 @@ import java.util.List;
 @FacesComponent("browserComponentTree")
 public class BrowserComponentTree extends UINamingContainer {
     private TreeNode root;
-    private List<BrowserItem> browserItemsList;
     private boolean isSelected = false;
     private BrowserService service;
     private String folderId;
 
-    public BrowserComponentTree() {
+
+    public BrowserComponentTree()
+    {
         service = BrowserFactory.getInstance("CMIS");
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         folderId = request.getParameter("folderId");
-        BrowserItem currentFolder = null;
-        if(folderId == null) {
-            currentFolder = service.findFolderByPath("/", true);
-            folderId = currentFolder.getId();
-        } else{
-            currentFolder = service.findFolderById(folderId, true);
-        }
 
-        browserItemsList = currentFolder.getChildren();
+        BrowserItem currentFolder = null;
+        if (folderId == null)
+        {
+            currentFolder = service.findFolderByPath("/");
+            folderId = currentFolder.getId();
+        }
+        else currentFolder = service.findFolderById(folderId);
+
 
         root = new DefaultTreeNode("Root", null);
-        createNode(browserItemsList, root, folderId);
-
-        if (!isSelected && root.getChildCount() > 0) {
-            root.getChildren().get(0).setSelected(true);
-        }
+        // create tree from RootFolder (for showing all parents of current folder)
+        BrowserItem rootFolder = getRootFolder(currentFolder);
+        makeTree(rootFolder, root);
     }
 
-    private void createNode(List<BrowserItem> list, TreeNode node, String requestId) {
-        for (BrowserItem item : list) {
+    // Find Root from any folder
+    private BrowserItem getRootFolder(BrowserItem item)
+    {
+        while (item.getParent() != null)
+        {
+            item = item.getParent();
+        }
 
-            if (item.getType() == BrowserItem.TYPE.FOLDER)
+        return item;
+    }
+
+    // fill tree recursively
+    private void makeTree(BrowserItem item, TreeNode parent)
+    {
+        TreeNode node = new DefaultTreeNode(item, parent);
+
+        // if selected folder, than select it and expand all parents
+        if (item.getId().equals(folderId))
+        {
+            node.setSelected(true);
+
+            for (TreeNode i = node; i != null; i = i.getParent())
             {
-            TreeNode tempRoot = new DefaultTreeNode(item, node);
-            if (item.getId().equals(requestId)) {
-                tempRoot.setSelected(true);
-                isSelected = true;
-                tempRoot.setExpanded(true);
+                i.setExpanded(true);
+            }
+        }
 
-                TreeNode parent = tempRoot.getParent();
-                while (parent != null) {
-                    parent.setExpanded(true);
-                    parent = parent.getParent();
-                }
-            }
-            if (item.getChildren().size() != 0) {
-                createNode(item.getChildren(), tempRoot, requestId);
-            }
+        for (BrowserItem child : item.getChildren())
+        {
+            // tree includes only folders
+            if (child.getType() == BrowserItem.TYPE.FOLDER)
+            {
+                makeTree(child, node);
             }
         }
     }
+
 
     public TreeNode getRoot() {
         return root;
-    }
-
-    public List<BrowserItem> getBrowserItemsList() {
-        return browserItemsList;
     }
 
 }

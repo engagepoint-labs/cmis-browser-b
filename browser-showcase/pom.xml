@@ -15,14 +15,17 @@
     <name>browser-showcase</name>
     <url>http://maven.apache.org</url>
 
-    <dependencies>
-        <!-- browser-api -->
-        <dependency>
-            <groupId>com.engagepoint.university.ep2013b</groupId>
-            <artifactId>browser-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+    <repositories>
+        <repository>
+            <id>prime-repo</id>
+            <name>PrimeFaces Maven Repository</name>
+            <url>http://repository.primefaces.org</url>
+            <layout>default</layout>
+        </repository>
+    </repositories>
 
+
+    <dependencies>
         <!-- browser-component -->
         <dependency>
             <groupId>com.engagepoint.university.ep2013b</groupId>

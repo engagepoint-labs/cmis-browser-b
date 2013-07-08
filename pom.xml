@@ -17,6 +17,11 @@
         <module>browser-test</module>
     </modules>
 
+    <properties>
+        <skipTests>true</skipTests>
+    </properties>
+
+
     <dependencyManagement>
         <dependencies>
             <!-- JUnit -->
@@ -32,13 +37,13 @@
                 <groupId>org.apache.chemistry.opencmis</groupId>
                 <artifactId>chemistry-opencmis-server-inmemory</artifactId>
                 <type>war</type>
-                <version>0.9.0-EP-SNAPSHOT</version>
+                <version>0.9.0</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.chemistry.opencmis</groupId>
                 <artifactId>chemistry-opencmis-client-impl</artifactId>
-                <version>0.9.0-EP-SNAPSHOT</version>
+                <version>0.9.0</version>
             </dependency>
         </dependencies>
 
@@ -92,6 +97,9 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>2.15</version>
+                    <configuration>
+                        <skipTests>${skipTests}</skipTests>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -102,16 +110,16 @@
             </plugins>
         </pluginManagement>
 
-        <!--<plugins>-->
+        <plugins>
 
-            <!--&lt;!&ndash; Maven versions plugin&ndash;&gt;-->
+            <!-- Maven versions plugin-->
             <!--<plugin>-->
                 <!--<groupId>org.codehaus.mojo</groupId>-->
                 <!--<artifactId>versions-maven-plugin</artifactId>-->
                 <!--<version>2.1</version>-->
             <!--</plugin>-->
 
-            <!--&lt;!&ndash; JaCoCo plugin &ndash;&gt;-->
+            <!-- JaCoCo plugin -->
             <!--<plugin>-->
                 <!--<groupId>org.jacoco</groupId>-->
                 <!--<artifactId>jacoco-maven-plugin</artifactId>-->
@@ -188,7 +196,7 @@
                 <!--</executions>-->
 
             <!--</plugin>-->
-        <!--</plugins>-->
+        </plugins>
     </build>
 
 </project>

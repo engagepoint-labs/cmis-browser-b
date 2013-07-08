@@ -91,36 +91,35 @@
      </dependencies>
 
     <build>
-        <!-- !!! JBehave temporary disabled (not necessary for now) !!! -->
 
-        <!--<resources>-->
-            <!--<resource>-->
-                <!--<directory>src/main/java</directory>-->
-                <!--<filtering>true</filtering>-->
-                <!--<excludes>-->
-                    <!--<exclude>**/*.java</exclude>-->
-                <!--</excludes>-->
-            <!--</resource>-->
-            <!--<resource>-->
-                <!--<directory>src/main/resources</directory>-->
-                <!--<filtering>true</filtering>-->
-            <!--</resource>-->
-        <!--</resources>-->
-        <!--<pluginManagement>-->
-            <!--<plugins>-->
-                <!--<plugin>-->
-                    <!--<groupId>org.apache.maven.plugins</groupId>-->
-                    <!--<artifactId>maven-compiler-plugin</artifactId>-->
-                    <!--<version>2.1</version>-->
-                    <!--<configuration>-->
-                        <!--<source>1.5</source>-->
-                        <!--<target>1.5</target>-->
-                    <!--</configuration>-->
-                <!--</plugin>-->
-            <!--</plugins>-->
-        <!--</pluginManagement>-->
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <filtering>true</filtering>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>2.1</version>
+                    <configuration>
+                        <source>1.5</source>
+                        <target>1.5</target>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
-            <!---->
+
             <!--<plugin>-->
                 <!--<groupId>org.jbehave</groupId>-->
                 <!--<artifactId>jbehave-maven-plugin</artifactId>-->
@@ -170,24 +169,24 @@
                 <artifactId>cargo-maven2-plugin</artifactId>
                 <version>1.4.0</version>
 
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<id>start-container</id>-->
-                        <!--<phase>pre-integration-test</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>start</goal>-->
-                        <!--</goals>-->
+                <executions>
+                    <execution>
+                        <id>start-container</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>start</goal>
+                        </goals>
 
-                    <!--</execution>-->
-                    <!--<execution>-->
-                        <!--<id>stop-container</id>-->
-                        <!--<phase>post-integration-test</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>stop</goal>-->
-                        <!--</goals>-->
+                    </execution>
+                    <execution>
+                        <id>stop-container</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
 
-                    <!--</execution>-->
-                <!--</executions>-->
+                    </execution>
+                </executions>
 
                 <configuration>
                     <container>
@@ -213,6 +212,12 @@
                     <configuration>
                         <properties>
                             <cargo.servlet.port>8080</cargo.servlet.port>
+                            <cargo.jvmargs>
+                                -Xdebug
+                                -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=18000
+                                -Xnoagent
+                                -Djava.compiler=NONE
+                            </cargo.jvmargs>
                         </properties>
                     </configuration>
 

@@ -24,5 +24,5 @@ Then in tree leaf by xpath './/*[text()='My_Folder-0-1']' is selected
 Scenario: User clicks tree leaf by xpath
 
 Given user goes on page by url 'http://localhost:8080/browser/browser.xhtml'
-When user clicks tree leaf by xpath './/*[text()='My_Folder-0-0']'
-Then in tree leaf by xpath './/*[text()='My_Folder-0-0']' is selected
+When user clicks tree leaf by xpath './/*[text()='My_Folder-1-0']'
+Then in tree leaf by xpath './/*[text()='My_Folder-1-0']' is selected

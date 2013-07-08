@@ -83,4 +83,14 @@ public class CMISBrowserServiceIT
         assertEquals("My_Document-0-1", item.getParent().getChildren().get(1).getName());
         assertEquals(5, item.getParent().getChildren().size());
     }
+
+    @Test
+    public void test_getCurrentLocationById()
+    {
+        String expected = "/My_Folder-0-0";
+        String actual = cmisBrowserService.getCurrentLocationById("101");
+
+        assertEquals(expected, actual);
+
+    }
 }

@@ -17,5 +17,8 @@ public interface BrowserService
     public int getTotalPagesFromFolderById(String id, int rowCounts);
     public int getTotalPagesFromFolderByPath(String id, int rowCounts);
 
+    // Possibly better create some Util class for this method ?
+    public String getCurrentLocationById(String id);
+
     // ... add more here ...
 }

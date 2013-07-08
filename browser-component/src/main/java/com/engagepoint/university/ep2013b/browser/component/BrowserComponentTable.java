@@ -44,7 +44,7 @@ public class BrowserComponentTable extends UINamingContainer {
         }
         BrowserItem currentFolder = null;
         if(folderId == null) {
-            currentFolder = service.findFolderByPath("/");
+            currentFolder = service.findFolderByPath("/",false);
             folderId = currentFolder.getId();
         } else{
             currentFolder = service.findFolderById(folderId, pageNum, 3);

@@ -232,19 +232,20 @@ public class CMISBrowserService implements BrowserService
     public void showSearchResults(){
 
         //// String  stt  = "SELECT * FROM cmis:document where cmis:name=? or cmis:objectId=?";
-        //String  stt  = "SELECT * FROM cmis:document where cmis:name LIKE ?"; == ????????  !!!
+        String  stt  = "SELECT * FROM cmis:document where cmis:name LIKE ?"; // == ????????  !!!
         // String stt = "SELECT cmis:name FROM cmis:document WHERE IN_FOLDER(?)";
-        String stt = "SELECT cmis:name FROM cmis:folder WHERE IN_FOLDER(?)";
+        //String stt = "SELECT cmis:name FROM cmis:folder WHERE IN_FOLDER(?)";
 
         //String  stt  = "SELECT cmis:objectId, cmis:name FROM cmis:folder F WHERE IN_TREE(F, ?)"; ???????
 
 
         QueryStatement qq =  session.createQueryStatement(stt);
 
-         //qq.setStringContains(1,"ocument");
+         qq.setStringContains(1,"%ocument%");
         //qq.setString(2,"106");
 
-        qq.setString(1,"102");
+        //qq.setString(1,"102");
+        System.out.println("qq = " + qq.toQueryString());
 
         ItemIterable<QueryResult> results = qq.query(false);
 

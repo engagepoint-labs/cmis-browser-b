@@ -12,7 +12,15 @@
 
     <cc:implementation>
 
-        <p:dataTable var="item" value="#{cc.browserItemsList}"  id="table" >
+        <h:inputText id="search" value="#{cc.searchCriteria}"/>
+
+        <h:commandButton value="Search">
+            <f:ajax execute="search" render="table">
+                <f:param name="folderId" value="#{cc.folderId}"/>
+            </f:ajax>
+        </h:commandButton>
+
+        <p:dataTable var="item" value="#{cc.dataList}"  id="table" >
 
             <p:column headerText="Id">
                 <h:outputText value="#{item.id}"  id="itemid" />

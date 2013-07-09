@@ -17,6 +17,8 @@
         <jbehave.site.version>3.1.1</jbehave.site.version>
         <jbehave.web.version>3.6</jbehave.web.version>
         <embeddables>**/*Stories.java</embeddables>
+
+        <skipTests>false</skipTests>
     </properties>
 
     <dependencyManagement>
@@ -131,6 +133,10 @@
                         <goals>
                             <goal>unpack-view-resources</goal>
                         </goals>
+
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -148,6 +154,8 @@
                                 <include>**/*Stories.java</include>
                             </includes>
                             <executorsClass>org.jbehave.core.embedder.executors.SameThreadExecutors</executorsClass>
+
+                            <skip>${skipTests}</skip>
                         </configuration>
                         <goals>
                             <goal>run-stories-as-embeddables</goal>

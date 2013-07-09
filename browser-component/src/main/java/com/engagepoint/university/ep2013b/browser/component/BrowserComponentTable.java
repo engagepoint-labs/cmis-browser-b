@@ -7,6 +7,7 @@ import com.engagepoint.university.ep2013b.browser.api.BrowserService;
 import javax.faces.component.FacesComponent;
 import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ public class BrowserComponentTable extends UINamingContainer
 
     private List<BrowserItem> dataList;
     private String searchCriteria = "none";
+    BrowserItem currentFolder = null;
 
     // Maximum of rows per page
     private static final int rowCounts = 2;
@@ -47,7 +49,6 @@ public class BrowserComponentTable extends UINamingContainer
         else pageNum = Integer.parseInt(paramPageNum);
 
 
-        BrowserItem currentFolder = null;
         if(folderId == null)
         {
 //            currentFolder = service.findFolderByPath("/");
@@ -73,20 +74,26 @@ public class BrowserComponentTable extends UINamingContainer
         return searchedList;
     }
 
-       public List<BrowserItem> getDataList()
+    public void searchClick(ActionEvent event)
     {
-        System.out.println("getDataList()");
+        System.out.println("searchClick()");
         System.out.println("folder = " + folderId);
         System.out.println("searchCriteria = " + searchCriteria);
 
         if (("".equals(searchCriteria)) || (searchCriteria == null))
         {
             // non search
-            return dataList;
+            dataList = currentFolder.getChildren();
         }
+        else
+        {
+            // search
+            dataList = getSearchedList();
+        }
+    }
 
-        // search
-        return getSearchedList();
+    public List<BrowserItem> getDataList() {
+        return dataList;
     }
 
     public String getFolderId() {

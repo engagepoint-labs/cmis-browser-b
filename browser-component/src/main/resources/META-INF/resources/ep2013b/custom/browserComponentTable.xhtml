@@ -13,11 +13,8 @@
     <cc:implementation>
 
         <h:inputText id="search" value="#{cc.searchCriteria}"/>
-
-        <h:commandButton value="Search">
-            <f:ajax execute="search" render="table">
-                <f:param name="folderId" value="#{cc.folderId}"/>
-            </f:ajax>
+        <h:commandButton value="Search" actionListener="#{cc.searchClick}">
+            <f:param name="folderId" value="#{cc.folderId}"/>
         </h:commandButton>
 
         <p:dataTable var="item" value="#{cc.dataList}"  id="table" >

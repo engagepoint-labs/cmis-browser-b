@@ -17,6 +17,7 @@
         <h:commandButton value="Search">
             <f:ajax execute="search" render="table">
                 <f:param name="folderId" value="#{cc.folderId}"/>
+                <f:param name="pageNum" value="#{cc.pageNum}"/>
             </f:ajax>
         </h:commandButton>
 

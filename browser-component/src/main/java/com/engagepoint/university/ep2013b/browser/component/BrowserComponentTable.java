@@ -39,6 +39,7 @@ public class BrowserComponentTable extends UINamingContainer
         searchCriteria = request.getParameter("searchCriteria");
 
         System.out.println("folder = " + folderId);
+        System.out.println("pageNum = " + pageNum);
         System.out.println("searchCriteria = " + searchCriteria);
 
         String paramPageNum = request.getParameter("pageNum");
@@ -50,11 +51,9 @@ public class BrowserComponentTable extends UINamingContainer
         BrowserItem currentFolder = null;
         if(folderId == null)
         {
-//            currentFolder = service.findFolderByPath("/");
             currentFolder = service.findFolderByPath("/", 1, rowCounts);
             folderId = currentFolder.getId();
         }
-//        else currentFolder = service.findFolderById(folderId);
         else currentFolder = service.findFolderById(folderId, pageNum, rowCounts);
 
         pagesCount = service.getTotalPagesFromFolderById(folderId, rowCounts);
@@ -77,6 +76,7 @@ public class BrowserComponentTable extends UINamingContainer
     {
         System.out.println("getDataList()");
         System.out.println("folder = " + folderId);
+        System.out.println("pageNum = " + pageNum);
         System.out.println("searchCriteria = " + searchCriteria);
 
         if (("".equals(searchCriteria)) || (searchCriteria == null))
@@ -91,6 +91,10 @@ public class BrowserComponentTable extends UINamingContainer
 
     public String getFolderId() {
         return folderId;
+    }
+
+    public void setPageNum(Integer pageNum) {
+        this.pageNum = pageNum;
     }
 
     public Integer getPageNum() {

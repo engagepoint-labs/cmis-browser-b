@@ -5,6 +5,7 @@ import com.engagepoint.university.ep2013b.browser.api.BrowserService;
 import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
+import org.apache.chemistry.opencmis.commons.data.PropertyData;
 import org.apache.chemistry.opencmis.commons.enums.BindingType;
 
 import java.util.*;
@@ -32,6 +33,9 @@ public class CMISBrowserService implements BrowserService
     public BrowserItem findFolderById(String id)
     {
         Folder current = (Folder)session.getObject(id);
+        //// test
+        showSearchResults();
+        ///////////////////////
         return findFolder(current, 0, 0);
     }
 
@@ -223,4 +227,43 @@ public class CMISBrowserService implements BrowserService
 
         return sessionFactory.createSession(parameter);
     }
+
+
+    public void showSearchResults(){
+
+        //// String  stt  = "SELECT * FROM cmis:document where cmis:name=? or cmis:objectId=?";
+        //String  stt  = "SELECT * FROM cmis:document where cmis:name LIKE ?"; == ????????  !!!
+        // String stt = "SELECT cmis:name FROM cmis:document WHERE IN_FOLDER(?)";
+        String stt = "SELECT cmis:name FROM cmis:folder WHERE IN_FOLDER(?)";
+
+        //String  stt  = "SELECT cmis:objectId, cmis:name FROM cmis:folder F WHERE IN_TREE(F, ?)"; ???????
+
+
+        QueryStatement qq =  session.createQueryStatement(stt);
+
+         //qq.setStringContains(1,"ocument");
+        //qq.setString(2,"106");
+
+        qq.setString(1,"102");
+
+        ItemIterable<QueryResult> results = qq.query(false);
+
+        //System.out.println("results = "+results.toString());
+
+        int ii = 1;
+        for(QueryResult hit: results) {
+
+            System.out.println("  -------------------------------  result N = " + ii++);
+
+            for(PropertyData<?> property: hit.getProperties()) {
+
+                String queryName = property.getQueryName();
+                Object value = property.getFirstValue();
+
+                System.out.println(queryName + ": " + value);
+            }
+        }
+
+    }
+
 }

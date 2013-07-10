@@ -14,9 +14,9 @@
 
 <cc:implementation>
 
-    <p:layout id="layout">
+    <p:layout id="componentlayout" fullPage="true">
 
-        <p:layoutUnit position="north" size="50">
+        <p:layoutUnit position="north" size="auto">
             <custom:browserInfoPanel />
         </p:layoutUnit>
 
@@ -27,7 +27,6 @@
 
         <p:layoutUnit position="center" header="Table">
             <custom:browserComponentTable link="#{cc.attrs.link}"/>
-
         </p:layoutUnit>
     </p:layout>
 

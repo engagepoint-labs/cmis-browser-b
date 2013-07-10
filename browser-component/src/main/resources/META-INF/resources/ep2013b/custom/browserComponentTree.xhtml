@@ -13,7 +13,7 @@
     <cc:implementation>
         <p:tree id="tree" value="#{cc.root}" var="node" selectionMode="single">
 
-            <p:treeNode id="node" >
+            <p:treeNode id="node" expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
 
                 <h:outputLink value="#{cc.attrs.link}" id="treelink" >
                     <h:outputText value="#{node.name}"/>

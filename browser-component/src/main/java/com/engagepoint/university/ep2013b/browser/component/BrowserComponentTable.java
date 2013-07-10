@@ -31,17 +31,11 @@ public class BrowserComponentTable extends UINamingContainer
 
     public BrowserComponentTable()
     {
-        System.out.println("BrowserComponentTable()");
-
         service = BrowserFactory.getInstance("CMIS");
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 
         folderId = request.getParameter("folderId");
         searchCriteria = request.getParameter("searchCriteria");
-
-        System.out.println("folder = " + folderId);
-        System.out.println("pageNum = " + pageNum);
-        System.out.println("searchCriteria = " + searchCriteria);
 
         String paramPageNum = request.getParameter("pageNum");
 
@@ -76,11 +70,6 @@ public class BrowserComponentTable extends UINamingContainer
     // Method executed when dataTable renders (during loading page or ajax request)
     public List<BrowserItem> getDataList()
     {
-        System.out.println("getDataList()");
-        System.out.println("folder = " + folderId);
-        System.out.println("pageNum = " + pageNum);
-        System.out.println("searchCriteria = " + searchCriteria);
-
         if (("".equals(searchCriteria)) || (searchCriteria == null))
         {
             // non search

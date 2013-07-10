@@ -11,62 +11,57 @@
     </cc:interface>
 
     <cc:implementation>
-        <!-- Search Panel -->
-            <!-- Search criteria -->
-            <h:inputText id="search" value="#{cc.searchCriteria}"/>
+        <p:layout id="tablelayout">
 
-            <!-- Ajax -->
-            <h:commandButton value="Search">
-                <f:ajax execute="search" render="table">
-                    <!-- Send folderId param, for not losing it after canceling search -->
+            <!-- Search Panel-->
+            <p:layoutUnit position="north" size="auto">
+                <p:inputText id="search" value="#{cc.searchCriteria}"/>
+
+                <p:commandButton update="search,table" ajax="true" icon="ui-icon-search" title="Search">
                     <f:param name="folderId" value="#{cc.folderId}"/>
-                </f:ajax>
-            </h:commandButton>
-        <!-- Search Panel -->
+                </p:commandButton>
+            </p:layoutUnit>
 
-        <p:dataTable var="item" value="#{cc.dataList}"  id="table" >
+            <!-- Table Panel-->
+            <p:layoutUnit position="center" size="auto">
+                <p:dataTable var="item" value="#{cc.dataList}"  id="table" >
+                    <p:column headerText="Id">
+                        <h:outputText value="#{item.id}"  id="itemid" />
+                    </p:column>
 
-            <p:column headerText="Id">
-                <h:outputText value="#{item.id}"  id="itemid" />
-            </p:column>
+                    <p:column headerText="Name">
+                        <h:outputText value="#{item.name}" id="itemname" />
+                    </p:column>
 
-            <p:column headerText="Name">
-                <h:outputText value="#{item.name}" id="itemname" />
-            </p:column>
+                    <p:column headerText="Type">
+                        <h:outputText value="#{item.type}" id="itemtype" />
+                    </p:column>
 
-            <p:column headerText="Type">
-                <h:outputText value="#{item.type}" id="itemtype" />
-            </p:column>
+                    <!-- Paging Panel-->
+                    <f:facet name="footer">
+                        <p:button id="butfirst" disabled="#{!cc.prevAllowed}" icon="ui-icon-arrowthickstop-1-w">
+                            <f:param name="folderId" value="#{cc.folderId}"/>
+                            <f:param name="pageNum" value="1"/>
+                        </p:button>
 
-            <f:facet name="footer">
-                <h:panelGrid columns="4" width="100">
+                        <p:button id="butprev" disabled="#{!cc.prevAllowed}" icon="ui-icon-arrowthick-1-w">
+                            <f:param name="folderId" value="#{cc.folderId}"/>
+                            <f:param name="pageNum" value="#{cc.prevPageNum}"/>
+                        </p:button>
 
-                <h:outputLink rendered="#{cc.prevAllowed}" id="butfirst" >
-                    <h:outputText value="first"/>
-                    <f:param name="folderId" value="#{cc.folderId}"/>
-                    <f:param name="pageNum" value="1"/>
-                </h:outputLink>
+                        <p:button id="butnext" disabled="#{!cc.nextAllowed}" icon="ui-icon-arrowthick-1-e">
+                            <f:param name="folderId" value="#{cc.folderId}"/>
+                            <f:param name="pageNum" value="#{cc.nextPageNum}"/>
+                        </p:button>
 
-                <h:outputLink rendered="#{cc.prevAllowed}" id="butprev">
-                    <h:outputText value="prev"/>
-                    <f:param name="folderId" value="#{cc.folderId}"/>
-                    <f:param name="pageNum" value="#{cc.prevPageNum}"/>
-                </h:outputLink>
+                        <p:button id="butlast" disabled="#{!cc.nextAllowed}" icon="ui-icon-arrowthickstop-1-e">
+                            <f:param name="folderId" value="#{cc.folderId}"/>
+                            <f:param name="pageNum" value="#{cc.pagesCount}"/>
+                        </p:button>
+                    </f:facet>
+                </p:dataTable>
+            </p:layoutUnit>
+        </p:layout>
 
-                <h:outputLink rendered="#{cc.nextAllowed}" id="butnext">
-                    <h:outputText value="next"/>
-                    <f:param name="folderId" value="#{cc.folderId}"/>
-                    <f:param name="pageNum" value="#{cc.nextPageNum}"/>
-                </h:outputLink>
-
-                <h:outputLink rendered="#{cc.nextAllowed}" id="butlast">
-                    <h:outputText value="last"/>
-                    <f:param name="folderId" value="#{cc.folderId}"/>
-                    <f:param name="pageNum" value="#{cc.pagesCount}"/>
-                </h:outputLink>
-                </h:panelGrid>
-            </f:facet>
-
-        </p:dataTable>
     </cc:implementation>
 </ui:composition>

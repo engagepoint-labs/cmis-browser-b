@@ -229,7 +229,8 @@ public class CMISBrowserService implements BrowserService
 
 
     ////   simple search
-    public  List<BrowserItem> simpleSearch(String id, String parameter){
+    public  List<BrowserItem> simpleSearch(String id, String parameter)
+    {
 
         BrowserItem item;
         ArrayList<BrowserItem> browserItems = new ArrayList<BrowserItem>();

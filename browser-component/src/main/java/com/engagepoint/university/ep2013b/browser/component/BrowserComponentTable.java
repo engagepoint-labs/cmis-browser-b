@@ -24,6 +24,7 @@ public class BrowserComponentTable extends UINamingContainer
     // List which should be displayed
     private List<BrowserItem> dataList;
     private String searchCriteria = "none";
+    private BrowserItem currentFolder = null;
 
     // Maximum of rows per page
     private static final int rowCounts = 2;
@@ -41,43 +42,30 @@ public class BrowserComponentTable extends UINamingContainer
 
         if (paramPageNum == null || "".equals(paramPageNum)) pageNum = 1;
         else pageNum = Integer.parseInt(paramPageNum);
-
-
-        BrowserItem currentFolder = null;
-        if(folderId == null)
-        {
-            currentFolder = service.findFolderByPath("/", 1, rowCounts);
-            folderId = currentFolder.getId();
-        }
-        else currentFolder = service.findFolderById(folderId, pageNum, rowCounts);
-
-        pagesCount = service.getTotalPagesFromFolderById(folderId, rowCounts);
-        dataList = currentFolder.getChildren();
     }
 
-    // Emulate search engine, returning fake data
-    public List<BrowserItem> getSearchedList(String criteria)
-    {
-        List<BrowserItem> searchedList = new ArrayList<BrowserItem>();
-
-        searchedList.add(new BrowserItem("id1", "Searched 1 for \"" + criteria + "\"", BrowserItem.TYPE.FOLDER, null, null));
-        searchedList.add(new BrowserItem("id2", "Searched 2 for \"" + criteria + "\"", BrowserItem.TYPE.FOLDER, null, null));
-        searchedList.add(new BrowserItem("id3", "Searched 3 for \"" + criteria + "\"", BrowserItem.TYPE.FOLDER, null, null));
-
-        return searchedList;
-    }
 
     // Method executed when dataTable renders (during loading page or ajax request)
     public List<BrowserItem> getDataList()
     {
-        if (("".equals(searchCriteria)) || (searchCriteria == null))
+        if ((searchCriteria == null) || ("".equals(searchCriteria)))
         {
-            // non search
-            return dataList;
-        }
+            // not searching
 
-        // search
-        return getSearchedList(searchCriteria);
+            if((folderId == null) || ("".equals(folderId)))
+            {
+                // first time at the page
+                currentFolder = service.findFolderByPath("/", 1, rowCounts);
+                folderId = currentFolder.getId();
+            }
+            else currentFolder = service.findFolderById(folderId, pageNum, rowCounts);
+
+            pagesCount = service.getTotalPagesFromFolderById(folderId, rowCounts);
+            dataList = currentFolder.getChildren();
+        }
+        else dataList = service.simpleSearch(folderId, searchCriteria);
+
+        return dataList;
     }
 
     public String getFolderId() {

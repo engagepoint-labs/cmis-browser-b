@@ -15,6 +15,16 @@
 
             <!-- Search Panel-->
             <p:layoutUnit position="north" size="auto">
+                <p:ajaxStatus>
+                    <f:facet name="start">
+                        <h:outputText value="processing..."/>
+                    </f:facet>
+
+                    <f:facet name="complete">
+                        <h:outputText value="" />
+                    </f:facet>
+                </p:ajaxStatus>
+
                 <p:inputText id="search" value="#{cc.searchCriteria}"/>
 
                 <p:commandButton update="search,table" ajax="true" icon="ui-icon-search" title="Search">

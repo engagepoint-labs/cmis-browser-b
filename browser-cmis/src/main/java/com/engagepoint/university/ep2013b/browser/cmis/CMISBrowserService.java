@@ -261,6 +261,7 @@ public class CMISBrowserService implements BrowserService
                 item.setName(hit.getPropertyByQueryName("cmis:name").getFirstValue().toString());
                 item.setType(BrowserItem.TYPE.FILE);
 
+                System.out.println("item = "+item);
                 browserItems.add(item);
 
              }
@@ -286,6 +287,7 @@ public class CMISBrowserService implements BrowserService
                 item.setName(hit.getPropertyByQueryName("cmis:name").getFirstValue().toString());
                 item.setType(BrowserItem.TYPE.FOLDER);
 
+                System.out.println("item = "+item);
                 browserItems.add(item);
 
             }

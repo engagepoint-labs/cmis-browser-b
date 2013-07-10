@@ -93,26 +93,15 @@ public class CMISBrowserService implements BrowserService
 
         while (!current.isRootFolder())
         {
-//            parent = current.getParents().get(0);
             parent = current.getFolderParent();
 
-//            item = new BrowserItem();
-//            item.setId(current.getId());
-//            item.setName(current.getName());
-//            item.setType(BrowserItem.TYPE.FOLDER);
-
-            item = new BrowserItem(current.getId(),current.getName(),BrowserItem.TYPE.FOLDER,null,null);
+            item = new BrowserItem(current.getId(),current.getName(),BrowserItem.TYPE.FOLDER);
             parents.add(item);
 
             current = parent;
         }
 
-//        item = new BrowserItem();
-//        item.setId(current.getId());
-//        item.setName(current.getName());
-//        item.setType(BrowserItem.TYPE.FOLDER);
-
-        item = new BrowserItem(current.getId(),current.getName(),BrowserItem.TYPE.FOLDER,null,null);
+        item = new BrowserItem(current.getId(),current.getName(),BrowserItem.TYPE.FOLDER);
 
         parents.add(item);
 
@@ -231,7 +220,7 @@ public class CMISBrowserService implements BrowserService
     }
 
 
-    ////   simple search
+    ////  ======================================================     simple search of name
     public  List<BrowserItem> simpleSearch(String id, String parameter){
 
         BrowserItem item;
@@ -243,33 +232,24 @@ public class CMISBrowserService implements BrowserService
 
         if(id != null && !id.isEmpty() && parameter != null && !parameter.isEmpty()){
 
+            QueryStatement query =  session.createQueryStatement(inDocums);
 
-            QueryStatement qq =  session.createQueryStatement(inDocums);
+            query.setString(1,id);
+            query.setStringLike(2,"%"+parameter+"%");
 
-            qq.setString(1,id);
-            qq.setStringLike(2,"%"+parameter+"%");
+            System.out.println("query string = " + query.toQueryString());
 
-            System.out.println("query string = " + qq.toQueryString());
-
-            ItemIterable<QueryResult> results = qq.query(false);
+            ItemIterable<QueryResult> results = query.query(false);
 
             int ii = 1;
             for(QueryResult hit: results) {
 
                 System.out.println("  -------------------------------  result N = " + ii++);
 
-
-//                item = new BrowserItem();
-//                item.setId(hit.getPropertyByQueryName("cmis:objectId").getFirstValue().toString());
-//                item.setName(hit.getPropertyByQueryName("cmis:name").getFirstValue().toString());
-//                item.setType(BrowserItem.TYPE.FILE);
-
                 item = new BrowserItem(
                         hit.getPropertyByQueryName("cmis:objectId").getFirstValue().toString(),
                         hit.getPropertyByQueryName("cmis:name").getFirstValue().toString(),
-                        BrowserItem.TYPE.FILE,
-                        null,
-                        null
+                        BrowserItem.TYPE.FILE
                 );
 
                 System.out.println("item = "+item);
@@ -278,33 +258,25 @@ public class CMISBrowserService implements BrowserService
              }
 
 
-            qq =  session.createQueryStatement(inFolders);
+            query =  session.createQueryStatement(inFolders);
 
-            qq.setString(1,id);
-            qq.setStringLike(2,"%"+parameter+"%");
+            query.setString(1,id);
+            query.setStringLike(2,"%"+parameter+"%");
 
-            System.out.println("query string = " + qq.toQueryString());
+            System.out.println("query string = " + query.toQueryString());
 
-            results = qq.query(false);
+            results = query.query(false);
 
 
             for(QueryResult hit: results) {
 
                 System.out.println("  -------------------------------  result N = " + ii++);
 
-
-//                item = new BrowserItem();
-//                item.setId(hit.getPropertyByQueryName("cmis:objectId").getFirstValue().toString());
-//                item.setName(hit.getPropertyByQueryName("cmis:name").getFirstValue().toString());
-//                item.setType(BrowserItem.TYPE.FOLDER);
-
                 item = new BrowserItem(
                         hit.getPropertyByQueryName("cmis:objectId").getFirstValue().toString(),
                         hit.getPropertyByQueryName("cmis:name").getFirstValue().toString(),
-                        BrowserItem.TYPE.FOLDER,
-                        null,
-                        null
-                );
+                        BrowserItem.TYPE.FOLDER
+                 );
 
                 System.out.println("item = " + item);
                 browserItems.add(item);

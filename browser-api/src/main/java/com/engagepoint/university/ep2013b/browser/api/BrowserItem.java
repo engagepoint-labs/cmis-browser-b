@@ -6,6 +6,7 @@ import java.util.List;
 
 public class BrowserItem implements Serializable
 {
+
     public enum TYPE {FILE, FOLDER}
 
     private String id = "";
@@ -35,6 +36,12 @@ public class BrowserItem implements Serializable
         this.name = name;
         this.type = type;
         this.parent = parent;
+    }
+
+    public BrowserItem(String id, String name, TYPE folder) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
     }
 
     public BrowserItem(String name, TYPE type, BrowserItem parent, List<BrowserItem> children) {

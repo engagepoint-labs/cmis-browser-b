@@ -21,6 +21,7 @@ public class BrowserComponentTable extends UINamingContainer
     private int pagesCount;
     private BrowserItem selectedItem = null;
 
+    // List which should be displayed
     private List<BrowserItem> dataList;
     private String searchCriteria = "none";
 
@@ -60,19 +61,20 @@ public class BrowserComponentTable extends UINamingContainer
         dataList = currentFolder.getChildren();
     }
 
-    // Emulate search engine
-    public List<BrowserItem> getSearchedList()
+    // Emulate search engine, returning fake data
+    public List<BrowserItem> getSearchedList(String criteria)
     {
         List<BrowserItem> searchedList = new ArrayList<BrowserItem>();
 
-        searchedList.add(new BrowserItem("id1", "Searched 1", BrowserItem.TYPE.FOLDER, null, null));
-        searchedList.add(new BrowserItem("id2", "Searched 2", BrowserItem.TYPE.FOLDER, null, null));
-        searchedList.add(new BrowserItem("id3", "Searched 3", BrowserItem.TYPE.FOLDER, null, null));
+        searchedList.add(new BrowserItem("id1", "Searched 1 for \"" + criteria + "\"", BrowserItem.TYPE.FOLDER, null, null));
+        searchedList.add(new BrowserItem("id2", "Searched 2 for \"" + criteria + "\"", BrowserItem.TYPE.FOLDER, null, null));
+        searchedList.add(new BrowserItem("id3", "Searched 3 for \"" + criteria + "\"", BrowserItem.TYPE.FOLDER, null, null));
 
         return searchedList;
     }
 
-       public List<BrowserItem> getDataList()
+    // Method executed when dataTable renders (during loading page or ajax request)
+    public List<BrowserItem> getDataList()
     {
         System.out.println("getDataList()");
         System.out.println("folder = " + folderId);
@@ -86,7 +88,7 @@ public class BrowserComponentTable extends UINamingContainer
         }
 
         // search
-        return getSearchedList();
+        return getSearchedList(searchCriteria);
     }
 
     public String getFolderId() {

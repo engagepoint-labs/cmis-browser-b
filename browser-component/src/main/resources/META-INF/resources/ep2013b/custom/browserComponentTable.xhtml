@@ -11,15 +11,18 @@
     </cc:interface>
 
     <cc:implementation>
+        <!-- Search Panel -->
+            <!-- Search criteria -->
+            <h:inputText id="search" value="#{cc.searchCriteria}"/>
 
-        <h:inputText id="search" value="#{cc.searchCriteria}"/>
-
-        <h:commandButton value="Search">
-            <f:ajax execute="search" render="table">
-                <f:param name="folderId" value="#{cc.folderId}"/>
-                <f:param name="pageNum" value="#{cc.pageNum}"/>
-            </f:ajax>
-        </h:commandButton>
+            <!-- Ajax -->
+            <h:commandButton value="Search">
+                <f:ajax execute="search" render="table">
+                    <!-- Send folderId param, for not losing it after canceling search -->
+                    <f:param name="folderId" value="#{cc.folderId}"/>
+                </f:ajax>
+            </h:commandButton>
+        <!-- Search Panel -->
 
         <p:dataTable var="item" value="#{cc.dataList}"  id="table" >
 

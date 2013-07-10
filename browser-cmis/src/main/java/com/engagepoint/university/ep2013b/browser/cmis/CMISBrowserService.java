@@ -7,7 +7,10 @@ import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
 import org.apache.chemistry.opencmis.commons.enums.BindingType;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CMISBrowserService implements BrowserService
 {
@@ -206,7 +209,7 @@ public class CMISBrowserService implements BrowserService
 //        parameter.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
 
         // WSDL
-        final String url = "http://localhost:8080/server/services/";
+        final String url = "http://localhost:18080/server/services/";
         parameter.put(SessionParameter.BINDING_TYPE, BindingType.WEBSERVICES.value());
         parameter.put(SessionParameter.WEBSERVICES_ACL_SERVICE,             url+"ACLService?wsdl");
         parameter.put(SessionParameter.WEBSERVICES_DISCOVERY_SERVICE,       url+"DiscoveryService?wsdl");
@@ -222,5 +225,73 @@ public class CMISBrowserService implements BrowserService
         parameter.put(SessionParameter.REPOSITORY_ID, repository.getId());
 
         return sessionFactory.createSession(parameter);
+    }
+
+
+    ////   simple search
+    public  List<BrowserItem> simpleSearch(String id, String parameter){
+
+        BrowserItem item;
+        ArrayList<BrowserItem> browserItems = new ArrayList<BrowserItem>();
+
+        String  inFolders = "SELECT cmis:objectId, cmis:name FROM cmis:folder   WHERE IN_TREE(?) and cmis:name LIKE ?";
+        String  inDocums  = "SELECT cmis:objectId, cmis:name FROM cmis:document WHERE IN_TREE(?) and cmis:name LIKE ?";
+
+
+        if(id != null && !id.isEmpty() && parameter != null && !parameter.isEmpty()){
+
+
+            QueryStatement qq =  session.createQueryStatement(inDocums);
+
+            qq.setString(1,id);
+            qq.setStringLike(2,"%"+parameter+"%");
+
+            System.out.println("query string = " + qq.toQueryString());
+
+            ItemIterable<QueryResult> results = qq.query(false);
+
+            int ii = 1;
+            for(QueryResult hit: results) {
+
+                System.out.println("  -------------------------------  result N = " + ii++);
+
+
+                item = new BrowserItem();
+                item.setId(hit.getPropertyByQueryName("cmis:objectId").getFirstValue().toString());
+                item.setName(hit.getPropertyByQueryName("cmis:name").getFirstValue().toString());
+                item.setType(BrowserItem.TYPE.FILE);
+
+                browserItems.add(item);
+
+             }
+
+
+            qq =  session.createQueryStatement(inFolders);
+
+            qq.setString(1,id);
+            qq.setStringLike(2,"%"+parameter+"%");
+
+            System.out.println("query string = " + qq.toQueryString());
+
+            results = qq.query(false);
+
+
+            for(QueryResult hit: results) {
+
+                System.out.println("  -------------------------------  result N = " + ii++);
+
+
+                item = new BrowserItem();
+                item.setId(hit.getPropertyByQueryName("cmis:objectId").getFirstValue().toString());
+                item.setName(hit.getPropertyByQueryName("cmis:name").getFirstValue().toString());
+                item.setType(BrowserItem.TYPE.FOLDER);
+
+                browserItems.add(item);
+
+            }
+
+        }  // valid id & parameter string
+
+        return browserItems;
     }
 }

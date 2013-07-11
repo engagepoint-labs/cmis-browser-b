@@ -8,7 +8,6 @@ import javax.faces.component.FacesComponent;
 import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -63,7 +62,10 @@ public class BrowserComponentTable extends UINamingContainer
             pagesCount = service.getTotalPagesFromFolderById(folderId, rowCounts);
             dataList = currentFolder.getChildren();
         }
-        else dataList = service.simpleSearch(folderId, searchCriteria);
+        else {
+            pagesCount = service.getTotalPagesFromSimpleSearch(folderId, searchCriteria, rowCounts);
+            dataList = service.simpleSearch(folderId, searchCriteria, pageNum, rowCounts);
+        }
 
         return dataList;
     }

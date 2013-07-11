@@ -14,6 +14,7 @@ import java.util.Map;
 
 public class CMISBrowserService implements BrowserService
 {
+
     // Unique Service Provider name
     private static final String SERVICE_NAME = "CMIS";
     private Session session;
@@ -221,14 +222,18 @@ public class CMISBrowserService implements BrowserService
 
 
     ////  ======================================================     simple search of name
-    public  List<BrowserItem> simpleSearch(String id, String parameter){
+    public  List<BrowserItem> simpleSearch(String id, String parameter, int page, int rowCounts){
 
         BrowserItem item;
         ArrayList<BrowserItem> browserItems = new ArrayList<BrowserItem>();
 
-        String  inFolders = "SELECT cmis:objectId, cmis:name FROM cmis:folder   WHERE IN_TREE(?) and cmis:name LIKE ?";
-        String  inDocums  = "SELECT cmis:objectId, cmis:name FROM cmis:document WHERE IN_TREE(?) and cmis:name LIKE ?";
-
+        String  inFolders =
+                "SELECT cmis:objectId, cmis:name FROM cmis:folder   WHERE IN_TREE(?) and cmis:name LIKE ?";
+        String  inDocums  =
+                "SELECT cmis:objectId, cmis:name FROM cmis:document WHERE IN_TREE(?) and cmis:name LIKE ?";
+        //String inDocums =
+                //"SELECT cmis:name, cmis:objectId FROM  (cmis:document d  JOIN cmis:folder f) where IN_TREE(?) and cmis:name LIKE ?";
+        // http://pic.dhe.ibm.com/infocenter/p8docs/v5r0m0/index.jsp?topic=%2Fcom.ibm.installingp8cmis.doc%2Fcmidv022.htm
 
         if(id != null && !id.isEmpty() && parameter != null && !parameter.isEmpty()){
 
@@ -240,9 +245,18 @@ public class CMISBrowserService implements BrowserService
             System.out.println("query string = " + query.toQueryString());
 
             ItemIterable<QueryResult> results = query.query(false);
+            //int rowCounts = 2;
+            long skip=0;
+
+            if (((page != 0) && (rowCounts != 0)))
+            {
+                skip = (page-1)*rowCounts;
+                //children = current.getChildren().skipTo(skip).getPage(rowCounts);
+            }
+
 
             int ii = 1;
-            for(QueryResult hit: results) {
+            for(QueryResult hit: results.skipTo(skip).getPage(rowCounts)) {
 
                 System.out.println("  -------------------------------  result N = " + ii++);
 
@@ -257,34 +271,64 @@ public class CMISBrowserService implements BrowserService
 
              }
 
+//
+//            query =  session.createQueryStatement(inFolders);
+//
+//            query.setString(1,id);
+//            query.setStringLike(2,"%"+parameter+"%");
+//
+//            System.out.println("query string = " + query.toQueryString());
+//
+//            results = query.query(false);
+//
+//
+//            for(QueryResult hit: results) {
+//
+//                System.out.println("  -------------------------------  result N = " + ii++);
+//
+//                item = new BrowserItem(
+//                        hit.getPropertyByQueryName("cmis:objectId").getFirstValue().toString(),
+//                        hit.getPropertyByQueryName("cmis:name").getFirstValue().toString(),
+//                        BrowserItem.TYPE.FOLDER
+//                 );
+//
+//                System.out.println("item = " + item);
+//                browserItems.add(item);
+//
+//            }
 
-            query =  session.createQueryStatement(inFolders);
+        }  // valid id & parameter string
+
+        return browserItems;
+    }
+
+    @Override
+    public int getTotalPagesFromSimpleSearch(String id, String parameter, int rowCounts) {
+
+        String  inDocums  =
+                "SELECT cmis:objectId, cmis:name FROM cmis:document  WHERE IN_TREE(?) and cmis:name LIKE ?";
+
+         int totalPages = 0;
+
+        if(id != null && !id.isEmpty() && parameter != null && !parameter.isEmpty()){
+
+            QueryStatement query =  session.createQueryStatement(inDocums);
 
             query.setString(1,id);
             query.setStringLike(2,"%"+parameter+"%");
 
             System.out.println("query string = " + query.toQueryString());
 
-            results = query.query(false);
+            ItemIterable<QueryResult> results = query.query(false);
+
+            long total = results.getTotalNumItems();
+            totalPages = Math.round((float)total/ rowCounts);
+
+        }
 
 
-            for(QueryResult hit: results) {
 
-                System.out.println("  -------------------------------  result N = " + ii++);
-
-                item = new BrowserItem(
-                        hit.getPropertyByQueryName("cmis:objectId").getFirstValue().toString(),
-                        hit.getPropertyByQueryName("cmis:name").getFirstValue().toString(),
-                        BrowserItem.TYPE.FOLDER
-                 );
-
-                System.out.println("item = " + item);
-                browserItems.add(item);
-
-            }
-
-        }  // valid id & parameter string
-
-        return browserItems;
+        return totalPages;  //To change body of implemented methods use File | Settings | File Templates.
     }
+
 }

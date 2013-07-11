@@ -21,7 +21,9 @@ public interface BrowserService
 
     // Possibly better create some Util class for this method ?
     public String getCurrentLocationById(String id);
-    public List<BrowserItem> simpleSearch(String id, String parameter);
+    public List<BrowserItem> simpleSearch(String id, String parameter, int page, int rowCounts);
+    public int getTotalPagesFromSimpleSearch(String id, String parameter, int rowCounts);
+
 
     // ... add more here ...
 }

@@ -242,7 +242,7 @@ public class CMISBrowserService implements BrowserService
             query.setString(1,id);
             query.setStringLike(2,"%"+parameter+"%");
 
-            System.out.println("query string = " + query.toQueryString());
+            //System.out.println("query string = " + query.toQueryString());
 
             ItemIterable<QueryResult> results = query.query(false);
             //int rowCounts = 2;
@@ -258,7 +258,7 @@ public class CMISBrowserService implements BrowserService
             int ii = 1;
             for(QueryResult hit: results.skipTo(skip).getPage(rowCounts)) {
 
-                System.out.println("  -------------------------------  result N = " + ii++);
+                //System.out.println("  -------------------------------  result N = " + ii++);
 
                 item = new BrowserItem(
                         hit.getPropertyByQueryName("cmis:objectId").getFirstValue().toString(),
@@ -266,7 +266,7 @@ public class CMISBrowserService implements BrowserService
                         BrowserItem.TYPE.FILE
                 );
 
-                System.out.println("item = "+item);
+                //System.out.println("item = "+item);
                 browserItems.add(item);
 
              }
@@ -317,7 +317,7 @@ public class CMISBrowserService implements BrowserService
             query.setString(1,id);
             query.setStringLike(2,"%"+parameter+"%");
 
-            System.out.println("query string = " + query.toQueryString());
+            //System.out.println("query string = " + query.toQueryString());
 
             ItemIterable<QueryResult> results = query.query(false);
 

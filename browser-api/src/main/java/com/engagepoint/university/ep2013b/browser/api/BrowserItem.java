@@ -41,7 +41,7 @@ public class BrowserItem implements Serializable
     public BrowserItem(String id, String name, TYPE folder) {
         this.id = id;
         this.name = name;
-        this.type = type;
+        this.type = folder;
     }
 
     public BrowserItem(String name, TYPE type, BrowserItem parent, List<BrowserItem> children) {

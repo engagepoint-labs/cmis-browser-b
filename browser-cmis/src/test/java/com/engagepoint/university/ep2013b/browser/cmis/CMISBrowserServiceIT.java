@@ -5,6 +5,8 @@ import org.junit.Test;
 
 import java.util.List;
 
+import static junit.framework.Assert.assertEquals;
+
 public class CMISBrowserServiceIT
 {
     private CMISBrowserService cmisBrowserService = new CMISBrowserService();
@@ -94,11 +96,35 @@ public class CMISBrowserServiceIT
 //    }
 
     @Test
-    public void test_foo()
+    public void test_simpleSearch_findlist_size()
     {
         List<BrowserItem> list = cmisBrowserService.simpleSearch("101", "-1");
 
-        for (BrowserItem i : list)
-            System.out.println(i);
+        assertEquals(9, list.size());
     }
+
+    @Test
+    public void test_simpleSearch_invalid_parameter_id()
+    {
+        List<BrowserItem> list = cmisBrowserService.simpleSearch("0", "-1");
+
+        assertEquals(0, list.size());
+    }
+
+    @Test
+    public void test_simpleSearch_invalid_parameter_str()
+    {
+        List<BrowserItem> list = cmisBrowserService.simpleSearch("101", "_");
+
+         assertEquals(15, list.size());
+    }
+
+    @Test
+    public void test_simpleSearch_valid_data()
+    {
+        List<BrowserItem> list = cmisBrowserService.simpleSearch("101", "_");
+
+        assertEquals("My_Folder-2-0", list.get(11).getName());
+    }
+
 }

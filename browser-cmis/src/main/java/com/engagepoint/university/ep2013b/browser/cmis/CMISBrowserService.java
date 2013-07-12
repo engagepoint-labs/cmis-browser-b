@@ -2,7 +2,6 @@ package com.engagepoint.university.ep2013b.browser.cmis;
 
 import com.engagepoint.university.ep2013b.browser.api.BrowserItem;
 import com.engagepoint.university.ep2013b.browser.api.BrowserService;
-import com.engagepoint.university.ep2013b.browser.api.TablePage;
 import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
@@ -227,7 +226,6 @@ public class CMISBrowserService implements BrowserService
 
         BrowserItem item;
         ArrayList<BrowserItem> browserItems = new ArrayList<BrowserItem>();
-        TablePage tablePage = new TablePage();
         int totalPages = 0;
 
 
@@ -279,10 +277,6 @@ public class CMISBrowserService implements BrowserService
             } else{
                 totalPages = Math.round((float)total / rowCounts);
             }
-
-
-
-            tablePage = new TablePage(browserItems, totalPages);
 
         }  // valid id & parameter string
 

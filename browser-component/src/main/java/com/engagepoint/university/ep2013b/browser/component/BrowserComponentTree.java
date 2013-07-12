@@ -28,12 +28,16 @@ public class BrowserComponentTree extends UINamingContainer {
 
     public BrowserComponentTree()
     {
+        System.out.println("BrowserComponentTree()");
+
         service = BrowserFactory.getInstance("CMIS");
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         folderId = request.getParameter("folderId");
 
+        System.out.println("id = " + folderId);
+
         BrowserItem currentFolder = null;
-        if ((folderId == null) || ("".equals(folderId)))
+        if ((folderId == null) || ("".equals(folderId))|| ("null".equals(folderId)))
         {
             currentFolder = service.findFolderByPath("/");
             folderId = currentFolder.getId();

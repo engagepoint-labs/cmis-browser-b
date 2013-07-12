@@ -15,6 +15,12 @@
 
             <!-- Search Panel-->
             <p:layoutUnit position="north" size="auto">
+                <p:inputText id="search" value="#{cc.searchCriteria}"/>
+
+                <p:commandButton id="searchbtn"  update="search,table" ajax="true" icon="ui-icon-search" title="Search">
+                    <f:param name="folderId" value="#{cc.folderId}"/>
+                </p:commandButton>
+
                 <p:ajaxStatus>
                     <f:facet name="start">
                         <h:outputText value="processing..."/>
@@ -24,16 +30,10 @@
                         <h:outputText value="" />
                     </f:facet>
                 </p:ajaxStatus>
-
-                <p:inputText id="search" value="#{cc.searchCriteria}"/>
-
-                <p:commandButton id="searchbtn"  update="search,table" ajax="true" icon="ui-icon-search" title="Search">
-                    <f:param name="folderId" value="#{cc.folderId}"/>
-                </p:commandButton>
             </p:layoutUnit>
 
             <!-- Table Panel-->
-            <p:layoutUnit position="center" size="auto">
+            <p:layoutUnit position="center">
                 <p:dataTable var="item" value="#{cc.dataList}"  id="table" >
                     <p:column headerText="Id">
                         <h:outputText value="#{item.id}"  id="itemid" />
@@ -52,21 +52,25 @@
                         <p:button id="butfirst" disabled="#{!cc.prevAllowed}" icon="ui-icon-arrowthickstop-1-w">
                             <f:param name="folderId" value="#{cc.folderId}"/>
                             <f:param name="pageNum" value="1"/>
+                            <f:param name="searchCriteria" value="#{cc.searchCriteria}"/>
                         </p:button>
 
                         <p:button id="butprev" disabled="#{!cc.prevAllowed}" icon="ui-icon-arrowthick-1-w">
                             <f:param name="folderId" value="#{cc.folderId}"/>
                             <f:param name="pageNum" value="#{cc.prevPageNum}"/>
+                            <f:param name="searchCriteria" value="#{cc.searchCriteria}"/>
                         </p:button>
 
                         <p:button id="butnext" disabled="#{!cc.nextAllowed}" icon="ui-icon-arrowthick-1-e">
                             <f:param name="folderId" value="#{cc.folderId}"/>
                             <f:param name="pageNum" value="#{cc.nextPageNum}"/>
+                            <f:param name="searchCriteria" value="#{cc.searchCriteria}"/>
                         </p:button>
 
                         <p:button id="butlast" disabled="#{!cc.nextAllowed}" icon="ui-icon-arrowthickstop-1-e">
                             <f:param name="folderId" value="#{cc.folderId}"/>
                             <f:param name="pageNum" value="#{cc.pagesCount}"/>
+                            <f:param name="searchCriteria" value="#{cc.searchCriteria}"/>
                         </p:button>
                     </f:facet>
                 </p:dataTable>

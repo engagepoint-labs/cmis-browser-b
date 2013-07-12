@@ -29,13 +29,13 @@
         <repository>
             <id>releases</id>
             <name>releases</name>
-            <url>file:///d:/test/release</url>
+            <url>file:///${env.USERPROFILE}/.m2/</url>
         </repository>
 
         <snapshotRepository>
             <id>snapshots</id>
             <name>snapshots</name>
-            <url>file:///d:/test/snapshots</url>
+            <url>file:///${env.USERPROFILE}/.m2/</url>
             <uniqueVersion>false</uniqueVersion>
         </snapshotRepository>
     </distributionManagement>
@@ -50,7 +50,7 @@
             </snapshots>
             <id>snapshots</id>
             <name>libs-snapshots</name>
-            <url>file:///d:/test/snapshots</url>
+            <url>file:///${env.USERPROFILE}/.m2/</url>
         </repository>
     </repositories>
 
@@ -62,7 +62,7 @@
             </snapshots>
             <id>snapshots</id>
             <name>plugins-snapshots</name>
-            <url>file:///d:/test/snapshots</url>
+            <url>file:///${env.USERPROFILE}/.m2/</url>
         </pluginRepository>
     </pluginRepositories>
 

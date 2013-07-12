@@ -63,8 +63,12 @@ public class BrowserComponentTable extends UINamingContainer
             dataList = currentFolder.getChildren();
         }
         else {
-            pagesCount = service.getTotalPagesFromSimpleSearch(folderId, searchCriteria, rowCounts);
-            dataList = service.simpleSearch(folderId, searchCriteria, pageNum, rowCounts);
+
+            BrowserItem item  =  service.simpleSearch(folderId, searchCriteria, pageNum, rowCounts);
+            //pagesCount = service.getTotalPagesFromSimpleSearch(folderId, searchCriteria, rowCounts);
+            //dataList = service.simpleSearch(folderId, searchCriteria, pageNum, rowCounts);
+            pagesCount = item.getTotalPages();
+            dataList = item.getChildren();
         }
 
         return dataList;

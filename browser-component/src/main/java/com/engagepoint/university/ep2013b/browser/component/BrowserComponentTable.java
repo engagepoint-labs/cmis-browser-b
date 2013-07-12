@@ -31,8 +31,6 @@ public class BrowserComponentTable extends UINamingContainer
 
     public BrowserComponentTable()
     {
-        System.out.println("BrowserComponentTable()");
-
         service = BrowserFactory.getInstance("CMIS");
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 
@@ -49,11 +47,6 @@ public class BrowserComponentTable extends UINamingContainer
     // Method executed when dataTable renders (during loading page or ajax request)
     public List<BrowserItem> getDataList()
     {
-        System.out.println("getDataList():");
-        System.out.println("id = " + folderId);
-        System.out.println("page = " + pageNum);
-        System.out.println("search = " + searchCriteria);
-
         if((folderId == null) || ("".equals(folderId))|| ("null".equals(folderId)))
         {
             // first time at the page
@@ -64,14 +57,15 @@ public class BrowserComponentTable extends UINamingContainer
         folderId = currentFolder.getId();
 
 
-        // not searching
         if ((searchCriteria == null) || ("".equals(searchCriteria)))
         {
+            // not searching
             pagesCount = service.getTotalPagesFromFolderById(folderId, rowCounts);
             dataList = currentFolder.getChildren();
         }
-        else {
-
+        else
+        {
+            // searching
             BrowserItem item  =  service.simpleSearch(folderId, searchCriteria, pageNum, rowCounts);
             //pagesCount = service.getTotalPagesFromSimpleSearch(folderId, searchCriteria, rowCounts);
             //dataList = service.simpleSearch(folderId, searchCriteria, pageNum, rowCounts);
@@ -123,8 +117,9 @@ public class BrowserComponentTable extends UINamingContainer
     }
 
 
-    public String getSearchCriteria() {
-        return searchCriteria;
+    public String getSearchCriteria()
+    {
+        return ((searchCriteria == null) || "null".equals(searchCriteria)) ? "" : searchCriteria;
     }
 
     public void setSearchCriteria(String searchCriteria) {

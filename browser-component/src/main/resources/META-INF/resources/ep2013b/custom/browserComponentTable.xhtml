@@ -15,21 +15,29 @@
 
             <!-- Search Panel-->
             <p:layoutUnit position="north" size="auto">
-                <p:inputText id="search" value="#{cc.searchCriteria}"/>
+                <h:panelGrid columns="3">
+                    <p:column>
+                        <p:inputText id="search" value="#{cc.searchCriteria}"/>
+                    </p:column>
 
-                <p:commandButton id="searchbtn"  update="search,table" ajax="true" icon="ui-icon-search" title="Search">
-                    <f:param name="folderId" value="#{cc.folderId}"/>
-                </p:commandButton>
+                    <p:column>
+                        <p:commandButton id="searchbtn"  update="search,table" ajax="true" icon="ui-icon-search" title="Search">
+                            <f:param name="folderId" value="#{cc.folderId}"/>
+                        </p:commandButton>
+                    </p:column>
 
-                <p:ajaxStatus>
-                    <f:facet name="start">
-                        <h:outputText value="processing..."/>
-                    </f:facet>
+                    <p:column>
+                        <p:ajaxStatus>
+                            <f:facet name="start">
+                                <h:outputText value="processing..."/>
+                            </f:facet>
 
-                    <f:facet name="complete">
-                        <h:outputText value="" />
-                    </f:facet>
-                </p:ajaxStatus>
+                            <f:facet name="complete">
+                                <h:outputText value="" />
+                            </f:facet>
+                        </p:ajaxStatus>
+                    </p:column>
+                </h:panelGrid>
             </p:layoutUnit>
 
             <!-- Table Panel-->

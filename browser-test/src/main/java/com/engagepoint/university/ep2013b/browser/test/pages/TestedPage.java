@@ -200,7 +200,7 @@ public class TestedPage extends WebDriverPage {
     public void find(final String text, final String xpath)
     {
         // wait until element changed its text, if timeout than not found
-        (new WebDriverWait(this, 10)).until(new ExpectedCondition<Boolean>() {
+        (new WebDriverWait(this, 20)).until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d)
             {
                 WebElement element = findElement(By.xpath(xpath));

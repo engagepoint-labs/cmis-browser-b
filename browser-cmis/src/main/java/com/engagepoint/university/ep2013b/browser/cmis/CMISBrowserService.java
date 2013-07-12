@@ -7,10 +7,7 @@ import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
 import org.apache.chemistry.opencmis.commons.enums.BindingType;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CMISBrowserService implements BrowserService
 {
@@ -284,5 +281,89 @@ public class CMISBrowserService implements BrowserService
 
         return  item;
     }
+
+    //// ==============================================   advanced search by several parameters
+    ////   Document Type, Date from .. to ... ,  Content Type,  Size,  Contains Text
+
+
+    public  BrowserItem advancedSearch(String id, String parameter, int pageNum, int rowCounts){
+
+        BrowserItem item;
+        ArrayList<BrowserItem> browserItems = new ArrayList<BrowserItem>();
+        int totalPages = 0;
+
+        String  inDocums    = "SELECT ?, ?, ? FROM ?";
+        String  anyOptions  = " WHERE ";
+        String  multiple    = " AND ";
+
+        String paramDateFrom  = "cmis:creationDate >= TIMESTAMP ?";
+        String paramDateTo    = "cmis:creationDate <= TIMESTAMP ?";
+        String paramDocType   = "cmis:baseTypeId = ?";
+        String paramContType  = "cmis:contentStreamMimeType = ?";
+        String paramSize      = "cmis:contentStreamLength = ?";
+        String paramText      = "  CONTAINS(?) ";
+
+        QueryStatement query =  session.createQueryStatement(
+                inDocums+anyOptions+paramDateFrom+multiple+paramDateTo);
+
+
+        query.setProperty(1, "cmis:document", "cmis:objectId");
+        query.setProperty(2, "cmis:document", "cmis:name");
+        query.setProperty(3, "cmis:document", "cmis:creationDate");
+
+        query.setType(4, "cmis:document");
+
+        //query.setProperty(4, "cmis:document", "cmis:creationDate");
+        Calendar dd = new GregorianCalendar(2013,6,13, 0,0,0);  // month and day -1
+        query.setDateTime(5, dd);
+        dd = new GregorianCalendar(2013,6,14,0,0,0);
+        query.setDateTime(6, dd);
+
+        //query.setId(6, id);
+
+        System.out.println("query string = "+query.toQueryString());
+
+            ItemIterable<QueryResult> results = query.query(false);
+            //int rowCounts = 2;
+            long skip=0;
+
+            if (((pageNum != 0) && (rowCounts != 0)))
+            {
+                skip = (pageNum - 1) * rowCounts;
+            }
+
+
+            int ii = 1;
+            for(QueryResult hit: results.skipTo(skip).getPage(rowCounts)) {
+
+                item = new BrowserItem(
+                        hit.getPropertyByQueryName("cmis:objectId").getFirstValue().toString(),
+                        hit.getPropertyByQueryName("cmis:name").getFirstValue().toString(),
+                        BrowserItem.TYPE.FILE
+                );
+
+                browserItems.add(item);
+
+            }
+
+            long total = results.getTotalNumItems();
+
+            if(total == 0){
+                totalPages = 0;
+            }else
+
+            if(total < rowCounts){
+                totalPages = 1;
+            } else{
+                totalPages = Math.round((float)total / rowCounts);
+            }
+
+          // valid id & parameter string
+
+        item = new BrowserItem("",BrowserItem.TYPE.FOLDER, null, browserItems, totalPages);
+
+        return  item;
+    }
+
 
 }

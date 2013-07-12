@@ -232,9 +232,9 @@ public class CMISBrowserService implements BrowserService
 
 
         String  inFolders =
-                "SELECT cmis:objectId, cmis:name FROM cmis:folder   WHERE IN_TREE(?) and cmis:name LIKE ?";
+                "SELECT cmis:objectId, cmis:name FROM cmis:folder   WHERE IN_FOLDER(?) and cmis:name LIKE ?";
         String  inDocums  =
-                "SELECT cmis:objectId, cmis:name FROM cmis:document WHERE IN_TREE(?) and cmis:name LIKE ?";
+                "SELECT cmis:objectId, cmis:name FROM cmis:document WHERE IN_FOLDER(?) and cmis:name LIKE ?";
 
 
         if(id != null && !id.isEmpty() && parameter != null && !parameter.isEmpty()){
@@ -269,13 +269,24 @@ public class CMISBrowserService implements BrowserService
              }
 
             long total = results.getTotalNumItems();
-            totalPages = Math.round((float)total / rowCounts);
+
+            if(total == 0){
+                totalPages = 0;
+            }else
+
+            if(total < rowCounts){
+                totalPages = 1;
+            } else{
+                totalPages = Math.round((float)total / rowCounts);
+            }
+
+
 
             tablePage = new TablePage(browserItems, totalPages);
 
         }  // valid id & parameter string
 
-        item = new BrowserItem("",BrowserItem.TYPE.FOLDER,null, browserItems, totalPages);
+        item = new BrowserItem("",BrowserItem.TYPE.FOLDER, null, browserItems, totalPages);
 
         return  item;
     }

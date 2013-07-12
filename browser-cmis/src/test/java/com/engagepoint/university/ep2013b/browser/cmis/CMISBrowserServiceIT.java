@@ -1,7 +1,6 @@
 package com.engagepoint.university.ep2013b.browser.cmis;
 
 import com.engagepoint.university.ep2013b.browser.api.BrowserItem;
-import com.engagepoint.university.ep2013b.browser.api.TablePage;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
@@ -98,77 +97,85 @@ public class CMISBrowserServiceIT
     @Test
     public void test_simpleSearch_findlist_size()
     {
-       TablePage page = cmisBrowserService.simpleSearch("101", "-1",1,19);
+       BrowserItem item = cmisBrowserService.simpleSearch("101", "-1",1,19);
 
-        assertEquals(5, page.getItems().size());
+        assertEquals(3, item.getChildren().size());
     }
 
     @Test
     public void test_simpleSearch_findlist_totalpages()
     {
-        TablePage page = cmisBrowserService.simpleSearch("101", "-1",1,19);
+        BrowserItem item = cmisBrowserService.simpleSearch("101", "-1",1,19);
 
-        assertEquals(0, page.getTotalPages());
+        assertEquals(1, item.getTotalPages());
     }
 
     @Test
     public void test_simpleSearch_invalid_parameter_id()
     {
-        TablePage page = cmisBrowserService.simpleSearch("0", "-1",1,19);
+        BrowserItem item = cmisBrowserService.simpleSearch("0", "-1",1,19);
 
-        assertEquals(0, page.getItems().size());
+        assertEquals(0, item.getChildren().size());
     }
 
     @Test
     public void test_simpleSearch_invalid_parameter_str()
     {
-        TablePage page = cmisBrowserService.simpleSearch("101", "_",1,19);
+        BrowserItem item = cmisBrowserService.simpleSearch("101", "_",1,19);
 
-         assertEquals(9, page.getItems().size());
+         assertEquals(3, item.getChildren().size());
     }
 
     @Test
     public void test_simpleSearch_valid_data()
     {
-        TablePage page  = cmisBrowserService.simpleSearch("101", "_",1,19);
+        BrowserItem item  = cmisBrowserService.simpleSearch("101", "_",1,19);
 
-        assertEquals("My_Document-1-0", page.getItems().get(8).getName());
+        assertEquals("My_Document-1-0", item.getChildren().get(2).getName());
     }
 
     @Test
     public void test_simpleSearch_empty_page()
     {
-        TablePage page = cmisBrowserService.simpleSearch("0", "-1",2,19);
+        BrowserItem item = cmisBrowserService.simpleSearch("0", "-1",2,19);
 
-        assertEquals(0, page.getItems().size());
+        assertEquals(0, item.getChildren().size());
     }
 
 
     @Test
     public void test_simpleSearch_valid_page()
     {
-        TablePage page = cmisBrowserService.simpleSearch("101", "_",2,6);
+        BrowserItem item = cmisBrowserService.simpleSearch("101", "_",2,2);
 
-        assertEquals(3, page.getItems().size());
+        assertEquals(1, item.getChildren().size());
     }
 
 
     @Test
     public void test_simpleSearch_valid_last_page()
     {
-        TablePage page = cmisBrowserService.simpleSearch("101", "_",9,1);
+        BrowserItem item = cmisBrowserService.simpleSearch("101", "_",3,1);
 
-        assertEquals("My_Document-1-0", page.getItems().get(0).getName());
+        assertEquals("My_Document-1-0", item.getChildren().get(0).getName());
     }
 
 
     @Test
     public void test_simpleSearch_invalid_totalpages()
     {
-        TablePage page = cmisBrowserService.simpleSearch("101", "_",9,1);
+        BrowserItem item = cmisBrowserService.simpleSearch("101", "_",9,1);
 
-        assertNotSame(4, page.getTotalPages());
+        assertNotSame(4, item.getTotalPages());
     }
 
+
+    @Test
+    public void test_simpleSearch_invalid_totalpages2()
+    {
+        BrowserItem item = cmisBrowserService.simpleSearch("101", "older",1,4);
+
+        assertEquals(0, item.getTotalPages());
+    }
 
 }

@@ -7,27 +7,27 @@ So that I can achieve a business goal
 
 Scenario: User see tree folder children in the table by xpath
 
-Given user goes on page by url 'http://localhost:8080/browser/browser.xhtml'
+Given user goes on page by url 'http://localhost:18080/browser/browser.xhtml'
 When user clicks in the tree folder by xpath './/*[contains(@id,'tree:0_0:treelink')]'
 Then in the table folder child by xpath './/*[contains(@id,'table:1:itemname') and text()='My_Document-1-1']' is visible
 
 Scenario: User see tree folder children in the table by xpath - 2
 
-Given user goes on page by url 'http://localhost:8080/browser/browser.xhtml'
+Given user goes on page by url 'http://localhost:18080/browser/browser.xhtml'
 When user clicks in the tree folder by xpath './/*[contains(@id,'tree:0_0:treelink')]'
 And user clicks in the tree folder by xpath './/*[contains(@id,':tree:0_0_1:treelink')]'
 Then in the table folder child by xpath './/*[contains(@id,'table:1:itemname') and text()='My_Document-2-1']' is visible
 
 Scenario: User see next page of tree folder children in the table by xpath
 
-Given user goes on page by url 'http://localhost:8080/browser/browser.xhtml'
+Given user goes on page by url 'http://localhost:18080/browser/browser.xhtml'
 When user clicks in the tree folder by xpath './/*[contains(@id,'tree:0_0:treelink')]'
 And user clicks table button by xpath './/*[contains(@id,'table:butnext')]'
 Then in the table folder child by xpath './/*[contains(@id,'table:0:itemname') and text()='My_Document-1-2']' is visible
 
 Scenario: User see previos page of tree folder children in the table by xpath
 
-Given user goes on page by url 'http://localhost:8080/browser/browser.xhtml'
+Given user goes on page by url 'http://localhost:18080/browser/browser.xhtml'
 When user clicks in the tree folder by xpath './/*[contains(@id,'tree:0_0:treelink')]'
 And user clicks table button by xpath './/*[contains(@id,'table:butnext')]'
 And user clicks table button by xpath './/*[contains(@id,'table:butprev')]'
@@ -35,7 +35,7 @@ Then in the table folder child by xpath './/*[contains(@id,'table:1:itemname') a
 
 Scenario: User see first page of tree folder children in the table by xpath
 
-Given user goes on page by url 'http://localhost:8080/browser/browser.xhtml'
+Given user goes on page by url 'http://localhost:18080/browser/browser.xhtml'
 When user clicks in the tree folder by xpath './/*[contains(@id,'tree:0_0:treelink')]'
 And user clicks table button by xpath './/*[contains(@id,'table:butnext')]'
 And user clicks table button by xpath './/*[contains(@id,'table:butfirst')]'
@@ -44,7 +44,7 @@ Then in the table folder child by xpath './/*[contains(@id,'table:1:itemname') a
 
 Scenario: User see last page of tree folder children in the table by xpath
 
-Given user goes on page by url 'http://localhost:8080/browser/browser.xhtml'
+Given user goes on page by url 'http://localhost:18080/browser/browser.xhtml'
 When user clicks in the tree folder by xpath './/*[contains(@id,'tree:0_0:treelink')]'
 And user clicks table button by xpath './/*[contains(@id,'table:butlast')]'
 Then in the table folder child by xpath './/*[contains(@id,'table:0:itemname') and text()='My_Folder-1-1']' is visible

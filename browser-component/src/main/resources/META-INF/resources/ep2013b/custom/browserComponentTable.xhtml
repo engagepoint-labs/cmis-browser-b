@@ -4,86 +4,111 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:cc="http://xmlns.jcp.org/jsf/composite"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:custom="http://java.sun.com/jsf/composite/ep2013b/custom">
 
-    <cc:interface componentType="browserComponentTable">
-        <cc:attribute name="link"/>
-    </cc:interface>
+<cc:interface componentType="browserComponentTable">
+    <cc:attribute name="link"/>
+</cc:interface>
 
-    <cc:implementation>
-        <p:layout id="tablelayout">
+<cc:implementation>
 
-            <!-- Search Panel-->
-            <p:layoutUnit position="north" size="auto">
-                <h:panelGrid columns="3">
-                    <p:column>
-                        <p:inputText id="search" value="#{cc.searchCriteria}"/>
-                    </p:column>
+    <!-- Simple Search -->
+    <p:panel>
+        <h:panelGrid columns="3">
+            <p:column>
+                <p:inputText id="search" value="#{cc.searchCriteria}"/>
+            </p:column>
 
-                    <p:column>
-                        <p:commandButton id="searchbtn"  update="search,table" ajax="true" icon="ui-icon-search" title="Search">
-                            <f:param name="folderId" value="#{cc.folderId}"/>
-                        </p:commandButton>
-                    </p:column>
+            <p:column>
+                <p:commandButton id="searchbtn" update="search,table" ajax="true" icon="ui-icon-search" title="Search">
+                    <f:param name="folderId" value="#{cc.folderId}"/>
+                </p:commandButton>
+            </p:column>
 
-                    <p:column>
-                        <p:ajaxStatus>
-                            <f:facet name="start">
-                                <h:outputText value="processing..."/>
-                            </f:facet>
-
-                            <f:facet name="complete">
-                                <h:outputText value="" />
-                            </f:facet>
-                        </p:ajaxStatus>
-                    </p:column>
-                </h:panelGrid>
-            </p:layoutUnit>
-
-            <!-- Table Panel-->
-            <p:layoutUnit position="center">
-                <p:dataTable var="item" value="#{cc.dataList}"  id="table" >
-                    <p:column headerText="Id">
-                        <h:outputText value="#{item.id}"  id="itemid" />
-                    </p:column>
-
-                    <p:column headerText="Name">
-                        <h:outputText value="#{item.name}" id="itemname" />
-                    </p:column>
-
-                    <p:column headerText="Type">
-                        <h:outputText value="#{item.type}" id="itemtype" />
-                    </p:column>
-
-                    <!-- Paging Panel-->
-                    <f:facet name="footer">
-                        <p:button id="butfirst" disabled="#{!cc.prevAllowed}" icon="ui-icon-arrowthickstop-1-w">
-                            <f:param name="folderId" value="#{cc.folderId}"/>
-                            <f:param name="pageNum" value="1"/>
-                            <f:param name="searchCriteria" value="#{cc.searchCriteria}"/>
-                        </p:button>
-
-                        <p:button id="butprev" disabled="#{!cc.prevAllowed}" icon="ui-icon-arrowthick-1-w">
-                            <f:param name="folderId" value="#{cc.folderId}"/>
-                            <f:param name="pageNum" value="#{cc.prevPageNum}"/>
-                            <f:param name="searchCriteria" value="#{cc.searchCriteria}"/>
-                        </p:button>
-
-                        <p:button id="butnext" disabled="#{!cc.nextAllowed}" icon="ui-icon-arrowthick-1-e">
-                            <f:param name="folderId" value="#{cc.folderId}"/>
-                            <f:param name="pageNum" value="#{cc.nextPageNum}"/>
-                            <f:param name="searchCriteria" value="#{cc.searchCriteria}"/>
-                        </p:button>
-
-                        <p:button id="butlast" disabled="#{!cc.nextAllowed}" icon="ui-icon-arrowthickstop-1-e">
-                            <f:param name="folderId" value="#{cc.folderId}"/>
-                            <f:param name="pageNum" value="#{cc.pagesCount}"/>
-                            <f:param name="searchCriteria" value="#{cc.searchCriteria}"/>
-                        </p:button>
+            <p:column>
+                <p:ajaxStatus>
+                    <f:facet name="start">
+                        <h:outputText value="processing..."/>
                     </f:facet>
-                </p:dataTable>
-            </p:layoutUnit>
-        </p:layout>
 
-    </cc:implementation>
+                    <f:facet name="complete">
+                        <h:outputText value="" />
+                    </f:facet>
+                </p:ajaxStatus>
+            </p:column>
+        </h:panelGrid>
+    </p:panel>
+
+    <!-- Advanced Search -->
+    <p:panel id="advancedSearch">
+        <p:panelGrid columns="2">
+                    <h:outputLabel value="Document type:"/>
+                    <p:selectOneMenu id="searchDocumentType">
+                        <f:selectItem itemLabel="Document" itemValue=""/>
+                        <f:selectItem itemLabel="Folder" itemValue="" />
+                    </p:selectOneMenu>
+
+                    <h:outputLabel value="Date from:"/>
+                    <p:calendar id="searchDateFrom" showOn="button" />
+
+                    <h:outputLabel value="Date to:"/>
+                    <p:calendar id="searchDateTo" showOn="button" />
+
+                    <h:outputLabel value="Content type:"/>
+                    <p:selectOneMenu id="searchContentType">
+                        <f:selectItem itemLabel="cmis:document" itemValue="" />
+                        <f:selectItem itemLabel="cmis:folder" itemValue="" />
+                    </p:selectOneMenu>
+
+                    <h:outputLabel value="Size (KB):"/>
+                    <p:spinner id="searchSize" min="0"/>
+                </p:panelGrid>
+    </p:panel>
+
+    <!-- Table Panel-->
+    <p:panel>
+        <p:dataTable var="item" value="#{cc.dataList}"  id="table" >
+            <p:column headerText="Id">
+                <h:outputText value="#{item.id}"  id="itemid" />
+            </p:column>
+
+            <p:column headerText="Name">
+                <h:outputText value="#{item.name}" id="itemname" />
+            </p:column>
+
+            <p:column headerText="Type">
+                <h:outputText value="#{item.type}" id="itemtype" />
+            </p:column>
+
+            <!-- Paging Panel-->
+            <f:facet name="footer">
+                <p:button id="butfirst" disabled="#{!cc.prevAllowed}"  icon="ui-icon-arrowthickstop-1-w">
+                    <f:param name="folderId" value="#{cc.folderId}"/>
+                    <f:param name="pageNum" value="1"/>
+                    <f:param name="searchCriteria" value="#{cc.searchCriteria}"/>
+                </p:button>
+
+                <p:button id="butprev" disabled="#{!cc.prevAllowed}" icon="ui-icon-arrowthick-1-w">
+                    <f:param name="folderId" value="#{cc.folderId}"/>
+                    <f:param name="pageNum" value="#{cc.prevPageNum}"/>
+                    <f:param name="searchCriteria" value="#{cc.searchCriteria}"/>
+                </p:button>
+
+                <p:button id="butnext" disabled="#{!cc.nextAllowed}" icon="ui-icon-arrowthick-1-e">
+                    <f:param name="folderId" value="#{cc.folderId}"/>
+                    <f:param name="pageNum" value="#{cc.nextPageNum}"/>
+                    <f:param name="searchCriteria" value="#{cc.searchCriteria}"/>
+                </p:button>
+
+                <p:button id="butlast" disabled="#{!cc.nextAllowed}" icon="ui-icon-arrowthickstop-1-e">
+                    <f:param name="folderId" value="#{cc.folderId}"/>
+                    <f:param name="pageNum" value="#{cc.pagesCount}"/>
+                    <f:param name="searchCriteria" value="#{cc.searchCriteria}"/>
+                </p:button>
+            </f:facet>
+        </p:dataTable>
+    </p:panel>
+
+</cc:implementation>
 </ui:composition>

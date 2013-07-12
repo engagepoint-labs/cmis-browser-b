@@ -14,18 +14,18 @@
 
 <cc:implementation>
 
-    <p:layout id="componentlayout" fullPage="true">
+    <p:layout id="componentlayout">
 
-        <p:layoutUnit position="north" size="auto">
+        <p:layoutUnit position="north" header="Location" size="auto">
             <custom:browserInfoPanel />
         </p:layoutUnit>
 
-        <p:layoutUnit position="west" header="Tree">
+        <p:layoutUnit position="west" header="Tree" resizable="true">
             <custom:browserComponentTree link="#{cc.attrs.link}"/>
 
         </p:layoutUnit>
 
-        <p:layoutUnit position="center" header="Table">
+        <p:layoutUnit position="center" header="Table" resizable="true">
             <custom:browserComponentTable link="#{cc.attrs.link}"/>
         </p:layoutUnit>
     </p:layout>

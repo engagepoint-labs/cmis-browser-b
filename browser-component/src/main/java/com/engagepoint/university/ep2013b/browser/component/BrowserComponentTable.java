@@ -48,18 +48,23 @@ public class BrowserComponentTable extends UINamingContainer
     // Method executed when dataTable renders (during loading page or ajax request)
     public List<BrowserItem> getDataList()
     {
+        System.out.println("\tgetDataList");
+
+        System.out.println("1 folder = " + folderId);
+
+        if((folderId == null) || ("".equals(folderId)))
+        {
+            // first time at the page
+            currentFolder = service.findFolderByPath("/", 1, rowCounts);
+        }
+        else currentFolder = service.findFolderById(folderId, pageNum, rowCounts);
+
+        folderId = currentFolder.getId();
+        System.out.println("2 folder = " + folderId);
+
+        // not searching
         if ((searchCriteria == null) || ("".equals(searchCriteria)))
         {
-            // not searching
-
-            if((folderId == null) || ("".equals(folderId)))
-            {
-                // first time at the page
-                currentFolder = service.findFolderByPath("/", 1, rowCounts);
-                folderId = currentFolder.getId();
-            }
-            else currentFolder = service.findFolderById(folderId, pageNum, rowCounts);
-
             pagesCount = service.getTotalPagesFromFolderById(folderId, rowCounts);
             dataList = currentFolder.getChildren();
         }

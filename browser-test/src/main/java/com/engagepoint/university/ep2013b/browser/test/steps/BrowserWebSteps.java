@@ -145,5 +145,29 @@ public class BrowserWebSteps {
         testedPage.isSelectedByXpath(currSelectedFolder);
     }
 
+    // ---------------------------------------------------------------------------------------------------------------
+    @Given("opened '$url'")
+    public void open(String url)
+    {
+        testedPage.open(url);
+    }
 
+    @When("clicks on '$xpath'")
+    public void click(String xpath)
+    {
+        testedPage.click(xpath);
+    }
+
+    @When("types '$text' on '$xpath'")
+    public void type(String text, String xpath)
+    {
+        testedPage.type(text, xpath);
+    }
+
+    @Then("find '$text' on '$xpath'")
+    public void find(String text, String xpath)
+    {
+        testedPage.find(text, xpath);
+    }
+    // ---------------------------------------------------------------------------------------------------------------
 }

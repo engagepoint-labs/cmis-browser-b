@@ -226,12 +226,12 @@
                         <properties>
                             <cargo.servlet.port>18080</cargo.servlet.port>
                             <!--for using debug-->
-                            <!--<cargo.jvmargs>-->
-                                <!---Xdebug-->
-                                <!---Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=18000-->
-                                <!---Xnoagent-->
-                                <!---Djava.compiler=NONE-->
-                            <!--</cargo.jvmargs>-->
+                            <cargo.jvmargs>
+                                -Xdebug
+                                -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=18000
+                                -Xnoagent
+                                -Djava.compiler=NONE
+                            </cargo.jvmargs>
                         </properties>
                     </configuration>
 

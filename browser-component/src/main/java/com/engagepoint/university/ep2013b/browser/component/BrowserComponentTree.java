@@ -33,7 +33,7 @@ public class BrowserComponentTree extends UINamingContainer {
         folderId = request.getParameter("folderId");
 
         BrowserItem currentFolder = null;
-        if (folderId == null)
+        if ((folderId == null) || ("".equals(folderId)))
         {
             currentFolder = service.findFolderByPath("/");
             folderId = currentFolder.getId();

@@ -27,7 +27,7 @@
 
                 <p:inputText id="search" value="#{cc.searchCriteria}"/>
 
-                <p:commandButton update="search,table" ajax="true" icon="ui-icon-search" title="Search">
+                <p:commandButton id="searchbtn"  update="search,table" ajax="true" icon="ui-icon-search" title="Search">
                     <f:param name="folderId" value="#{cc.folderId}"/>
                 </p:commandButton>
             </p:layoutUnit>

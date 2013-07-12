@@ -247,14 +247,14 @@ public class CMISBrowserService implements BrowserService
             qq.setString(1,id);
             qq.setStringLike(2,"%"+parameter+"%");
 
-            System.out.println("query string = " + qq.toQueryString());
+//            System.out.println("query string = " + qq.toQueryString());
 
             ItemIterable<QueryResult> results = qq.query(false);
 
             int ii = 1;
             for(QueryResult hit: results) {
 
-                System.out.println("  -------------------------------  result N = " + ii++);
+//                System.out.println("  -------------------------------  result N = " + ii++);
 
 
                 item = new BrowserItem();
@@ -272,14 +272,14 @@ public class CMISBrowserService implements BrowserService
             qq.setString(1,id);
             qq.setStringLike(2,"%"+parameter+"%");
 
-            System.out.println("query string = " + qq.toQueryString());
+//            System.out.println("query string = " + qq.toQueryString());
 
             results = qq.query(false);
 
 
             for(QueryResult hit: results) {
 
-                System.out.println("  -------------------------------  result N = " + ii++);
+//                System.out.println("  -------------------------------  result N = " + ii++);
 
 
                 item = new BrowserItem();

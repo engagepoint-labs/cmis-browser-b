@@ -3,6 +3,10 @@ package com.engagepoint.university.ep2013b.browser.test.pages;
 import org.jbehave.web.selenium.WebDriverPage;
 import org.jbehave.web.selenium.WebDriverProvider;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -175,4 +179,34 @@ public class TestedPage extends WebDriverPage {
     }
 
 
+    // ---------------------------------------------------------------------------------------------------------------
+    public void open(String url)
+    {
+        get(url);
+    }
+
+    public void click(String xpath)
+    {
+        WebElement element = findElement(By.xpath(xpath));
+        element.click();
+    }
+
+    public void type(String text, String xpath)
+    {
+        WebElement element = findElement(By.xpath(xpath));
+        element.sendKeys(text);
+    }
+
+    public void find(final String text, final String xpath)
+    {
+        // wait until element changed its text, if timeout than not found
+        (new WebDriverWait(this, 10)).until(new ExpectedCondition<Boolean>() {
+            public Boolean apply(WebDriver d)
+            {
+                WebElement element = findElement(By.xpath(xpath));
+                return element.getText().equals(text);
+            }
+        });
+    }
+    // ---------------------------------------------------------------------------------------------------------------
 }

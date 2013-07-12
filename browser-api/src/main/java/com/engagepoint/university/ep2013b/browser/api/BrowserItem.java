@@ -6,6 +6,7 @@ import java.util.List;
 
 public class BrowserItem implements Serializable
 {
+
     public enum TYPE {FILE, FOLDER}
 
     private String id = "";
@@ -13,7 +14,7 @@ public class BrowserItem implements Serializable
     private String name = "";
     private BrowserItem parent = null;
     private List<BrowserItem> children = new ArrayList<BrowserItem>();
-
+    private int totalPages = 0;
 
     public BrowserItem()
     {
@@ -37,12 +38,27 @@ public class BrowserItem implements Serializable
         this.parent = parent;
     }
 
+    public BrowserItem(String id, String name, TYPE folder) {
+        this.id = id;
+        this.name = name;
+        this.type = folder;
+    }
+
     public BrowserItem(String name, TYPE type, BrowserItem parent, List<BrowserItem> children) {
         this.name = name;
         this.type = type;
         this.parent = parent;
         this.children = children;
     }
+
+    public BrowserItem(String name, TYPE type, BrowserItem parent, List<BrowserItem> children, int totalPages) {
+        this.name = name;
+        this.type = type;
+        this.parent = parent;
+        this.children = children;
+        this.totalPages = totalPages;
+    }
+
 
     public BrowserItem(String id, String name, TYPE type, BrowserItem parent, List<BrowserItem> children) {
         this.id = id;
@@ -138,5 +154,13 @@ public class BrowserItem implements Serializable
         result += ")";
 
         return result;
+    }
+
+    public int getTotalPages() {
+        return totalPages;
+    }
+
+    public void setTotalPages(int totalPages) {
+        this.totalPages = totalPages;
     }
 }

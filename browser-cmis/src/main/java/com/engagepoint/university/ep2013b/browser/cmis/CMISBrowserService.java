@@ -2,6 +2,7 @@ package com.engagepoint.university.ep2013b.browser.cmis;
 
 import com.engagepoint.university.ep2013b.browser.api.BrowserItem;
 import com.engagepoint.university.ep2013b.browser.api.BrowserService;
+import com.engagepoint.university.ep2013b.browser.api.TablePage;
 import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
@@ -14,6 +15,7 @@ import java.util.Map;
 
 public class CMISBrowserService implements BrowserService
 {
+
     // Unique Service Provider name
     private static final String SERVICE_NAME = "CMIS";
     private Session session;
@@ -93,23 +95,15 @@ public class CMISBrowserService implements BrowserService
 
         while (!current.isRootFolder())
         {
-//            parent = current.getParents().get(0);
             parent = current.getFolderParent();
 
-            item = new BrowserItem();
-            item.setId(current.getId());
-            item.setName(current.getName());
-            item.setType(BrowserItem.TYPE.FOLDER);
-
+            item = new BrowserItem(current.getId(),current.getName(),BrowserItem.TYPE.FOLDER);
             parents.add(item);
 
             current = parent;
         }
 
-        item = new BrowserItem();
-        item.setId(current.getId());
-        item.setName(current.getName());
-        item.setType(BrowserItem.TYPE.FOLDER);
+        item = new BrowserItem(current.getId(),current.getName(),BrowserItem.TYPE.FOLDER);
 
         parents.add(item);
 
@@ -228,71 +222,73 @@ public class CMISBrowserService implements BrowserService
     }
 
 
-    ////   simple search
-    public  List<BrowserItem> simpleSearch(String id, String parameter)
-    {
+    ////  ======================================================    simple search of partial/full name
+    public  BrowserItem simpleSearch(String id, String parameter, int pageNum, int rowCounts){
 
         BrowserItem item;
         ArrayList<BrowserItem> browserItems = new ArrayList<BrowserItem>();
+        TablePage tablePage = new TablePage();
+        int totalPages = 0;
 
-        String  inFolders = "SELECT cmis:objectId, cmis:name FROM cmis:folder   WHERE IN_TREE(?) and cmis:name LIKE ?";
-        String  inDocums  = "SELECT cmis:objectId, cmis:name FROM cmis:document WHERE IN_TREE(?) and cmis:name LIKE ?";
+
+        String  inFolders =
+                "SELECT cmis:objectId, cmis:name FROM cmis:folder   WHERE IN_FOLDER(?) and cmis:name LIKE ?";
+        String  inDocums  =
+                "SELECT cmis:objectId, cmis:name FROM cmis:document WHERE IN_FOLDER(?) and cmis:name LIKE ?";
 
 
         if(id != null && !id.isEmpty() && parameter != null && !parameter.isEmpty()){
 
+            QueryStatement query =  session.createQueryStatement(inDocums);
 
-            QueryStatement qq =  session.createQueryStatement(inDocums);
+            query.setString(1,id);
+            query.setStringLike(2,"%"+parameter+"%");
 
-            qq.setString(1,id);
-            qq.setStringLike(2,"%"+parameter+"%");
 
-//            System.out.println("query string = " + qq.toQueryString());
+            ItemIterable<QueryResult> results = query.query(false);
+            //int rowCounts = 2;
+            long skip=0;
 
-            ItemIterable<QueryResult> results = qq.query(false);
+            if (((pageNum != 0) && (rowCounts != 0)))
+            {
+                skip = (pageNum - 1)*rowCounts;
+            }
+
 
             int ii = 1;
-            for(QueryResult hit: results) {
+            for(QueryResult hit: results.skipTo(skip).getPage(rowCounts)) {
 
-//                System.out.println("  -------------------------------  result N = " + ii++);
-
-
-                item = new BrowserItem();
-                item.setId(hit.getPropertyByQueryName("cmis:objectId").getFirstValue().toString());
-                item.setName(hit.getPropertyByQueryName("cmis:name").getFirstValue().toString());
-                item.setType(BrowserItem.TYPE.FILE);
+                item = new BrowserItem(
+                        hit.getPropertyByQueryName("cmis:objectId").getFirstValue().toString(),
+                        hit.getPropertyByQueryName("cmis:name").getFirstValue().toString(),
+                        BrowserItem.TYPE.FILE
+                );
 
                 browserItems.add(item);
 
              }
 
+            long total = results.getTotalNumItems();
 
-            qq =  session.createQueryStatement(inFolders);
+            if(total == 0){
+                totalPages = 0;
+            }else
 
-            qq.setString(1,id);
-            qq.setStringLike(2,"%"+parameter+"%");
-
-//            System.out.println("query string = " + qq.toQueryString());
-
-            results = qq.query(false);
-
-
-            for(QueryResult hit: results) {
-
-//                System.out.println("  -------------------------------  result N = " + ii++);
-
-
-                item = new BrowserItem();
-                item.setId(hit.getPropertyByQueryName("cmis:objectId").getFirstValue().toString());
-                item.setName(hit.getPropertyByQueryName("cmis:name").getFirstValue().toString());
-                item.setType(BrowserItem.TYPE.FOLDER);
-
-                browserItems.add(item);
-
+            if(total < rowCounts){
+                totalPages = 1;
+            } else{
+                totalPages = Math.round((float)total / rowCounts);
             }
+
+
+
+            tablePage = new TablePage(browserItems, totalPages);
 
         }  // valid id & parameter string
 
-        return browserItems;
+        item = new BrowserItem("",BrowserItem.TYPE.FOLDER, null, browserItems, totalPages);
+
+        return  item;
     }
+
 }

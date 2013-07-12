@@ -12,53 +12,24 @@
     <packaging>jar</packaging>
     <name>browser-test</name>
 
-    <properties>
-        <jbehave.core.version>4.0-beta-3</jbehave.core.version>
-        <jbehave.site.version>3.1.1</jbehave.site.version>
-        <jbehave.web.version>3.6</jbehave.web.version>
-        <embeddables>**/*Stories.java</embeddables>
 
+
+     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+            <!-- Sonar -->
+        <sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
+        <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+        <sonar.jacoco.itReportPath>${project.basedir}/target/jacoco-it.exec</sonar.jacoco.itReportPath>
         <skipTests>false</skipTests>
     </properties>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.seleniumhq.selenium</groupId>
-                <artifactId>selenium-java</artifactId>
-                <version>2.32.0</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+
 
     <dependencies>
         <!-- JBehave -->
-        <dependency>
-            <groupId>org.jbehave</groupId>
-            <artifactId>jbehave-core</artifactId>
-            <version>${jbehave.core.version}</version>
-            <classifier>resources</classifier>
-            <type>zip</type>
-        </dependency>
 
-        <dependency>
-            <groupId>org.jbehave.site</groupId>
-            <artifactId>jbehave-site-resources</artifactId>
-            <version>${jbehave.site.version}</version>
-            <type>zip</type>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jbehave.web</groupId>
-            <artifactId>jbehave-web-selenium</artifactId>
-            <version>3.5.4</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jbehave.web</groupId>
-            <artifactId>jbehave-web-runner</artifactId>
-            <version>3.5.4</version>
-        </dependency>
 
         <!-- OpenCMIS -->
         <dependency>
@@ -68,13 +39,32 @@
             <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.engagepoint.university.ep2013b</groupId>
+            <artifactId>browser-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.engagepoint.university.ep2013b</groupId>
+            <artifactId>browser-cmis</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.engagepoint.university.ep2013b</groupId>
+            <artifactId>browser-component</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- browser-showcase -->
         <dependency>
             <groupId>com.engagepoint.university.ep2013b</groupId>
             <artifactId>browser-showcase</artifactId>
             <type>war</type>
-             <version>${project.version}</version>
+            <version>${project.version}</version>
         </dependency>
+
+
 
         <!-- JSF -->
         <dependency>
@@ -90,7 +80,13 @@
             <version>2.2.0</version>
             <scope>provided</scope>
         </dependency>
-     </dependencies>
+
+
+
+
+
+
+    </dependencies>
 
     <build>
         <resources>
@@ -122,83 +118,54 @@
         </pluginManagement>
 
         <plugins>
-            <plugin>
-                <groupId>org.jbehave</groupId>
-                <artifactId>jbehave-maven-plugin</artifactId>
-                <version>${jbehave.core.version}</version>
-                <executions>
-                    <execution>
-                        <id>unpack-view-resources</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>unpack-view-resources</goal>
-                        </goals>
 
-                        <configuration>
-                            <skip>${skipTests}</skip>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.jbehave</groupId>
-                <artifactId>jbehave-maven-plugin</artifactId>
-                <version>4.0-beta-3</version>
-
-                <executions>
-                    <execution>
-                        <id>run-stories</id>
-                        <phase>integration-test</phase>
-                        <configuration>
-                            <includes>
-                                <include>**/*Stories.java</include>
-                            </includes>
-                            <executorsClass>org.jbehave.core.embedder.executors.SameThreadExecutors</executorsClass>
-
-                            <skip>${skipTests}</skip>
-                        </configuration>
-                        <goals>
-                            <goal>run-stories-as-embeddables</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.google.guava</groupId>
-                        <artifactId>guava</artifactId>
-                        <version>11.0.1</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-
-            <!-- Cargo -->
             <plugin>
                 <groupId>org.codehaus.cargo</groupId>
                 <artifactId>cargo-maven2-plugin</artifactId>
                 <version>1.4.0</version>
 
                 <executions>
-                    <execution>
-                        <id>start-container</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>start</goal>
-                        </goals>
-                        <configuration>
-                            <skip>${skipTests}</skip>
-                        </configuration>
-                    </execution>
+                    <!--<execution>-->
 
-                    <execution>
-                        <id>stop-container</id>
-                        <phase>post-integration-test</phase>
-                        <goals>
-                            <goal>stop</goal>
-                        </goals>
-                        <configuration>
-                            <skip>${skipTests}</skip>
-                        </configuration>
-                    </execution>
+                        <!--<id>verify-deploy</id>-->
+                        <!--<phase>validate</phase>-->
+                        <!--<goals>-->
+                            <!--&lt;!&ndash;<goal>deployer-deploy</goal>&ndash;&gt;-->
+                            <!--<goal>start</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+
+                    <!--<execution>-->
+                    <!--<id>clean-undeploy</id>-->
+                    <!--<phase>clean</phase>-->
+                    <!--<goals>-->
+                    <!--<goal>start</goal>-->
+                    <!--</goals>-->
+                    <!--</execution>-->
+
+
+
+                    <!--<execution>-->
+                    <!--<id>start-container</id>-->
+                    <!--<phase>pre-integration-test</phase>-->
+                    <!--<goals>-->
+                    <!--<goal>start </goal>-->
+                    <!--</goals>-->
+                    <!--<configuration>-->
+                    <!--<skip>${skipTests}</skip>-->
+                    <!--</configuration>-->
+                    <!--</execution>-->
+
+                    <!--<execution>-->
+                    <!--<id>stop-container</id>-->
+                    <!--<phase>post-integration-test</phase>-->
+                    <!--<goals>-->
+                    <!--<goal>stop</goal>-->
+                    <!--</goals>-->
+                    <!--<configuration>-->
+                    <!--<skip>${skipTests}</skip>-->
+                    <!--</configuration>-->
+                    <!--</execution>-->
                 </executions>
 
                 <configuration>
@@ -227,10 +194,10 @@
                             <cargo.servlet.port>18080</cargo.servlet.port>
                             <!--for using debug-->
                             <!--<cargo.jvmargs>-->
-                                <!---Xdebug-->
-                                <!---Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=18000-->
-                                <!---Xnoagent-->
-                                <!---Djava.compiler=NONE-->
+                            <!---Xdebug-->
+                            <!---Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=18000-->
+                            <!---Xnoagent-->
+                            <!---Djava.compiler=NONE-->
                             <!--</cargo.jvmargs>-->
                         </properties>
                     </configuration>
@@ -257,7 +224,162 @@
                         </deployable>
                     </deployables>
                 </configuration>
+
             </plugin>
+
+
+            <!--<plugin>-->
+            <!--<groupId>org.jacoco</groupId>-->
+            <!--<artifactId>jacoco-maven-plugin</artifactId>-->
+            <!--<version>0.6.3.201306030806</version>-->
+            <!--&lt;!&ndash;<configuration>&ndash;&gt;-->
+            <!--&lt;!&ndash;<includes>&ndash;&gt;-->
+            <!--&lt;!&ndash;<include>**/*Test.java</include>&ndash;&gt;-->
+            <!--&lt;!&ndash;</includes>&ndash;&gt;-->
+            <!--&lt;!&ndash;</configuration>&ndash;&gt;-->
+            <!--<executions>-->
+
+
+            <!--<execution>-->
+            <!--<id>pre-unit-test</id>-->
+            <!--<goals>-->
+
+            <!--<goal>prepare-agent</goal>-->
+            <!--</goals>-->
+            <!--</execution>-->
+            <!--<execution>-->
+            <!--<id>post-unit-test</id>-->
+            <!--<phase>test</phase>-->
+            <!--<goals>-->
+            <!--<goal>report</goal>-->
+            <!--</goals>-->
+            <!--</execution>-->
+            <!--<execution>-->
+            <!--<id>pre-integration-test</id>-->
+            <!--<phase>pre-integration-test</phase>-->
+            <!--<goals>-->
+            <!--<goal>prepare-agent</goal>-->
+            <!--</goals>-->
+            <!--<configuration>-->
+
+            <!--<destFile>${project.build.directory}/jacoco-it.exec</destFile>-->
+            <!--<propertyName>failsafe.argLine</propertyName>-->
+            <!--</configuration>-->
+            <!--</execution>-->
+            <!--<execution>-->
+            <!--<id>post-integration-test</id>-->
+            <!--<phase>post-integration-test</phase>-->
+            <!--<goals>-->
+            <!--<goal>report</goal>-->
+            <!--</goals>-->
+            <!--<configuration>-->
+            <!--<dataFile>${project.build.directory}/jacoco-it.exec</dataFile>-->
+            <!--<outputDirectory>${project.reporting.outputDirectory}/jacoco-it</outputDirectory>-->
+            <!--</configuration>-->
+            <!--</execution>-->
+            <!--</executions>-->
+            <!--</plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.9</version>
+                <!--<configuration>-->
+                <!--<argLine>${failsafe.argLine}</argLine>-->
+                <!--</configuration>-->
+                <executions>
+                    <execution>
+                        <id>integration-test</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>verify</id>
+                        <goals>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--<plugin>-->
+                <!--<groupId>org.jbehave</groupId>-->
+                <!--<artifactId>jbehave-maven-plugin</artifactId>-->
+                <!--<version>${jbehave.core.version}</version>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>unpack-view-resources</id>-->
+                        <!--<phase>process-resources</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>unpack-view-resources</goal>-->
+                        <!--</goals>-->
+
+                        <!--<configuration>-->
+                            <!--<skip>${skipTests}</skip>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
+            <!--<plugin>-->
+                <!--<groupId>org.jbehave</groupId>-->
+                <!--<artifactId>jbehave-maven-plugin</artifactId>-->
+                <!--<version>4.0-beta-3</version>-->
+
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>run-stories</id>-->
+                        <!--<phase>integration-test</phase>-->
+                        <!--<configuration>-->
+                            <!--<includes>-->
+                                <!--<include>**/*Stories.java</include>-->
+                            <!--</includes>-->
+                            <!--<executorsClass>org.jbehave.core.embedder.executors.SameThreadExecutors</executorsClass>-->
+
+                            <!--<skip>${skipTests}</skip>-->
+                        <!--</configuration>-->
+                        <!--<goals>-->
+                            <!--<goal>run-stories-as-embeddables</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+                <!--<dependencies>-->
+                    <!--<dependency>-->
+                        <!--<groupId>com.google.guava</groupId>-->
+                        <!--<artifactId>guava</artifactId>-->
+                        <!--<version>11.0.1</version>-->
+                    <!--</dependency>-->
+
+                <!--</dependencies>-->
+            <!--</plugin>-->
+
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.1</version>
+            </plugin>
+
+            <!--<plugin>-->
+                <!--<artifactId>maven-invoker-plugin</artifactId>-->
+                <!--<configuration>-->
+                    <!--<cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>-->
+                    <!--<localRepositoryPath>${project.build.directory}/it-repo</localRepositoryPath>-->
+                    <!--<settingsFile>src/it/settings.xml</settingsFile>-->
+                <!--</configuration>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<goals>-->
+                            <!--<goal>install</goal>-->
+                            <!--<goal>run</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
+
+
+
+
+            <!-- Cargo -->
+
 
         </plugins>
     </build>

@@ -19,6 +19,10 @@
             <artifactId>chemistry-opencmis-client-impl</artifactId>
         </dependency>
 
+
+        <!-- browser-showcase -->
+
+
         <!-- JUnit -->
         <dependency>
             <groupId>junit</groupId>
@@ -26,4 +30,14 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+
+
+
+    <build>
+            <plugins>
+
+
+   </plugins>
+  </build>
 </project>

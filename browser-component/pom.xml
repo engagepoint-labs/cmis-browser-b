@@ -13,6 +13,9 @@
     <packaging>jar</packaging>
 
     <properties>
+
+
+
     <jbehave.core.version>4.0-beta-3</jbehave.core.version>
     <jbehave.site.version>3.1.1</jbehave.site.version>
     <jbehave.web.version>3.6</jbehave.web.version>
@@ -34,22 +37,20 @@
 
 
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-java</artifactId>
+                <version>2.32.0</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+
     <dependencies>
 
 
-        <dependency>
-            <groupId>com.sun.faces</groupId>
-            <artifactId>jsf-api</artifactId>
-            <version>2.2.0</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.sun.faces</groupId>
-            <artifactId>jsf-impl</artifactId>
-            <version>2.2.0</version>
-            <scope>provided</scope>
-        </dependency>
 
         <dependency>
             <groupId>org.apache.chemistry.opencmis</groupId>
@@ -59,6 +60,11 @@
         </dependency>
 
 
+        <dependency>
+            <groupId>com.engagepoint.university.ep2013b</groupId>
+            <artifactId>browser-test</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>com.engagepoint.university.ep2013b</groupId>
@@ -96,12 +102,9 @@
             <version>2.2.0</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>com.engagepoint.university.ep2013b</groupId>
-            <artifactId>browser-test</artifactId>
-            <version>${project.version}</version>
 
-        </dependency>
+
+
         <!-- for TreeNode -->
         <dependency>
             <groupId>javax</groupId>
@@ -115,7 +118,14 @@
             <artifactId>primefaces</artifactId>
             <version>3.5</version>
         </dependency>
+
+
+
+
     </dependencies>
+
+
+
 
   <build>
       <resources>
@@ -147,40 +157,63 @@
       </pluginManagement>
 
       <plugins>
-          <plugin> <!-- genrate war of same project -->
-               <groupId>org.apache.maven.plugins</groupId>
-                     <artifactId>maven-war-plugin</artifactId>
-                   <executions>
-                       <execution>
-                             <phase>test</phase>
-                              <configuration>
-                               </configuration>
-                              <goals>
-                                <goal>war</goal>
-                              </goals>
-                            </execution>
-                          </executions>
-                    </plugin>
+          <!--<plugin> &lt;!&ndash; genrate war of same project &ndash;&gt;-->
+               <!--<groupId>org.apache.maven.plugins</groupId>-->
+                     <!--<artifactId>maven-war-plugin</artifactId>-->
+                   <!--<executions>-->
+                       <!--<execution>-->
+                             <!--<phase>test</phase>-->
+                              <!--<configuration>-->
+                               <!--</configuration>-->
+                              <!--<goals>-->
+                                <!--<goal>war</goal>-->
+                              <!--</goals>-->
+                            <!--</execution>-->
+                          <!--</executions>-->
+                    <!--</plugin>-->
 
+          <plugin>
+              <artifactId>maven-assembly-plugin</artifactId>
+              <configuration>
+                  <descriptorRefs>
+                      <descriptorRef>jar-with-dependencies</descriptorRef>
+                  </descriptorRefs>
+                  <archive>
+                      <manifest>
+                          <mainClass>org.jbehave.core.embedder.executors_jar.Stories</mainClass>
+                      </manifest>
+                  </archive>
+              </configuration>
+              <executions>
+                  <execution>
+                      <id>make-my-jar-with-dependencies</id>
+                      <phase>package</phase>
+                      <goals>
+                          <goal>single</goal>
+                      </goals>
+                  </execution>
+              </executions>
+          </plugin>
 
-          <!--<plugin>-->
-              <!--<artifactId>maven-assembly-plugin</artifactId>-->
-              <!--<version>2.4</version>-->
-              <!--<configuration>-->
-                  <!--<descriptorRefs>-->
-                      <!--<descriptorRef>jar-with-dependencies</descriptorRef>-->
-                  <!--</descriptorRefs>-->
-              <!--</configuration>-->
-              <!--<executions>-->
-                  <!--<execution>-->
-                      <!--<id>make-assembly</id> &lt;!&ndash; this is used for inheritance merges &ndash;&gt;-->
-                      <!--<phase>package</phase> &lt;!&ndash; bind to the packaging phase &ndash;&gt;-->
-                      <!--<goals>-->
-                          <!--<goal>single</goal>-->
-                      <!--</goals>-->
-                  <!--</execution>-->
-              <!--</executions>-->
-          <!--</plugin>-->
+<!--
+          <plugin>
+              <artifactId>maven-assembly-plugin</artifactId>
+              <version>2.4</version>
+              <configuration>
+                  <descriptorRefs>
+                      <descriptorRef>jar-with-dependencies</descriptorRef>
+                  </descriptorRefs>
+              </configuration>
+              <executions>
+                  <execution>
+                      <id>make-assembly</id> &lt;!&ndash; this is used for inheritance merges &ndash;&gt;
+                      <phase>package</phase> &lt;!&ndash; bind to the packaging phase &ndash;&gt;
+                      <goals>
+                          <goal>single</goal>
+                      </goals>
+                  </execution>
+              </executions>
+          </plugin>-->
 
     <plugin>
         <groupId>org.jbehave</groupId>
@@ -213,12 +246,13 @@
                     <includes>
                         <include>**/*Stories.java</include>
                     </includes>
+                    <scope>test</scope>
                     <executorsClass>org.jbehave.core.embedder.executors.SameThreadExecutors</executorsClass>
 
                     <skip>${skipTests}</skip>
                 </configuration>
                 <goals>
-                    <goal>run-stories-as-embeddables</goal>
+                    <goal>run-stories-as-paths</goal>
                 </goals>
             </execution>
         </executions>
@@ -233,28 +267,30 @@
 
 
 
-      <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-failsafe-plugin</artifactId>
-          <version>2.9</version>
-          <!--<configuration>-->
-          <!--<argLine>${failsafe.argLine}</argLine>-->
-          <!--</configuration>-->
-          <executions>
-              <execution>
-                  <id>integration-test</id>
-                  <goals>
-                      <goal>integration-test</goal>
-                  </goals>
-              </execution>
-              <execution>
-                  <id>verify</id>
-                  <goals>
-                      <goal>verify</goal>
-                  </goals>
-              </execution>
-          </executions>
-      </plugin>
+
+
+      <!--<plugin>-->
+          <!--<groupId>org.apache.maven.plugins</groupId>-->
+          <!--<artifactId>maven-failsafe-plugin</artifactId>-->
+          <!--<version>2.9</version>-->
+          <!--&lt;!&ndash;<configuration>&ndash;&gt;-->
+          <!--&lt;!&ndash;<argLine>${failsafe.argLine}</argLine>&ndash;&gt;-->
+          <!--&lt;!&ndash;</configuration>&ndash;&gt;-->
+          <!--<executions>-->
+              <!--<execution>-->
+                  <!--<id>integration-test</id>-->
+                  <!--<goals>-->
+                      <!--<goal>integration-test</goal>-->
+                  <!--</goals>-->
+              <!--</execution>-->
+              <!--<execution>-->
+                  <!--<id>verify</id>-->
+                  <!--<goals>-->
+                      <!--<goal>verify</goal>-->
+                  <!--</goals>-->
+              <!--</execution>-->
+          <!--</executions>-->
+      <!--</plugin>-->
 
 
               <plugin>

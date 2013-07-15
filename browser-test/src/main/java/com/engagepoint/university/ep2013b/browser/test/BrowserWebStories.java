@@ -69,7 +69,7 @@ public class BrowserWebStories extends JUnitStories {
     @Override
     protected List<String> storyPaths() {
         return new StoryFinder()
-                .findPaths(codeLocationFromClass(this.getClass()).getFile(), asList("**/*.story"), null);
+                .findPaths(codeLocationFromClass(this.getClass()).getFile(), asList("stories/cx/lehmann/jbehave/jbehave_simple/stories/cleanup.story"), null);
     }
 
     // This Embedder is used by Maven or Ant and it will override anything set in the constructor

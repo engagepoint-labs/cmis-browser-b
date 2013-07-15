@@ -183,9 +183,17 @@ public class CMISBrowserServiceIT
     {
         BrowserItem item = cmisBrowserService.advancedSearch("101", "older",1,4);
 
-        assertEquals(1, item.getTotalPages());
+        assertEquals(6, item.getTotalPages());
     }
 
+
+    @Test
+    public void test_metadata()
+    {
+        BrowserItem item = cmisBrowserService.Metadata("101", "older",1,4);
+
+        assertEquals(6, item.getTotalPages());
+    }
 
 
 }

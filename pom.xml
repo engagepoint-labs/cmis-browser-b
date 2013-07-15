@@ -5,7 +5,7 @@
     <groupId>com.engagepoint.university.ep2013b</groupId>
     <artifactId>browser</artifactId>
     <packaging>pom</packaging>
-    <version>1.1</version>
+    <version>1.2-SNAPSHOT</version>
 
     <modules>
         <module>browser-api</module>

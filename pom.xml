@@ -175,7 +175,7 @@
 
                 <configuration>
                     <tagNameFormat>v@{project.version}</tagNameFormat>
-                    <preparationGoals>clean install</preparationGoals>
+                    <!--<preparationGoals>clean install</preparationGoals>-->
                     <branchName>release</branchName>
                     <allowTimestampedSnapshots>true</allowTimestampedSnapshots>
                     <autoVersionSubmodules>true</autoVersionSubmodules>

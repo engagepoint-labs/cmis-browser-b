@@ -5,7 +5,7 @@
     <groupId>com.engagepoint.university.ep2013b</groupId>
     <artifactId>browser</artifactId>
     <packaging>pom</packaging>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.1</version>
 
     <modules>
         <module>browser-api</module>
@@ -20,7 +20,7 @@
         <url>https://github.com/engagepoint-labs/cmis-browser-b</url>
         <connection>scm:git:git://github.com:engagepoint-labs/cmis-browser-b.git</connection>
         <developerConnection>scm:git:git@github.com:engagepoint-labs/cmis-browser-b.git</developerConnection>
-      <tag>HEAD</tag>
+      <tag>v1.1</tag>
   </scm>
 
     <!--for maven-release-plugin-->

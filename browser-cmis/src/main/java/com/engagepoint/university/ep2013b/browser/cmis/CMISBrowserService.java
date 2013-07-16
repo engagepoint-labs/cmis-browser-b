@@ -7,6 +7,7 @@ import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
 import org.apache.chemistry.opencmis.commons.enums.BindingType;
 
+import java.io.Serializable;
 import java.util.*;
 
 public class CMISBrowserService implements BrowserService {
@@ -267,8 +268,9 @@ public class CMISBrowserService implements BrowserService {
     //// ==========================================   advanced search by several parameters
     ////   Document Type, Date from .. to ... ,  Content Type,  Size,  Contains Text
 
-    public BrowserItem advancedSearch(String id, AdvSearchParams parameter, int pageNum, int rowCounts) {
+    public BrowserItem advancedSearch(String id, Object param, int pageNum, int rowCounts) {
 
+        AdvSearchParams parameter = (AdvSearchParams) param;
 
         BrowserItem item;
         ArrayList<BrowserItem> browserItems = new ArrayList<BrowserItem>();
@@ -316,19 +318,5 @@ public class CMISBrowserService implements BrowserService {
 
         return item;
     }
-
-
-    private void createDocument(){
-
-        Map<String,String> prop = new HashMap<String, String>();
-
-        prop.put("cmis:objectTypeId", "audioFile");
-        prop.put("cmis:objectId", "1001");
-        prop.put("cmis:name", "test_audio");
-
-
-       //Document doc =  session.createDocument(prop,"/");
-    }
-
 
 }

@@ -23,8 +23,9 @@ public class AdvSearchParams implements Serializable {
 
 
     public AdvSearchParams(
-            String docType, Calendar fromDate,
-            Calendar toDate, String contentType, Integer size, String text) {
+            String docType, Date fromDate,
+            Date toDate, String contentType, Integer size, String text) {
+
 
         params.put("docType", docType);
         params.put("fromDate", fromDate);
@@ -42,6 +43,39 @@ public class AdvSearchParams implements Serializable {
     public void setParams(Map<String, Object> params) {
         this.params = params;
     }
+
+    public String getDocumentType() {return (String) params.get("docType");}
+    public Date getDateFrom() {return (Date) params.get("fromDate");}
+    public Date getDateTo() {return (Date) params.get("toDate");}
+    public String getContentType() {return (String) params.get("contentType");}
+    public Integer getSize() {return (Integer) params.get("size");}
+    public String getText() {return (String) params.get("text");}
+
+    public void setDocumentType(String docType)
+    {
+        if ((docType != null) && (!"".equals(docType))) params.put("docType", docType);
+    }
+    public void setDateFrom(Date fromDate) {params.put("fromDate", fromDate);}
+    public void setDateTo(Date toDate) {params.put("toDate", toDate);}
+    public void setContentType(String contentType)
+    {
+        if ((contentType != null) && (!"".equals(contentType))) params.put("contentType", contentType);
+    }
+    public void setSize(Integer size)
+    {
+        if (size > 0) params.put("size", size);
+    }
+
+    public void setText(String text)
+    {
+        if ((text != null) && (!"".equals(text))) params.put("text", text);
+    }
+
+    public boolean isEmpty()
+    {
+        return getDocumentType() == null;
+    }
+
 
     public String createQueryString() {
 
@@ -123,8 +157,6 @@ public class AdvSearchParams implements Serializable {
             preparedQueryString = preparedQueryString + paramText;
         }
 
-        System.out.println("preparedQueryString = " + preparedQueryString);
-
         return preparedQueryString;
 
     }
@@ -150,12 +182,12 @@ public class AdvSearchParams implements Serializable {
 
 
         if(params.get("fromDate") != null){
-            query.setDateTime(paramCounter++, (Calendar) params.get("fromDate"));
+            query.setDateTime(paramCounter++, (Date) params.get("fromDate"));
         }
 
 
         if(params.get("toDate") != null){
-            query.setDateTime(paramCounter++, (Calendar) params.get("toDate"));
+            query.setDateTime(paramCounter++, (Date) params.get("toDate"));
         }
 
 
@@ -190,46 +222,6 @@ public class AdvSearchParams implements Serializable {
 
     }
 
-}
-
-
-class ParamPair implements Serializable {
-
-    private String querySubString = "";
-    private Object value = "";
-
-
-    ParamPair() {
-    }
-
-    ParamPair(String querySubString, Object value) {
-        this.querySubString = querySubString;
-        this.value = value;
-    }
-
-    String getQuerySubString() {
-        return querySubString;
-    }
-
-    void setQueryString(String querySubString) {
-        this.querySubString = querySubString;
-    }
-
-    Object getValue() {
-        return value;
-    }
-
-    void setValue(Object value) {
-        this.value = value;
-    }
-
-    @Override
-    public String toString() {
-        return "ParamPair{" +
-                "queryString='" + querySubString + '\'' +
-                ", value=" + value +
-                '}';
-    }
 }
 
 

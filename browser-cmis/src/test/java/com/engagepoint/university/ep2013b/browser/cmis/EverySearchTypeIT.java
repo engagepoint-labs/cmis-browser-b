@@ -122,7 +122,7 @@ public class EverySearchTypeIT {
 //                "cmis:document",dd, dd2, "audioFile",100, null);
 
         AdvSearchParams params =  new AdvSearchParams(
-                "cmis:document", dd, dd2, "ComplexType",null, null);
+                "cmis:document", dd.getTime(), dd2.getTime(), "ComplexType",null, null);
 
         BrowserItem item = cmisBrowserService.advancedSearch("101", params,1,30);
 
@@ -145,7 +145,7 @@ public class EverySearchTypeIT {
 //                "cmis:document",dd, dd2, "plain/text",100, null);
 
         AdvSearchParams params =  new AdvSearchParams(
-                "cmis:document",null, dd2, null, 34036, null);
+                "cmis:document",null, dd2.getTime(), null, 34036, null);
 
         BrowserItem item = cmisBrowserService.advancedSearch("101", params,1,30);
 

@@ -3,6 +3,7 @@ package com.engagepoint.university.ep2013b.browser.component;
 
 import com.engagepoint.university.ep2013b.browser.api.BrowserItem;
 import com.engagepoint.university.ep2013b.browser.api.BrowserService;
+import com.engagepoint.university.ep2013b.browser.cmis.AdvSearchParams;
 
 import javax.faces.component.FacesComponent;
 import javax.faces.component.UINamingContainer;
@@ -28,9 +29,13 @@ public class BrowserComponentTable extends UINamingContainer
     // Maximum of rows per page
     private static final int rowCounts = 2;
 
+    private AdvSearchParams advancedSearchParams = new AdvSearchParams();
+
 
     public BrowserComponentTable()
     {
+        System.out.println("BrowserComponentTable");
+
         service = BrowserFactory.getInstance("CMIS");
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 
@@ -47,6 +52,19 @@ public class BrowserComponentTable extends UINamingContainer
     // Method executed when dataTable renders (during loading page or ajax request)
     public List<BrowserItem> getDataList()
     {
+        System.out.println("getDataList()");
+        System.out.println("folderID = " + folderId);
+        System.out.println("page = " + pageNum);
+        System.out.println("simple search = " + searchCriteria);
+        System.out.println("advanced search:");
+        System.out.println("\tDocumentType = " + advancedSearchParams.getDocumentType());
+        System.out.println("\tDateFrom = " + advancedSearchParams.getDateFrom());
+        System.out.println("\tDateTo = " + advancedSearchParams.getDateTo());
+        System.out.println("\tContentType = " + advancedSearchParams.getContentType());
+        System.out.println("\tSize = " + advancedSearchParams.getSize());
+        System.out.println("\tText = " + advancedSearchParams.getText());
+
+
         if((folderId == null) || ("".equals(folderId))|| ("null".equals(folderId)))
         {
             // first time at the page
@@ -57,7 +75,7 @@ public class BrowserComponentTable extends UINamingContainer
         folderId = currentFolder.getId();
 
 
-        if ((searchCriteria == null) || ("".equals(searchCriteria)))
+        if ((searchCriteria == null) && advancedSearchParams.isEmpty())
         {
             // not searching
             pagesCount = service.getTotalPagesFromFolderById(folderId, rowCounts);
@@ -65,10 +83,19 @@ public class BrowserComponentTable extends UINamingContainer
         }
         else
         {
-            // searching
-            BrowserItem item  =  service.simpleSearch(folderId, searchCriteria, pageNum, rowCounts);
-            //pagesCount = service.getTotalPagesFromSimpleSearch(folderId, searchCriteria, rowCounts);
-            //dataList = service.simpleSearch(folderId, searchCriteria, pageNum, rowCounts);
+            BrowserItem item;
+
+            if ((searchCriteria != null))
+            {
+                // simple search
+                item = service.simpleSearch(folderId, searchCriteria, pageNum, rowCounts);
+            }
+            else
+            {
+                // advanced search
+                item = service.advancedSearch(folderId, advancedSearchParams, pageNum, rowCounts);
+            }
+
             pagesCount = item.getTotalPages();
             dataList = item.getChildren();
         }
@@ -119,10 +146,19 @@ public class BrowserComponentTable extends UINamingContainer
 
     public String getSearchCriteria()
     {
-        return ((searchCriteria == null) || "null".equals(searchCriteria)) ? "" : searchCriteria;
+        return searchCriteria;
     }
 
-    public void setSearchCriteria(String searchCriteria) {
-        this.searchCriteria = searchCriteria;
+    public void setSearchCriteria(String searchCriteria)
+    {
+        this.searchCriteria = ((searchCriteria == null) || "".equals(searchCriteria) || "null".equals(searchCriteria)) ? null : searchCriteria;
+    }
+
+    public AdvSearchParams getAdvancedSearchParams() {
+        return advancedSearchParams;
+    }
+
+    public void setAdvancedSearchParams(AdvSearchParams advancedSearchParams) {
+        this.advancedSearchParams = advancedSearchParams;
     }
 }

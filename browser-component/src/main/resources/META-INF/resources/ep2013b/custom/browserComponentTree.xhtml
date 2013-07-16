@@ -7,21 +7,18 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
     <cc:interface componentType="browserComponentTree">
-        <cc:attribute name="link" />
+        <cc:attribute name="link"/>
     </cc:interface>
-
-
-
 
 
     <cc:implementation>
 
-        <p:growl id="messages" showDetail="true" />
+        <p:growl id="messages" showDetail="true"/>
 
         <p:contextMenu id="treeContextMenu" for="tree">
-            <p:menuitem value="NewFolder" update="messages" actionListener="#{cc.createNode}" icon="ui-icon-search" />
-            <p:menuitem value="Edit" update="messages"  icon="ui-icon-search" />
-            <p:menuitem value="View" update="messages" actionListener="#{cc.displaySelectedSingle}" icon="ui-icon-search" />
+            <p:menuitem value="NewFolder" update="messages" outcome="browserFolder.xhtml" icon="ui-icon-search"/>
+            <p:menuitem value="Edit" update="messages" icon="ui-icon-search"/>
+            <p:menuitem value="View" update="messages" actionListener="#{cc.displaySelectedSingle}" icon="ui-icon-search"/>
             <p:menuitem value="Delete" update="tree" actionListener="#{cc.deleteNode}" icon="ui-icon-close"/>
         </p:contextMenu>
 
@@ -30,7 +27,7 @@
 
             <p:treeNode id="node" expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
 
-                <h:outputLink value="#{cc.attrs.link}" id="treelink" >
+                <h:outputLink value="#{cc.attrs.link}" id="treelink">
                     <h:outputText value="#{node.name}"/>
                     <f:param name="folderId" value="#{node.id}"/>
                 </h:outputLink>

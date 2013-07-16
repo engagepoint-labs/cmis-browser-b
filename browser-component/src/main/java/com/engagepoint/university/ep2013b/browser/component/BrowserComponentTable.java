@@ -76,6 +76,12 @@ public class BrowserComponentTable extends UINamingContainer
         return dataList;
     }
 
+
+    public String showPage(){
+
+            return "browserFolder.xhtml";
+        }
+
     public String getFolderId() {
         return folderId;
     }

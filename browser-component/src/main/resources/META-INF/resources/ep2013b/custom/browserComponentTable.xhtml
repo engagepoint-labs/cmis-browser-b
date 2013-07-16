@@ -13,6 +13,7 @@
     <cc:implementation>
         <p:layout id="tablelayout">
 
+
             <!-- Search Panel-->
             <p:layoutUnit position="north" size="auto">
                 <h:panelGrid columns="3">
@@ -37,6 +38,14 @@
                             </f:facet>
                         </p:ajaxStatus>
                     </p:column>
+
+                    <!-- button : "New Folder"-->
+                    <p:column>
+                        <p:button id="createfolde" value="New Folder" outcome="browserFolder.xhtml" title="Create New Folder" >
+                            <f:param name ="folderId" value="#{cc.folderId}" />
+                        </p:button>
+                    </p:column>
+
                 </h:panelGrid>
             </p:layoutUnit>
 

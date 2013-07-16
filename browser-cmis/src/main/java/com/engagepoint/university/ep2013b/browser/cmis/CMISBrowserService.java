@@ -156,9 +156,16 @@ public class CMISBrowserService implements BrowserService {
         ItemIterable<CmisObject> children = current.getChildren();
 
         long total = children.getTotalNumItems();
-        int totalPages = Math.round((float) total / rowCounts);
 
-        return totalPages;
+        long rest = total % rowCounts;
+
+        int totalPages = (int) (total - rest) / rowCounts;
+
+        if ( rest > 0) {
+            totalPages++;
+        }
+
+       return totalPages;
     }
 
     private String getCurrentLocation(Folder current) {
@@ -194,7 +201,7 @@ public class CMISBrowserService implements BrowserService {
     }
 
 
-    ////  ======================================================    simple search of partial/full name
+    ////  ===============================================   simple search of partial/full name
     public BrowserItem simpleSearch(String id, String parameter, int pageNum, int rowCounts) {
 
         BrowserItem item;
@@ -239,9 +246,12 @@ public class CMISBrowserService implements BrowserService {
             }
 
             long total = results.getTotalNumItems();
-            totalPages = Math.round((float) total / rowCounts);
 
-            if (total % rowCounts > 0) {
+            long rest = total % rowCounts;
+
+            totalPages = (int) (total - rest) / rowCounts;
+
+            if ( rest > 0) {
                 totalPages++;
             }
 
@@ -252,74 +262,10 @@ public class CMISBrowserService implements BrowserService {
         return item;
     }
 
-    ////  ======================================================    select metadata
-    public BrowserItem Metadata(String id, String parameter, int pageNum, int rowCounts) {
-
-        BrowserItem item;
-        ArrayList<BrowserItem> browserItems = new ArrayList<BrowserItem>();
-        int totalPages = 0;
-
-      ObjectType ot   =    session.getTypeDefinition("cmis:folder");   // cmis:document
-        System.out.println("object type size = "+ot.getChildren().getTotalNumItems());
-        for (ObjectType cc : ot.getChildren()){
-
-            System.out.println("object type  name = "+cc.getDisplayName());
-        }
-
-        item = new BrowserItem("", BrowserItem.TYPE.FOLDER, null, browserItems, totalPages);
-
-        return item;
-    }
 
 
-    //// ==============================================   advanced search by several parameters
+    //// ==========================================   advanced search by several parameters
     ////   Document Type, Date from .. to ... ,  Content Type,  Size,  Contains Text
-    private QueryStatement preparedQuery(AdvSearchParams parameter){
-
-        String preparedQueryString = "";
-
-        String inDocums = "SELECT ?, ?, ? FROM ?";
-        String anyOptions = " WHERE ";
-        String multiple = " AND ";
-
-        String type = "cmis:document";   /// ???
-        String paramDateFrom = "cmis:creationDate >= TIMESTAMP ?";
-        String paramDateTo = "cmis:creationDate <= TIMESTAMP ?";
-        String paramDocType = "cmis:baseTypeId = ?";
-        String paramContType = "cmis:contentStreamMimeType = ?";
-        String paramSize = "cmis:contentStreamLength = ?";
-        String paramText = "  CONTAINS(?) ";
-
-
-
-        QueryStatement query =  session.createQueryStatement("");
-
-        //// everytimes
-        query.setProperty(1, type, "cmis:objectId");
-        query.setProperty(2, type, "cmis:name");
-
-        //// by user request values
-        query.setProperty(3, "cmis:document", "cmis:creationDate");
-
-        // type
-        query.setType(4, "cmis:document");
-
-        // query.setProperty(4, "cmis:document", "cmis:creationDate");
-        Calendar dd = new GregorianCalendar(2013, 6, 15, 3, 0, 0);  // month and day -1
-        query.setDateTime(5, dd);
-        dd = new GregorianCalendar(2013, 6, 16, 3, 0, 0);
-        query.setDateTime(6, dd);
-
-        //query.setId(6, id);
-
-        System.out.println("query string = " + query.toQueryString());
-
-
-       return query;
-    }
-
-
-
 
     public BrowserItem advancedSearch(String id, AdvSearchParams parameter, int pageNum, int rowCounts) {
 
@@ -329,6 +275,7 @@ public class CMISBrowserService implements BrowserService {
         int totalPages = 0;
 
         QueryStatement prepQuery = session.createQueryStatement(parameter.createQueryString());
+
 
         ItemIterable<QueryResult> results = parameter.setQueryParams(prepQuery).query(false);
         //int rowCounts = 2;
@@ -354,9 +301,12 @@ public class CMISBrowserService implements BrowserService {
 
         long total = results.getTotalNumItems();
 
-        totalPages = Math.round((float) total / rowCounts);
 
-        if (total % rowCounts > 0) {
+        long rest = total % rowCounts;
+
+        totalPages = (int) (total - rest) / rowCounts;
+
+        if ( rest > 0) {
             totalPages++;
         }
 
@@ -365,6 +315,19 @@ public class CMISBrowserService implements BrowserService {
         item = new BrowserItem("", BrowserItem.TYPE.FOLDER, null, browserItems, totalPages);
 
         return item;
+    }
+
+
+    private void createDocument(){
+
+        Map<String,String> prop = new HashMap<String, String>();
+
+        prop.put("cmis:objectTypeId", "audioFile");
+        prop.put("cmis:objectId", "1001");
+        prop.put("cmis:name", "test_audio");
+
+
+       //Document doc =  session.createDocument(prop,"/");
     }
 
 

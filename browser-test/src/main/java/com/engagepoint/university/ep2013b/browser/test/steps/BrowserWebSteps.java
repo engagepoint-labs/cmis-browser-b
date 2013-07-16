@@ -169,5 +169,11 @@ public class BrowserWebSteps {
     {
         testedPage.find(text, xpath);
     }
-    // ---------------------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------
+
+    @When("use backspace in '$xpath'")
+    public void useBackspace(String xpath) throws InterruptedException {
+        testedPage.clearText(xpath);
+    }
+
 }

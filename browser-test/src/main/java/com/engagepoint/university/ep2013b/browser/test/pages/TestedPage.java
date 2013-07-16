@@ -3,6 +3,7 @@ package com.engagepoint.university.ep2013b.browser.test.pages;
 import org.jbehave.web.selenium.WebDriverPage;
 import org.jbehave.web.selenium.WebDriverProvider;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -18,13 +19,12 @@ public class TestedPage extends WebDriverPage {
 
     private final WebDriverProvider driverProvider;
 
-
     public TestedPage(WebDriverProvider driverProvider) {
         super(driverProvider);
         this.driverProvider = driverProvider;
    }
 
-    /////    servise
+    /////    service
 
     public void found(String text) {
         found(getPageSource(), text);
@@ -200,7 +200,7 @@ public class TestedPage extends WebDriverPage {
     public void find(final String text, final String xpath)
     {
         // wait until element changed its text, if timeout than not found
-        (new WebDriverWait(this, 20)).until(new ExpectedCondition<Boolean>() {
+        (new WebDriverWait(this, 40)).until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d)
             {
                 WebElement element = findElement(By.xpath(xpath));
@@ -208,5 +208,11 @@ public class TestedPage extends WebDriverPage {
             }
         });
     }
-    // ---------------------------------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------
+
+    public void clearText(String xpath) {
+        WebElement element = findElement(By.xpath(xpath));
+        element.clear();
+    }
+
 }

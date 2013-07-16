@@ -176,4 +176,14 @@ public class BrowserWebSteps {
         testedPage.clearText(xpath);
     }
 
+    @When("use right click on '$xpath'")
+    public void useRightClick(String xpath) {
+        testedPage.rightClick(xpath);
+    }
+
+    @Then("wait")
+    public void waitForSec() throws InterruptedException {
+        Thread.sleep(5000);
+    }
+
 }

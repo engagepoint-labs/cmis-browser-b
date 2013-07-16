@@ -5,6 +5,7 @@ import com.engagepoint.university.ep2013b.browser.api.BrowserService;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.component.FacesComponent;
 import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
@@ -24,7 +25,7 @@ public class BrowserComponentTree extends UINamingContainer {
     private BrowserService service;
     private String folderId;
     private String currentLocation;
-
+    private TreeNode selectedNode;
 
     public BrowserComponentTree()
     {
@@ -94,4 +95,32 @@ public class BrowserComponentTree extends UINamingContainer {
     public String getCurrentLocation() {
         return currentLocation;
     }
+
+
+
+    public TreeNode getSelectedNode() {
+        return selectedNode;
+    }
+
+    public void setSelectedNode(TreeNode selectedNode) {
+        this.selectedNode = selectedNode;
+    }
+
+    public void displaySelectedSingle() {
+        if(selectedNode != null) {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Selected", selectedNode.getData().toString());
+
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+    }
+
+    //  delete Folder
+    public void deleteNode() {
+        selectedNode.getChildren().clear();
+        selectedNode.getParent().getChildren().remove(selectedNode);
+        selectedNode.setParent(null);
+
+        selectedNode = null;
+    }
+
 }

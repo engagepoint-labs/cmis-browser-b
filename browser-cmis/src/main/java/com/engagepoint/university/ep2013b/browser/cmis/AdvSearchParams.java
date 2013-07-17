@@ -40,6 +40,10 @@ public class AdvSearchParams implements Serializable {
 
     }
 
+    public String getFolderId() {
+        return (String) params.get("folderId");
+    }
+
     public String getDocumentType() {
         return (String) params.get("docType");
     }
@@ -62,6 +66,10 @@ public class AdvSearchParams implements Serializable {
 
     public String getText() {
         return (String) params.get("text");
+    }
+
+    public void setFolderId(String id) {
+        params.put("folderId", id);
     }
 
     public void setDocumentType(String docType) {

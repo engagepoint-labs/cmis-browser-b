@@ -59,6 +59,21 @@ public class BrowserComponentTable extends UINamingContainer
         else currentFolder = service.findFolderById(folderId, pageNum, rowCounts);
 
         folderId = currentFolder.getId();
+        advancedSearchParams.setFolderId(folderId);
+
+
+        System.out.println("businessLogic()");
+        System.out.println("\tfolderID       = " + folderId);
+        System.out.println("\tpage           = " + pageNum);
+        System.out.println("\tsimple search  = " + searchCriteria);
+        System.out.println("\tadvanced search (isEmpty = "+ advancedSearchParams.isEmpty() +"):");
+        System.out.println("\t\tid           = " + advancedSearchParams.getFolderId());
+        System.out.println("\t\tDocumentType = " + advancedSearchParams.getDocumentType());
+        System.out.println("\t\tDateFrom     = " + advancedSearchParams.getDateFrom());
+        System.out.println("\t\tDateTo       = " + advancedSearchParams.getDateTo());
+        System.out.println("\t\tContentType  = " + advancedSearchParams.getContentType());
+        System.out.println("\t\tSize         = " + advancedSearchParams.getSize());
+        System.out.println("\t\tText         = " + advancedSearchParams.getText());
 
 
         if ((searchCriteria == null) && advancedSearchParams.isEmpty())

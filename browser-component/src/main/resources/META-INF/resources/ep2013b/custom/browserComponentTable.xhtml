@@ -61,10 +61,10 @@
             <p:calendar id="searchDateTo" showOn="button" value="#{cc.advancedSearchParams.dateTo}"/>
 
             <h:outputLabel value="Content type:"/>
-            <p:selectOneMenu id="searchContentType" value="#{cc.advancedSearchParams.contentType}">
+            <h:selectOneMenu id="searchContentType" value="#{cc.advancedSearchParams.contentType}">
                 <f:selectItem itemLabel="" itemValue=""/>
                 <f:selectItem itemLabel="Complex Type" itemValue="ComplexType" />
-            </p:selectOneMenu>
+            </h:selectOneMenu>
 
             <h:outputLabel value="Size (B):"/>
             <p:spinner id="searchSize" value="#{cc.advancedSearchParams.size}"/>

@@ -190,9 +190,4 @@ public class BrowserWebSteps {
     public void select(String text, String xpath) {
         testedPage.select(text, xpath);
     }
-
-    @Then("find text '$text'")
-    public void findText(String text){
-        testedPage.found(text);
-    }
 }

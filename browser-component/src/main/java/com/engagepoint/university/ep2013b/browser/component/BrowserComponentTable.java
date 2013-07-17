@@ -34,8 +34,6 @@ public class BrowserComponentTable extends UINamingContainer
 
     public BrowserComponentTable()
     {
-//        System.out.println("BrowserComponentTable");
-
         service = BrowserFactory.getInstance("CMIS");
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 
@@ -46,8 +44,6 @@ public class BrowserComponentTable extends UINamingContainer
 
         if (paramPageNum == null || "".equals(paramPageNum)) pageNum = 1;
         else pageNum = Integer.parseInt(paramPageNum);
-
-//        businessLogic();
     }
 
 
@@ -55,23 +51,9 @@ public class BrowserComponentTable extends UINamingContainer
     // Process received parameters and decided what data to show (folder items or search results)
     public void businessLogic()
     {
-//        System.out.println("businessLogic()");
-//        System.out.println("\tfolderID       = " + folderId);
-//        System.out.println("\tpage           = " + pageNum);
-//        System.out.println("\tsimple search  = " + searchCriteria);
-//        System.out.println("\tadvanced search (isEmpty = "+ advancedSearchParams.isEmpty() +"):");
-//        System.out.println("\t\tDocumentType = " + advancedSearchParams.getDocumentType());
-//        System.out.println("\t\tDateFrom     = " + advancedSearchParams.getDateFrom());
-//        System.out.println("\t\tDateTo       = " + advancedSearchParams.getDateTo());
-//        System.out.println("\t\tContentType  = " + advancedSearchParams.getContentType());
-//        System.out.println("\t\tSize         = " + advancedSearchParams.getSize());
-//        System.out.println("\t\tText         = " + advancedSearchParams.getText());
-
-
         if((folderId == null) || ("".equals(folderId))|| ("null".equals(folderId)))
         {
             // first time at the page
-//            System.out.println("first time on page");
             currentFolder = service.findFolderByPath("/", 1, rowCounts);
         }
         else currentFolder = service.findFolderById(folderId, pageNum, rowCounts);
@@ -82,7 +64,6 @@ public class BrowserComponentTable extends UINamingContainer
         if ((searchCriteria == null) && advancedSearchParams.isEmpty())
         {
             // not searching
-//            System.out.println("shows folder items");
             pagesCount = service.getTotalPagesFromFolderById(folderId, rowCounts);
             dataList = currentFolder.getChildren();
         }

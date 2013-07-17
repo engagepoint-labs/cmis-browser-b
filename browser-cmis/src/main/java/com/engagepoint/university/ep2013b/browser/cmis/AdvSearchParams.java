@@ -1,9 +1,12 @@
 package com.engagepoint.university.ep2013b.browser.cmis;
 
 import org.apache.chemistry.opencmis.client.api.QueryStatement;
+import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Date;
 
 
 public class AdvSearchParams implements Serializable {
@@ -12,7 +15,8 @@ public class AdvSearchParams implements Serializable {
 
     public AdvSearchParams() {
 
-        params.put("docType", null);
+        params.put("folderId", null);
+        params.put("docType", null); //// ???
         params.put("fromDate",null);
         params.put("toDate", null);
         params.put("contentType", null);
@@ -23,10 +27,10 @@ public class AdvSearchParams implements Serializable {
 
 
     public AdvSearchParams(
-            String docType, Date fromDate,
+            String id, String docType, Date fromDate,
             Date toDate, String contentType, Integer size, String text) {
 
-
+        params.put("folderId", id);
         params.put("docType", docType);
         params.put("fromDate", fromDate);
         params.put("toDate", toDate);
@@ -96,7 +100,7 @@ public class AdvSearchParams implements Serializable {
         String preparedQueryString = "";
 
         String inDocums = "SELECT ?, ? FROM ?";
-        String anyOptions = " WHERE ";
+        String inFolder = " WHERE IN_FOLDER(?)";
         String multiple = " AND ";
 
 
@@ -107,7 +111,7 @@ public class AdvSearchParams implements Serializable {
         String paramSize = "cmis:contentStreamLength = ?";
         String paramText = "CONTAINS(?)";
 
-        preparedQueryString = inDocums;
+        preparedQueryString = inDocums + inFolder;
         //// anyOptions + paramDateFrom + multiple + paramDateTo
 
         boolean flagAnyOptions = false;
@@ -115,60 +119,27 @@ public class AdvSearchParams implements Serializable {
 
 
         if(params.get("fromDate") != null){
-            flagAnyOptions = true;
-            preparedQueryString = preparedQueryString +  anyOptions +  paramDateFrom;
+             preparedQueryString = preparedQueryString +  multiple +  paramDateFrom;
         }
 
 
         if(params.get("toDate") != null){
-            if(!flagAnyOptions)  {
-                preparedQueryString = preparedQueryString +  anyOptions;
-                flagAnyOptions = true;
-            }
-            else {
-                preparedQueryString = preparedQueryString +  multiple;
-            }
-            preparedQueryString = preparedQueryString + paramDateTo;
+            preparedQueryString = preparedQueryString +  multiple + paramDateTo;
         }
 
 
         if(params.get("contentType") != null){
-            if(!flagAnyOptions)  {
-                preparedQueryString = preparedQueryString +  anyOptions;
-                flagAnyOptions = true;
-            }
-            else {
-                 preparedQueryString = preparedQueryString +  multiple;
-
-            }
-            preparedQueryString = preparedQueryString + paramContType;
+            preparedQueryString = preparedQueryString + multiple + paramContType;
         }
 
 
         if(params.get("size") != null){
-            if(!flagAnyOptions)  {
-                preparedQueryString = preparedQueryString +  anyOptions;
-                flagAnyOptions = true;
-            }
-            else {
-                preparedQueryString = preparedQueryString +  multiple;
-
-            }
-            preparedQueryString = preparedQueryString + paramSize;
+            preparedQueryString = preparedQueryString + multiple + paramSize;
         }
 
 
         if(params.get("text") != null){
-            if(!flagAnyOptions)  {
-                preparedQueryString = preparedQueryString +  anyOptions;
-                flagAnyOptions = true;
-            }
-            else {
-                    preparedQueryString = preparedQueryString +  multiple;
-
-
-            }
-            preparedQueryString = preparedQueryString + paramText;
+            preparedQueryString = preparedQueryString + multiple + paramText;
         }
 
 //        System.out.println("preparedQueryString = " + preparedQueryString);
@@ -185,16 +156,15 @@ public class AdvSearchParams implements Serializable {
         //// everytimes
         query.setProperty(1, type, "cmis:objectId");
         query.setProperty(2, type, "cmis:name");
-
-        //// by user request values
-        //query.setProperty(3, type, "cmis:creationDate");
-
-        int paramCounter = 3;  // have already 2 params
-
-        // type
         if(params.get("docType") != null){
-            query.setType(paramCounter++, params.get("docType").toString());
+            query.setType(3, params.get("docType").toString());
+        } else {
+            query.setType(3, type);
         }
+        query.setId(4, new ObjectIdImpl(params.get("folderId").toString()));
+
+        int paramCounter = 5;  // have already 2 params
+
 
 
         if(params.get("fromDate") != null){
@@ -222,7 +192,6 @@ public class AdvSearchParams implements Serializable {
         }
 
 //        System.out.println("QueryStatement = " + query.toQueryString());
-
 
         return query;
 

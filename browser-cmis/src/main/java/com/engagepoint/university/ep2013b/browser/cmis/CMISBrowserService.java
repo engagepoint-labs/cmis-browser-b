@@ -3,6 +3,7 @@ package com.engagepoint.university.ep2013b.browser.cmis;
 import com.engagepoint.university.ep2013b.browser.api.BrowserItem;
 import com.engagepoint.university.ep2013b.browser.api.BrowserService;
 import org.apache.chemistry.opencmis.client.api.*;
+import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
 import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
 import org.apache.chemistry.opencmis.commons.enums.BindingType;
@@ -318,16 +319,19 @@ public class CMISBrowserService implements BrowserService {
     }
 
 
-    private void createDocument(){
+    private void createFolder(){
 
-        Map<String,String> prop = new HashMap<String, String>();
+        Map<String,Object> prop = new HashMap<String, Object>();
 
         prop.put("cmis:objectTypeId", "audioFile");
         prop.put("cmis:objectId", "1001");
         prop.put("cmis:name", "test_audio");
+        prop.put("cmis:contentStreamLength", 100);
+        ObjectId id = new ObjectIdImpl("1001");
 
+       Folder folder = (Folder) session.createFolder(prop, id);
 
-       //Document doc =  session.createDocument(prop,"/");
+       // folder.createFolder()
     }
 
 

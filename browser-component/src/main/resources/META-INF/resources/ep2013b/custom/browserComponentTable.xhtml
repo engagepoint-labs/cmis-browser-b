@@ -14,14 +14,14 @@
         <p:layout id="tablelayout">
 
             <!-- Search Panel-->
-            <p:layoutUnit position="north" size="auto">
+            <p:layoutUnit position="north" size="auto" id="laysearch">
                 <h:panelGrid columns="3">
                     <p:column>
-                        <p:inputText id="search" value="#{cc.searchCriteria}"/>
+                        <p:inputText id="search" value="#{cc.searchCriteria}"  />
                     </p:column>
 
                     <p:column>
-                        <p:commandButton id="searchbtn"  update="search,table" ajax="true" icon="ui-icon-search" title="Search">
+                        <p:commandButton id="searchbtn"  update=":laysearch:search, :laytable:table" ajax="true" icon="ui-icon-search" title="Search">
                             <f:param name="folderId" value="#{cc.folderId}"/>
                         </p:commandButton>
                     </p:column>
@@ -41,8 +41,8 @@
             </p:layoutUnit>
 
             <!-- Table Panel-->
-            <p:layoutUnit position="center">
-                <p:dataTable var="item" value="#{cc.dataList}"  id="table" >
+            <p:layoutUnit position="center" id="laytable">
+                <p:dataTable var="item" value="#{cc.dataList}"  id="table"  >
                     <p:column headerText="Id">
                         <h:outputText value="#{item.id}"  id="itemid" />
                     </p:column>

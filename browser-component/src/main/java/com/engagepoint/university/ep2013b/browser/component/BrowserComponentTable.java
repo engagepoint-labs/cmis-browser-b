@@ -31,6 +31,8 @@ public class BrowserComponentTable extends UINamingContainer
 
     public BrowserComponentTable()
     {
+        System.out.println("-------------------------------   BrowserComponentTable()");
+
         service = BrowserFactory.getInstance("CMIS");
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 

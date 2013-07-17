@@ -181,15 +181,18 @@ public class BrowserWebSteps {
         testedPage.rightClick(xpath);
     }
 
-    @Then("'$strPath' is visible on the page")
-    public void visible(String strPath){
-        testedPage.isDisplayedByXpath(strPath);
+    @Then("'$xpath' is visible on the page")
+    public void visible(String xpath){
+        testedPage.isDisplayedByXpath(xpath);
     }
 
-    //Don't forget delete this
-    @Then("wait")
-    public void waitForSec() throws InterruptedException {
-        Thread.sleep(5000);
+    @When("select '$text' in '$xpath'")
+    public void select(String text, String xpath) {
+        testedPage.select(text, xpath);
     }
 
+    @Then("find text '$text'")
+    public void findText(String text){
+        testedPage.found(text);
+    }
 }

@@ -6,6 +6,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.internal.Locatable;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
@@ -199,13 +200,14 @@ public class TestedPage extends WebDriverPage {
     public void find(final String text, final String xpath)
     {
         // wait until element changed its text, if timeout than not found
-        (new WebDriverWait(this, 40)).until(new ExpectedCondition<Boolean>() {
+        (new WebDriverWait(this, 20)).until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d)
             {
                 WebElement element = findElement(By.xpath(xpath));
                 return element.getText().equals(text);
             }
         });
+
     }
     // ----------------------------------------------------------------------
 
@@ -219,6 +221,11 @@ public class TestedPage extends WebDriverPage {
         WebDriver webDriver = driverProvider.get();
         Actions action = new Actions(webDriver);
         action.contextClick(element).perform();
+    }
 
+    public void select(String text, String xpath) {
+        WebElement element = findElement(By.xpath(xpath));
+        Select select = new Select(element);
+        select.selectByValue(text);
     }
 }

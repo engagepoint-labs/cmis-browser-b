@@ -12,7 +12,7 @@ public class AdvSearchParams implements Serializable {
 
     public AdvSearchParams() {
 
-        params.put("docType", null); //// ???
+        params.put("docType", null);
         params.put("fromDate",null);
         params.put("toDate", null);
         params.put("contentType", null);
@@ -36,44 +36,58 @@ public class AdvSearchParams implements Serializable {
 
     }
 
-    public Map<String, Object> getParams() {
-        return params;
+    public String getDocumentType() {
+        return (String) params.get("docType");
     }
 
-    public void setParams(Map<String, Object> params) {
-        this.params = params;
+    public Date getDateFrom() {
+        return (Date) params.get("fromDate");
     }
 
-    public String getDocumentType() {return (String) params.get("docType");}
-    public Date getDateFrom() {return (Date) params.get("fromDate");}
-    public Date getDateTo() {return (Date) params.get("toDate");}
-    public String getContentType() {return (String) params.get("contentType");}
-    public Integer getSize() {return (Integer) params.get("size");}
-    public String getText() {return (String) params.get("text");}
+    public Date getDateTo() {
+        return (Date) params.get("toDate");
+    }
 
-    public void setDocumentType(String docType)
-    {
+    public String getContentType() {
+        return (String) params.get("contentType");
+    }
+
+    public Integer getSize() {
+        return (Integer) params.get("size");
+    }
+
+    public String getText() {
+        return (String) params.get("text");
+    }
+
+    public void setDocumentType(String docType) {
         if ((docType != null) && (!"".equals(docType))) params.put("docType", docType);
     }
-    public void setDateFrom(Date fromDate) {params.put("fromDate", fromDate);}
-    public void setDateTo(Date toDate) {params.put("toDate", toDate);}
-    public void setContentType(String contentType)
-    {
+
+    public void setDateFrom(Date fromDate) {
+        params.put("fromDate", fromDate);
+    }
+
+    public void setDateTo(Date toDate) {
+        params.put("toDate", toDate);
+    }
+
+    public void setContentType(String contentType) {
         if ((contentType != null) && (!"".equals(contentType))) params.put("contentType", contentType);
     }
-    public void setSize(Integer size)
-    {
+
+    public void setSize(Integer size) {
         if (size > 0) params.put("size", size);
     }
 
-    public void setText(String text)
-    {
+    public void setText(String text) {
         if ((text != null) && (!"".equals(text))) params.put("text", text);
     }
 
+    // Empty if every search criteria is not set
     public boolean isEmpty()
     {
-        return getDocumentType() == null;
+        return (getDocumentType() == null);
     }
 
 
@@ -157,6 +171,8 @@ public class AdvSearchParams implements Serializable {
             preparedQueryString = preparedQueryString + paramText;
         }
 
+//        System.out.println("preparedQueryString = " + preparedQueryString);
+
         return preparedQueryString;
 
     }
@@ -205,18 +221,8 @@ public class AdvSearchParams implements Serializable {
             query.setString(paramCounter++, params.get("text").toString());
         }
 
-        System.out.println("QueryStatement = " + query.toQueryString());
+//        System.out.println("QueryStatement = " + query.toQueryString());
 
-
-//
-//        // query.setProperty(4, "cmis:document", "cmis:creationDate");
-//        Calendar dd = new GregorianCalendar(2013, 6, 16, 3, 0, 0);  // month and day -1
-//        query.setDateTime(5, dd);
-//        dd = new GregorianCalendar(2013, 6, 17, 3, 0, 0);
-//        query.setDateTime(6, dd);
-//
-//        //query.setId(6, id);
-//
 
         return query;
 

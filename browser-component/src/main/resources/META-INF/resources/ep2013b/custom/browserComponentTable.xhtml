@@ -41,15 +41,18 @@
     </p:panel>
 
     <!-- Advanced Search -->
-    <p:accordionPanel>
+    <p:accordionPanel activeIndex="-1">
         <p:tab title="Advanced Search">
         <!--<p:panel id="advancedSearch" toggleable="true" header="Advanced Search">-->
         <h:panelGrid columns="2">
             <h:outputLabel value="Document type:"/>
-            <p:selectOneMenu id="searchDocumentType" value="#{cc.advancedSearchParams.documentType}" editable="true">
+            <!-- WARNING: Should be PrimeFace component <p:selectOneMenu>,
+                          but it sets itemLabel to documentType instead of itemValue-->
+            <h:selectOneMenu id="searchDocumentType" value="#{cc.advancedSearchParams.documentType}">
+                <f:selectItem itemLabel="" itemValue=""/>
                 <f:selectItem itemLabel="Document" itemValue="cmis:document"/>
-                <f:selectItem itemLabel="Folder" itemValue="cmis:folder" />
-            </p:selectOneMenu>
+                <f:selectItem itemLabel="Folder" itemValue="cmis:folder"/>
+            </h:selectOneMenu>
 
             <h:outputLabel value="Date from:"/>
             <p:calendar id="searchDateFrom" showOn="button" value="#{cc.advancedSearchParams.dateFrom}"/>
@@ -59,7 +62,7 @@
 
             <h:outputLabel value="Content type:"/>
             <p:selectOneMenu id="searchContentType" value="#{cc.advancedSearchParams.contentType}">
-                <f:selectItem itemLabel="Any" itemValue=""/>
+                <f:selectItem itemLabel="" itemValue=""/>
                 <f:selectItem itemLabel="Complex Type" itemValue="ComplexType" />
             </p:selectOneMenu>
 

@@ -171,8 +171,8 @@ public class BrowserWebSteps {
     }
     // ---------------------------------------------------------------------
 
-    @When("use backspace in '$xpath'")
-    public void useBackspace(String xpath) throws InterruptedException {
+    @When("clears text in '$xpath'")
+    public void clearText(String xpath) throws InterruptedException {
         testedPage.clearText(xpath);
     }
 

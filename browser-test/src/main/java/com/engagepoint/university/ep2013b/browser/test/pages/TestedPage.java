@@ -221,8 +221,4 @@ public class TestedPage extends WebDriverPage {
         action.contextClick(element).perform();
 
     }
-
-    public void contextClick() {
-
-    }
 }

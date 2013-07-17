@@ -181,6 +181,11 @@ public class BrowserWebSteps {
         testedPage.rightClick(xpath);
     }
 
+    @Then("'$strPath' is visible on the page")
+    public void visible(String strPath){
+        testedPage.isDisplayedByXpath(strPath);
+    }
+
     @Then("wait")
     public void waitForSec() throws InterruptedException {
         Thread.sleep(5000);

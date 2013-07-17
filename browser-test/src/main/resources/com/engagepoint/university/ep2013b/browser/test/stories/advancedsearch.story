@@ -40,4 +40,3 @@ Then find text 'No records found'
 When select '' in './/*[contains(@id,'searchDocumentType')]'
 And clicks on './/*[contains(@id,"searchbtn")]'
 Then find 'My_Document-0-0' on '(.//*[contains(@id,"table") and contains(@id,"itemname")])[1]'
-s

@@ -41,30 +41,37 @@
     </p:panel>
 
     <!-- Advanced Search -->
-    <p:panel id="advancedSearch" toggleable="true" header="Adv search">
-        <p:panelGrid columns="2">
-                    <h:outputLabel value="Document type:"/>
-                    <p:selectOneMenu id="searchDocumentType">
-                        <f:selectItem itemLabel="Document" itemValue=""/>
-                        <f:selectItem itemLabel="Folder" itemValue="" />
-                    </p:selectOneMenu>
+    <p:accordionPanel>
+        <p:tab title="Advanced Search">
+        <!--<p:panel id="advancedSearch" toggleable="true" header="Advanced Search">-->
+        <h:panelGrid columns="2">
+            <h:outputLabel value="Document type:"/>
+            <p:selectOneMenu id="searchDocumentType" value="#{cc.advancedSearchParams.documentType}" editable="true">
+                <f:selectItem itemLabel="Document" itemValue="cmis:document"/>
+                <f:selectItem itemLabel="Folder" itemValue="cmis:folder" />
+            </p:selectOneMenu>
 
-                    <h:outputLabel value="Date from:"/>
-                    <p:calendar id="searchDateFrom" showOn="button" />
+            <h:outputLabel value="Date from:"/>
+            <p:calendar id="searchDateFrom" showOn="button" value="#{cc.advancedSearchParams.dateFrom}"/>
 
-                    <h:outputLabel value="Date to:"/>
-                    <p:calendar id="searchDateTo" showOn="button" />
+            <h:outputLabel value="Date to:"/>
+            <p:calendar id="searchDateTo" showOn="button" value="#{cc.advancedSearchParams.dateTo}"/>
 
-                    <h:outputLabel value="Content type:"/>
-                    <p:selectOneMenu id="searchContentType">
-                        <f:selectItem itemLabel="cmis:document" itemValue="" />
-                        <f:selectItem itemLabel="cmis:folder" itemValue="" />
-                    </p:selectOneMenu>
+            <h:outputLabel value="Content type:"/>
+            <p:selectOneMenu id="searchContentType" value="#{cc.advancedSearchParams.contentType}">
+                <f:selectItem itemLabel="Any" itemValue=""/>
+                <f:selectItem itemLabel="Complex Type" itemValue="ComplexType" />
+            </p:selectOneMenu>
 
-                    <h:outputLabel value="Size (KB):"/>
-                    <p:spinner id="searchSize" min="0"/>
-                </p:panelGrid>
-    </p:panel>
+            <h:outputLabel value="Size (B):"/>
+            <p:spinner id="searchSize" value="#{cc.advancedSearchParams.size}"/>
+
+            <h:outputLabel value="Text in content:"/>
+            <p:inputText id="searchText" value="#{cc.advancedSearchParams.text}"/>
+        </h:panelGrid>
+    <!--</p:panel>-->
+        </p:tab>
+    </p:accordionPanel>
 
     <!-- Table Panel-->
     <p:panel>

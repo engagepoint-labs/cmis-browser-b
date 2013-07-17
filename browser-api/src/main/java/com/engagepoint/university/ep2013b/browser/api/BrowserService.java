@@ -21,6 +21,7 @@ public interface BrowserService
     public String getCurrentLocationById(String id);
     public BrowserItem simpleSearch(String id, String parameter, int page, int rowCounts);
     //public int getTotalPagesFromSimpleSearch(String id, String parameter, int rowCounts);
+    public BrowserItem advancedSearch(String id, Object parameter, int pageNum, int rowCounts);
 
 
     // ... add more here ...

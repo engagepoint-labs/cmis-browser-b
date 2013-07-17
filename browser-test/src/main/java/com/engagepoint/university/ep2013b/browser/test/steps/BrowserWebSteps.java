@@ -186,6 +186,7 @@ public class BrowserWebSteps {
         testedPage.isDisplayedByXpath(strPath);
     }
 
+    //Don't forget delete this
     @Then("wait")
     public void waitForSec() throws InterruptedException {
         Thread.sleep(5000);

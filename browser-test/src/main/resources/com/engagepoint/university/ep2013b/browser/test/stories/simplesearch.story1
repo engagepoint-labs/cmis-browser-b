@@ -3,9 +3,9 @@ Meta:
 Narrative:
 As a content management system (CMS) user
 I want to use simple search
-So that I can achieve a business goal
+So that I can find content by a simple criteria
 
-Scenario: User uses simple search, checks returning to previous state, checks pagination
+Scenario: User uses simple search, checks pagination and checks returning to previous state
 
 Given opened 'http://localhost:18080/browser'
 When types 'Doc' on './/*[contains(@id,"searchInput")]'

@@ -205,8 +205,19 @@ public class AdvSearchParams implements Serializable {
 
     }
 
+    @Override
+    public String toString() {
 
+        String result = "AdvSearchParams: { " ;
 
+        for (Map.Entry<String, Object> entry : params.entrySet()) {
+
+            result = result +"key: ["+entry.getKey()+"], value: ["+entry.getValue()+"]  /n";
+
+        }
+
+        return result + '}';
+    }
 }
 
 

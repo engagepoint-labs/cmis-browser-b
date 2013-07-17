@@ -41,8 +41,8 @@
     </p:panel>
 
     <!-- Advanced Search -->
-    <p:accordionPanel activeIndex="-1">
-        <p:tab title="Advanced Search">
+    <p:accordionPanel id="accordionAdvancedSearch" activeIndex="-1">
+        <p:tab id="accordionTabAdvancedSearch" title="Advanced Search">
         <!--<p:panel id="advancedSearch" toggleable="true" header="Advanced Search">-->
         <h:panelGrid columns="2">
             <h:outputLabel value="Document type:"/>
@@ -50,8 +50,8 @@
                           but it sets itemLabel to documentType instead of itemValue-->
             <h:selectOneMenu id="searchDocumentType" value="#{cc.advancedSearchParams.documentType}">
                 <f:selectItem itemLabel="" itemValue=""/>
-                <f:selectItem itemLabel="Document" itemValue="cmis:document"/>
-                <f:selectItem itemLabel="Folder" itemValue="cmis:folder"/>
+                <f:selectItem id="typeDocument" itemLabel="Document" itemValue="cmis:document"/>
+                <f:selectItem id="typeFolder" itemLabel="Folder" itemValue="cmis:folder"/>
             </h:selectOneMenu>
 
             <h:outputLabel value="Date from:"/>
@@ -61,10 +61,10 @@
             <p:calendar id="searchDateTo" showOn="button" value="#{cc.advancedSearchParams.dateTo}"/>
 
             <h:outputLabel value="Content type:"/>
-            <h:selectOneMenu id="searchContentType" value="#{cc.advancedSearchParams.contentType}">
-                <f:selectItem itemLabel="" itemValue=""/>
-                <f:selectItem itemLabel="Complex Type" itemValue="ComplexType" />
-            </h:selectOneMenu>
+            <p:selectOneMenu id="searchContentType" value="#{cc.advancedSearchParams.contentType}">
+                <f:selectItem id="sctAny" itemLabel="" itemValue=""/>
+                <f:selectItem id="sctComplex" itemLabel="Complex Type" itemValue="ComplexType" />
+            </p:selectOneMenu>
 
             <h:outputLabel value="Size (B):"/>
             <p:spinner id="searchSize" value="#{cc.advancedSearchParams.size}"/>

@@ -11,13 +11,23 @@
     </cc:interface>
 
     <cc:implementation>
-        <p:tree id="tree" value="#{cc.root}" var="node" selectionMode="single">
+
+        <p:growl id="messages" showDetail="true" />
+
+        <p:contextMenu id="treeContextMenu" for="tree">
+            <p:menuitem id="contextItemNewFolder" value="NewFolder" update="messages" actionListener="#{cc.createNode}" icon="ui-icon-search" />
+            <p:menuitem id="contextItemEdit" value="Edit" update="messages"  icon="ui-icon-search" />
+            <p:menuitem id="contextItemView" value="View" update="messages" actionListener="#{cc.displaySelectedSingle}" icon="ui-icon-search" />
+            <p:menuitem id="contextItemDelete" value="Delete" update="tree" actionListener="#{cc.deleteNode}" icon="ui-icon-close"/>
+        </p:contextMenu>
+
+        <p:tree id="tree" value="#{cc.root}" var="node" selectionMode="single" selection="#{cc.selectedNode}"
+                dynamic="true">
 
             <p:treeNode id="node" expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
 
                 <h:outputLink value="#{cc.attrs.link}" id="treelink" >
                     <h:outputText value="#{node.name}"/>
-
                     <f:param name="folderId" value="#{node.id}"/>
                 </h:outputLink>
 

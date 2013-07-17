@@ -169,5 +169,30 @@ public class BrowserWebSteps {
     {
         testedPage.find(text, xpath);
     }
-    // ---------------------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------
+
+    @When("clears text in '$xpath'")
+    public void clearText(String xpath) throws InterruptedException {
+        testedPage.clearText(xpath);
+    }
+
+    @When("use right click on '$xpath'")
+    public void useRightClick(String xpath) {
+        testedPage.rightClick(xpath);
+    }
+
+    @Then("'$xpath' is visible on the page")
+    public void visible(String xpath){
+        testedPage.isDisplayedByXpath(xpath);
+    }
+
+    @When("select '$text' in '$xpath'")
+    public void select(String text, String xpath) {
+        testedPage.select(text, xpath);
+    }
+
+    @Then("'$xpath' is not visible")
+    public void isNotVisible(String xpath) {
+        testedPage.isNotVisible(xpath);
+    }
 }

@@ -2,10 +2,11 @@ package com.engagepoint.university.ep2013b.browser.test.pages;
 
 import org.jbehave.web.selenium.WebDriverPage;
 import org.jbehave.web.selenium.WebDriverProvider;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.internal.Locatable;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
@@ -18,13 +19,12 @@ public class TestedPage extends WebDriverPage {
 
     private final WebDriverProvider driverProvider;
 
-
     public TestedPage(WebDriverProvider driverProvider) {
         super(driverProvider);
         this.driverProvider = driverProvider;
    }
 
-    /////    servise
+    /////    service
 
     public void found(String text) {
         found(getPageSource(), text);
@@ -207,6 +207,31 @@ public class TestedPage extends WebDriverPage {
                 return element.getText().equals(text);
             }
         });
+
     }
-    // ---------------------------------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------
+
+    public void clearText(String xpath) {
+        WebElement element = findElement(By.xpath(xpath));
+        element.clear();
+    }
+
+    public void rightClick(String xpath) {
+        WebElement element = findElement(By.xpath(xpath));
+        WebDriver webDriver = driverProvider.get();
+        Actions action = new Actions(webDriver);
+        action.contextClick(element).perform();
+    }
+
+    public void select(String text, String xpath) {
+        WebElement element = findElement(By.xpath(xpath));
+        Select select = new Select(element);
+        select.selectByValue(text);
+    }
+
+    public void isNotVisible(String xpath) {
+        if (getPageSource().contains(xpath)) {
+            fail("Element shouldn't be on the page");
+        }
+    }
 }

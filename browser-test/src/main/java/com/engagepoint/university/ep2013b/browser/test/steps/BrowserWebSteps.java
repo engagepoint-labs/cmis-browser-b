@@ -190,4 +190,9 @@ public class BrowserWebSteps {
     public void select(String text, String xpath) {
         testedPage.select(text, xpath);
     }
+
+    @Then("'$xpath' is not visible")
+    public void isNotVisible(String xpath) {
+        testedPage.isNotVisible(xpath);
+    }
 }

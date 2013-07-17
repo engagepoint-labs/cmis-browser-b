@@ -228,4 +228,10 @@ public class TestedPage extends WebDriverPage {
         Select select = new Select(element);
         select.selectByValue(text);
     }
+
+    public void isNotVisible(String xpath) {
+        if (getPageSource().contains(xpath)) {
+            fail("Element shouldn't be on the page");
+        }
+    }
 }

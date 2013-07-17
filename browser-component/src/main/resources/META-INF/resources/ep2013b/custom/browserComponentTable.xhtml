@@ -50,8 +50,8 @@
                           but it sets itemLabel to documentType instead of itemValue-->
             <h:selectOneMenu id="searchDocumentType" value="#{cc.advancedSearchParams.documentType}">
                 <f:selectItem itemLabel="" itemValue=""/>
-                <f:selectItem itemLabel="typeDocument" itemValue="cmis:document"/>
-                <f:selectItem itemLabel="typeFolder" itemValue="cmis:folder"/>
+                <f:selectItem id="typeDocument" itemLabel="Document" itemValue="cmis:document"/>
+                <f:selectItem id="typeFolder" itemLabel="Folder" itemValue="cmis:folder"/>
             </h:selectOneMenu>
 
             <h:outputLabel value="Date from:"/>

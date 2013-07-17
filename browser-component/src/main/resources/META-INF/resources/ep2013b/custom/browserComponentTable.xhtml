@@ -8,15 +8,16 @@
 
     <cc:interface componentType="browserComponentTable">
         <cc:attribute name="link"/>
+
     </cc:interface>
 
     <cc:implementation>
-        <p:layout id="tablelayout">
+        <p:layout id="tablelayout" rendered="#{cc.renderComponent}">
 
 
             <!-- Search Panel-->
             <p:layoutUnit position="north" size="auto">
-                <h:panelGrid columns="3">
+                <h:panelGrid columns="4">
                     <p:column>
                         <p:inputText id="search" value="#{cc.searchCriteria}"/>
                     </p:column>
@@ -24,6 +25,7 @@
                     <p:column>
                         <p:commandButton id="searchbtn"  update="search,table" ajax="true" icon="ui-icon-search" title="Search">
                             <f:param name="folderId" value="#{cc.folderId}"/>
+
                         </p:commandButton>
                     </p:column>
 
@@ -40,14 +42,19 @@
                     </p:column>
 
                     <!-- button : "New Folder"-->
-                    <p:column>
-                        <p:button id="createfolde" value="New Folder" outcome="browserFolder.xhtml" title="Create New Folder" >
+
+                        <p:button id="createfolde" value="New Folder" update = "table" ajax="true" action="#{cc.showPanelButton==true}" title="Create New Folder" rendered="true" >
                             <f:param name ="folderId" value="#{cc.folderId}" />
+                            <f:param name="showPanelButton" value="#{cc.showPanelButton==false}"/>
                         </p:button>
-                    </p:column>
+
 
                 </h:panelGrid>
             </p:layoutUnit>
+
+
+
+
 
             <!-- Table Panel-->
             <p:layoutUnit position="center">
@@ -92,7 +99,13 @@
                     </f:facet>
                 </p:dataTable>
             </p:layoutUnit>
+
+
+
         </p:layout>
+
+
+
 
     </cc:implementation>
 </ui:composition>

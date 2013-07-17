@@ -4,9 +4,11 @@ package com.engagepoint.university.ep2013b.browser.component;
 import com.engagepoint.university.ep2013b.browser.api.BrowserItem;
 import com.engagepoint.university.ep2013b.browser.api.BrowserService;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.component.FacesComponent;
 import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -19,6 +21,7 @@ public class BrowserComponentTable extends UINamingContainer
     private Integer pageNum;
     private int pagesCount;
     private BrowserItem selectedItem = null;
+    private boolean showPanelButton;
 
     // List which should be displayed
     private List<BrowserItem> dataList;
@@ -35,12 +38,16 @@ public class BrowserComponentTable extends UINamingContainer
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 
         folderId = request.getParameter("folderId");
+        String paramShowPanelButton = request.getParameter("showPanelButton");
         searchCriteria = request.getParameter("searchCriteria");
 
         String paramPageNum = request.getParameter("pageNum");
 
         if (paramPageNum == null || "".equals(paramPageNum)) pageNum = 1;
         else pageNum = Integer.parseInt(paramPageNum);
+
+        if (paramShowPanelButton == null || "".equals(paramShowPanelButton)) showPanelButton = true;
+        else showPanelButton = Boolean.parseBoolean(paramShowPanelButton);
     }
 
 
@@ -77,10 +84,32 @@ public class BrowserComponentTable extends UINamingContainer
     }
 
 
-    public String showPage(){
-
-            return "browserFolder.xhtml";
+    public boolean getRenderComponent(){
+         if(isShowPanelButton() == true){
+        return true;              }
+        else{
+            return false;
         }
+
+    }
+
+
+//    public void savePerson(ActionEvent actionEvent) {
+//        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Welcome " ));
+////        FacesComponent.NAMESPACE
+//    }
+
+
+
+
+
+    public boolean isShowPanelButton() {
+        return showPanelButton;
+    }
+
+    public void setShowPanelButton(boolean showPanelButton) {
+        this.showPanelButton = showPanelButton;
+    }
 
     public String getFolderId() {
         return folderId;

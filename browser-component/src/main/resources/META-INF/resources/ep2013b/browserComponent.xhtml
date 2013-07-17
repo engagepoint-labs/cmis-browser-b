@@ -15,6 +15,8 @@
 <cc:implementation>
 
 
+
+
     <p:layout id="componentlayout" fullPage="true">
 
         <p:layoutUnit position="north" size="auto">
@@ -23,12 +25,15 @@
 
         <p:layoutUnit position="west" header="Tree">
             <custom:browserComponentTree link="#{cc.attrs.link}"/>
+          </p:layoutUnit>
 
-        </p:layoutUnit>
 
-        <p:layoutUnit position="center" header="Table">
-            <custom:browserComponentTable link="#{cc.attrs.link}"/>
-        </p:layoutUnit>
+                <p:layoutUnit position="center" header="Table" >
+                    <custom:browserComponentButton link="#{cc.attrs.link}" />
+                    <custom:browserComponentTable  link="#{cc.attrs.link}"/>
+                </p:layoutUnit>
+
+
     </p:layout>
 
 </cc:implementation>

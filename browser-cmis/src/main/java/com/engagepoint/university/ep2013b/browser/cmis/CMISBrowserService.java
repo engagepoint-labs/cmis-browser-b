@@ -7,133 +7,114 @@ import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
 import org.apache.chemistry.opencmis.commons.enums.BindingType;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.Serializable;
+import java.util.*;
 
-public class CMISBrowserService implements BrowserService
-{
+public class CMISBrowserService implements BrowserService {
 
     // Unique Service Provider name
     private static final String SERVICE_NAME = "CMIS";
     private Session session;
 
-    public CMISBrowserService()
-    {
+    public CMISBrowserService() {
         session = connect();
     }
 
     // Should return SERVICE_NAME
     @Override
-    public String getServiceName()
-    {
+    public String getServiceName() {
         return SERVICE_NAME;
     }
 
     // Non paging methods
     @Override
-    public BrowserItem findFolderById(String id)
-    {
-        Folder current = (Folder)session.getObject(id);
+    public BrowserItem findFolderById(String id) {
+        Folder current = (Folder) session.getObject(id);
         return findFolder(current, 0, 0);
     }
 
     @Override
-    public BrowserItem findFolderByPath(String path)
-    {
-        Folder current = (Folder)session.getObjectByPath(path);
+    public BrowserItem findFolderByPath(String path) {
+        Folder current = (Folder) session.getObjectByPath(path);
         return findFolder(current, 0, 0);
     }
 
 
     // Paging methods
     @Override
-    public BrowserItem findFolderById(String id, int page, int rowCount)
-    {
-        Folder current = (Folder)session.getObject(id);
+    public BrowserItem findFolderById(String id, int page, int rowCount) {
+        Folder current = (Folder) session.getObject(id);
         return findFolder(current, page, rowCount);
     }
 
     @Override
-    public BrowserItem findFolderByPath(String path, int page, int rowCount)
-    {
-        Folder current = (Folder)session.getObjectByPath(path);
+    public BrowserItem findFolderByPath(String path, int page, int rowCount) {
+        Folder current = (Folder) session.getObjectByPath(path);
         return findFolder(current, page, rowCount);
     }
 
 
     @Override
-    public int getTotalPagesFromFolderById(String id, int rowCounts)
-    {
-        Folder current = (Folder)session.getObject(id);
+    public int getTotalPagesFromFolderById(String id, int rowCounts) {
+        Folder current = (Folder) session.getObject(id);
         return getTotalPagesFromFolder(current, rowCounts);
     }
 
     @Override
-    public int getTotalPagesFromFolderByPath(String path, int rowCounts)
-    {
-        Folder current = (Folder)session.getObjectByPath(path);
+    public int getTotalPagesFromFolderByPath(String path, int rowCounts) {
+        Folder current = (Folder) session.getObjectByPath(path);
         return getTotalPagesFromFolder(current, rowCounts);
     }
 
     @Override
-    public String getCurrentLocationById(String id)
-    {
-        Folder current = (Folder)session.getObject(id);
+    public String getCurrentLocationById(String id) {
+        Folder current = (Folder) session.getObject(id);
         return getCurrentLocation(current);
     }
 
-    private List<BrowserItem> findParents(Folder current)
-    {
+    private List<BrowserItem> findParents(Folder current) {
         List<BrowserItem> parents = new ArrayList<BrowserItem>();
 
         // Create all parents folders
         Folder parent;
         BrowserItem item;
 
-        while (!current.isRootFolder())
-        {
+        while (!current.isRootFolder()) {
             parent = current.getFolderParent();
 
-            item = new BrowserItem(current.getId(),current.getName(),BrowserItem.TYPE.FOLDER);
+            item = new BrowserItem(current.getId(), current.getName(), BrowserItem.TYPE.FOLDER);
             parents.add(item);
 
             current = parent;
         }
 
-        item = new BrowserItem(current.getId(),current.getName(),BrowserItem.TYPE.FOLDER);
+        item = new BrowserItem(current.getId(), current.getName(), BrowserItem.TYPE.FOLDER);
 
         parents.add(item);
 
 
-        for (int i = 0; i < parents.size()-1; ++i)
-        {
-            parents.get(i).setParent(parents.get(i+1));
+        for (int i = 0; i < parents.size() - 1; ++i) {
+            parents.get(i).setParent(parents.get(i + 1));
         }
 
         return parents;
     }
 
-    private BrowserItem findFolder(Folder current, int page, int rowCounts)
-    {
+    private BrowserItem findFolder(Folder current, int page, int rowCounts) {
         BrowserItem result;
         List<BrowserItem> parents = findParents(current);
 
         // Fill children of each parent folder
-        for(BrowserItem i : parents)
-        {
+        for (BrowserItem i : parents) {
             ItemIterable<CmisObject> children = current.getChildren();
 
             // if enabled paging (paging only for selected folder, other parents without)
-            if (((page != 0) && (rowCounts != 0)) && (i.equals(parents.get(0))))
-            {
-                long skip = (page-1)*rowCounts;
+            if (((page != 0) && (rowCounts != 0)) && (i.equals(parents.get(0)))) {
+                long skip = (page - 1) * rowCounts;
                 children = current.getChildren().skipTo(skip).getPage(rowCounts);
             }
 
-            for (CmisObject o : children)
-            {
+            for (CmisObject o : children) {
                 BrowserItem child, subchild;
 
                 // check if already exists (is one of the parents)
@@ -141,18 +122,15 @@ public class CMISBrowserService implements BrowserService
                 find.setId(o.getId());
                 int index = parents.indexOf(find);
 
-                if (index == -1)
-                {
+                if (index == -1) {
                     child = new BrowserItem();
                     child.setId(o.getId());
                     child.setName(o.getName());
                     child.setType((o instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE);
                     child.setParent(i);
 
-                    if (o instanceof Folder)
-                    {
-                        for (CmisObject s : ((Folder) o).getChildren())
-                        {
+                    if (o instanceof Folder) {
+                        for (CmisObject s : ((Folder) o).getChildren()) {
                             subchild = new BrowserItem();
                             subchild.setId(s.getId());
                             subchild.setName(s.getName());
@@ -163,8 +141,7 @@ public class CMISBrowserService implements BrowserService
                         }
                     }
 
-                }
-                else child = parents.get(index);
+                } else child = parents.get(index);
 
                 i.setChild(child);
             }
@@ -176,23 +153,27 @@ public class CMISBrowserService implements BrowserService
         return result;
     }
 
-    private int getTotalPagesFromFolder(Folder current, int rowCounts)
-    {
+    private int getTotalPagesFromFolder(Folder current, int rowCounts) {
         ItemIterable<CmisObject> children = current.getChildren();
 
         long total = children.getTotalNumItems();
-        int totalPages = Math.round((float)total/ rowCounts);
 
-        return totalPages;
+        long rest = total % rowCounts;
+
+        int totalPages = (int) (total - rest) / rowCounts;
+
+        if ( rest > 0) {
+            totalPages++;
+        }
+
+       return totalPages;
     }
 
-    private String getCurrentLocation(Folder current)
-    {
+    private String getCurrentLocation(Folder current) {
         return current.getPath();
     }
 
-    public Session connect()
-    {
+    public Session connect() {
         SessionFactory sessionFactory = SessionFactoryImpl.newInstance();
         Map<String, String> parameter = new HashMap<String, String>();
 
@@ -204,15 +185,15 @@ public class CMISBrowserService implements BrowserService
         // WSDL
         final String url = "http://localhost:18080/server/services/";
         parameter.put(SessionParameter.BINDING_TYPE, BindingType.WEBSERVICES.value());
-        parameter.put(SessionParameter.WEBSERVICES_ACL_SERVICE,             url+"ACLService?wsdl");
-        parameter.put(SessionParameter.WEBSERVICES_DISCOVERY_SERVICE,       url+"DiscoveryService?wsdl");
-        parameter.put(SessionParameter.WEBSERVICES_MULTIFILING_SERVICE,     url+"MultiFilingService?wsdl");
-        parameter.put(SessionParameter.WEBSERVICES_NAVIGATION_SERVICE,      url+"NavigationService?wsdl");
-        parameter.put(SessionParameter.WEBSERVICES_OBJECT_SERVICE,          url+"ObjectService?wsdl");
-        parameter.put(SessionParameter.WEBSERVICES_POLICY_SERVICE,          url+"PolicyService?wsdl");
-        parameter.put(SessionParameter.WEBSERVICES_RELATIONSHIP_SERVICE,    url+"RelationshipService?wsdl");
-        parameter.put(SessionParameter.WEBSERVICES_REPOSITORY_SERVICE,      url+"RepositoryService?wsdl");
-        parameter.put(SessionParameter.WEBSERVICES_VERSIONING_SERVICE,      url+"VersioningService?wsdl");
+        parameter.put(SessionParameter.WEBSERVICES_ACL_SERVICE, url + "ACLService?wsdl");
+        parameter.put(SessionParameter.WEBSERVICES_DISCOVERY_SERVICE, url + "DiscoveryService?wsdl");
+        parameter.put(SessionParameter.WEBSERVICES_MULTIFILING_SERVICE, url + "MultiFilingService?wsdl");
+        parameter.put(SessionParameter.WEBSERVICES_NAVIGATION_SERVICE, url + "NavigationService?wsdl");
+        parameter.put(SessionParameter.WEBSERVICES_OBJECT_SERVICE, url + "ObjectService?wsdl");
+        parameter.put(SessionParameter.WEBSERVICES_POLICY_SERVICE, url + "PolicyService?wsdl");
+        parameter.put(SessionParameter.WEBSERVICES_RELATIONSHIP_SERVICE, url + "RelationshipService?wsdl");
+        parameter.put(SessionParameter.WEBSERVICES_REPOSITORY_SERVICE, url + "RepositoryService?wsdl");
+        parameter.put(SessionParameter.WEBSERVICES_VERSIONING_SERVICE, url + "VersioningService?wsdl");
 
         Repository repository = sessionFactory.getRepositories(parameter).get(0);
         parameter.put(SessionParameter.REPOSITORY_ID, repository.getId());
@@ -221,40 +202,39 @@ public class CMISBrowserService implements BrowserService
     }
 
 
-    ////  ======================================================    simple search of partial/full name
-    public  BrowserItem simpleSearch(String id, String parameter, int pageNum, int rowCounts){
+    ////  ===============================================   simple search of partial/full name
+    public BrowserItem simpleSearch(String id, String parameter, int pageNum, int rowCounts) {
 
         BrowserItem item;
         ArrayList<BrowserItem> browserItems = new ArrayList<BrowserItem>();
         int totalPages = 0;
 
 
-        String  inFolders =
+        String inFolders =
                 "SELECT cmis:objectId, cmis:name FROM cmis:folder   WHERE IN_FOLDER(?) and cmis:name LIKE ?";
-        String  inDocums  =
+        String inDocums =
                 "SELECT cmis:objectId, cmis:name FROM cmis:document WHERE IN_FOLDER(?) and cmis:name LIKE ?";
 
 
-        if(id != null && !id.isEmpty() && parameter != null && !parameter.isEmpty()){
+        if (id != null && !id.isEmpty() && parameter != null && !parameter.isEmpty()) {
 
-            QueryStatement query =  session.createQueryStatement(inDocums);
+            QueryStatement query = session.createQueryStatement(inDocums);
 
-            query.setString(1,id);
-            query.setStringLike(2,"%"+parameter+"%");
+            query.setString(1, id);
+            query.setStringLike(2, "%" + parameter + "%");
 
 
             ItemIterable<QueryResult> results = query.query(false);
             //int rowCounts = 2;
-            long skip=0;
+            long skip = 0;
 
-            if (((pageNum != 0) && (rowCounts != 0)))
-            {
-                skip = (pageNum - 1)*rowCounts;
+            if (((pageNum != 0) && (rowCounts != 0))) {
+                skip = (pageNum - 1) * rowCounts;
             }
 
 
             int ii = 1;
-            for(QueryResult hit: results.skipTo(skip).getPage(rowCounts)) {
+            for (QueryResult hit : results.skipTo(skip).getPage(rowCounts)) {
 
                 item = new BrowserItem(
                         hit.getPropertyByQueryName("cmis:objectId").getFirstValue().toString(),
@@ -264,25 +244,79 @@ public class CMISBrowserService implements BrowserService
 
                 browserItems.add(item);
 
-             }
+            }
 
             long total = results.getTotalNumItems();
 
-            if(total == 0){
-                totalPages = 0;
-            }else
+            long rest = total % rowCounts;
 
-            if(total < rowCounts){
-                totalPages = 1;
-            } else{
-                totalPages = Math.round((float)total / rowCounts);
+            totalPages = (int) (total - rest) / rowCounts;
+
+            if ( rest > 0) {
+                totalPages++;
             }
 
         }  // valid id & parameter string
 
-        item = new BrowserItem("",BrowserItem.TYPE.FOLDER, null, browserItems, totalPages);
+        item = new BrowserItem("", BrowserItem.TYPE.FOLDER, null, browserItems, totalPages);
 
-        return  item;
+        return item;
+    }
+
+
+
+    //// ==========================================   advanced search by several parameters
+    ////   Document Type, Date from .. to ... ,  Content Type,  Size,  Contains Text
+
+    public BrowserItem advancedSearch(String id, Object param, int pageNum, int rowCounts) {
+
+        AdvSearchParams parameter = (AdvSearchParams) param;
+
+        BrowserItem item;
+        ArrayList<BrowserItem> browserItems = new ArrayList<BrowserItem>();
+        int totalPages = 0;
+
+        QueryStatement prepQuery = session.createQueryStatement(parameter.createQueryString());
+
+
+        ItemIterable<QueryResult> results = parameter.setQueryParams(prepQuery).query(false);
+        //int rowCounts = 2;
+        long skip = 0;
+
+        if (((pageNum != 0) && (rowCounts != 0))) {
+            skip = (pageNum - 1) * rowCounts;
+        }
+
+
+        int ii = 1;
+        for (QueryResult hit : results.skipTo(skip).getPage(rowCounts)) {
+
+            item = new BrowserItem(
+                    hit.getPropertyByQueryName("cmis:objectId").getFirstValue().toString(),
+                    hit.getPropertyByQueryName("cmis:name").getFirstValue().toString(),
+                    BrowserItem.TYPE.FILE
+            );
+
+            browserItems.add(item);
+
+        }
+
+        long total = results.getTotalNumItems();
+
+
+        long rest = total % rowCounts;
+
+        totalPages = (int) (total - rest) / rowCounts;
+
+        if ( rest > 0) {
+            totalPages++;
+        }
+
+        // valid id & parameter string
+
+        item = new BrowserItem("", BrowserItem.TYPE.FOLDER, null, browserItems, totalPages);
+
+        return item;
     }
 
 }

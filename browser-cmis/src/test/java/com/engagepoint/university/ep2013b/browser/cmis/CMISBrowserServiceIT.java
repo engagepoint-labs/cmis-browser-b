@@ -4,7 +4,6 @@ import com.engagepoint.university.ep2013b.browser.api.BrowserItem;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotSame;
 
 public class CMISBrowserServiceIT
 {
@@ -94,88 +93,5 @@ public class CMISBrowserServiceIT
 
     }
 
-    @Test
-    public void test_simpleSearch_findlist_size()
-    {
-       BrowserItem item = cmisBrowserService.simpleSearch("101", "-1",1,19);
-
-        assertEquals(3, item.getChildren().size());
-    }
-
-    @Test
-    public void test_simpleSearch_findlist_totalpages()
-    {
-        BrowserItem item = cmisBrowserService.simpleSearch("101", "-1",1,19);
-
-        assertEquals(1, item.getTotalPages());
-    }
-
-    @Test
-    public void test_simpleSearch_invalid_parameter_id()
-    {
-        BrowserItem item = cmisBrowserService.simpleSearch("0", "-1",1,19);
-
-        assertEquals(0, item.getChildren().size());
-    }
-
-    @Test
-    public void test_simpleSearch_invalid_parameter_str()
-    {
-        BrowserItem item = cmisBrowserService.simpleSearch("101", "_",1,19);
-
-         assertEquals(3, item.getChildren().size());
-    }
-
-    @Test
-    public void test_simpleSearch_valid_data()
-    {
-        BrowserItem item  = cmisBrowserService.simpleSearch("101", "_",1,19);
-
-        assertEquals("My_Document-1-0", item.getChildren().get(2).getName());
-    }
-
-    @Test
-    public void test_simpleSearch_empty_page()
-    {
-        BrowserItem item = cmisBrowserService.simpleSearch("0", "-1",2,19);
-
-        assertEquals(0, item.getChildren().size());
-    }
-
-
-    @Test
-    public void test_simpleSearch_valid_page()
-    {
-        BrowserItem item = cmisBrowserService.simpleSearch("101", "_",2,2);
-
-        assertEquals(1, item.getChildren().size());
-    }
-
-
-    @Test
-    public void test_simpleSearch_valid_last_page()
-    {
-        BrowserItem item = cmisBrowserService.simpleSearch("101", "_",3,1);
-
-        assertEquals("My_Document-1-0", item.getChildren().get(0).getName());
-    }
-
-
-    @Test
-    public void test_simpleSearch_invalid_totalpages()
-    {
-        BrowserItem item = cmisBrowserService.simpleSearch("101", "_",9,1);
-
-        assertNotSame(4, item.getTotalPages());
-    }
-
-
-    @Test
-    public void test_simpleSearch_invalid_totalpages2()
-    {
-        BrowserItem item = cmisBrowserService.simpleSearch("101", "older",1,4);
-
-        assertEquals(0, item.getTotalPages());
-    }
 
 }

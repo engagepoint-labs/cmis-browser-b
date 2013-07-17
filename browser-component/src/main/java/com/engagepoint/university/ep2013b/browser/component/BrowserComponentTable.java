@@ -3,6 +3,7 @@ package com.engagepoint.university.ep2013b.browser.component;
 
 import com.engagepoint.university.ep2013b.browser.api.BrowserItem;
 import com.engagepoint.university.ep2013b.browser.api.BrowserService;
+import com.engagepoint.university.ep2013b.browser.cmis.AdvSearchParams;
 
 import javax.faces.component.FacesComponent;
 import javax.faces.component.UINamingContainer;
@@ -28,9 +29,13 @@ public class BrowserComponentTable extends UINamingContainer
     // Maximum of rows per page
     private static final int rowCounts = 2;
 
+    private AdvSearchParams advancedSearchParams = new AdvSearchParams();
+
 
     public BrowserComponentTable()
     {
+//        System.out.println("BrowserComponentTable");
+
         service = BrowserFactory.getInstance("CMIS");
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 
@@ -41,15 +46,32 @@ public class BrowserComponentTable extends UINamingContainer
 
         if (paramPageNum == null || "".equals(paramPageNum)) pageNum = 1;
         else pageNum = Integer.parseInt(paramPageNum);
+
+//        businessLogic();
     }
 
 
-    // Method executed when dataTable renders (during loading page or ajax request)
-    public List<BrowserItem> getDataList()
+    // TODO: Should have better name
+    // Process received parameters and decided what data to show (folder items or search results)
+    public void businessLogic()
     {
+//        System.out.println("businessLogic()");
+//        System.out.println("\tfolderID       = " + folderId);
+//        System.out.println("\tpage           = " + pageNum);
+//        System.out.println("\tsimple search  = " + searchCriteria);
+//        System.out.println("\tadvanced search (isEmpty = "+ advancedSearchParams.isEmpty() +"):");
+//        System.out.println("\t\tDocumentType = " + advancedSearchParams.getDocumentType());
+//        System.out.println("\t\tDateFrom     = " + advancedSearchParams.getDateFrom());
+//        System.out.println("\t\tDateTo       = " + advancedSearchParams.getDateTo());
+//        System.out.println("\t\tContentType  = " + advancedSearchParams.getContentType());
+//        System.out.println("\t\tSize         = " + advancedSearchParams.getSize());
+//        System.out.println("\t\tText         = " + advancedSearchParams.getText());
+
+
         if((folderId == null) || ("".equals(folderId))|| ("null".equals(folderId)))
         {
             // first time at the page
+//            System.out.println("first time on page");
             currentFolder = service.findFolderByPath("/", 1, rowCounts);
         }
         else currentFolder = service.findFolderById(folderId, pageNum, rowCounts);
@@ -57,22 +79,41 @@ public class BrowserComponentTable extends UINamingContainer
         folderId = currentFolder.getId();
 
 
-        if ((searchCriteria == null) || ("".equals(searchCriteria)))
+        if ((searchCriteria == null) && advancedSearchParams.isEmpty())
         {
             // not searching
+//            System.out.println("shows folder items");
             pagesCount = service.getTotalPagesFromFolderById(folderId, rowCounts);
             dataList = currentFolder.getChildren();
         }
         else
         {
-            // searching
-            BrowserItem item  =  service.simpleSearch(folderId, searchCriteria, pageNum, rowCounts);
-            //pagesCount = service.getTotalPagesFromSimpleSearch(folderId, searchCriteria, rowCounts);
-            //dataList = service.simpleSearch(folderId, searchCriteria, pageNum, rowCounts);
+            BrowserItem item;
+
+            if ((searchCriteria != null))
+            {
+                // simple search
+//                System.out.println("shows simple search");
+                item = service.simpleSearch(folderId, searchCriteria, pageNum, rowCounts);
+            }
+            else
+            {
+                // advanced search
+//                System.out.println("shows advanced search");
+                item = service.advancedSearch(folderId, advancedSearchParams, pageNum, rowCounts);
+            }
+
             pagesCount = item.getTotalPages();
             dataList = item.getChildren();
         }
 
+
+    }
+
+    // Method executed when dataTable renders (during loading page or ajax request)
+    public List<BrowserItem> getDataList()
+    {
+        businessLogic();
         return dataList;
     }
 
@@ -119,10 +160,19 @@ public class BrowserComponentTable extends UINamingContainer
 
     public String getSearchCriteria()
     {
-        return ((searchCriteria == null) || "null".equals(searchCriteria)) ? "" : searchCriteria;
+        return searchCriteria;
     }
 
-    public void setSearchCriteria(String searchCriteria) {
-        this.searchCriteria = searchCriteria;
+    public void setSearchCriteria(String searchCriteria)
+    {
+        this.searchCriteria = ((searchCriteria == null) || "".equals(searchCriteria) || "null".equals(searchCriteria)) ? null : searchCriteria;
+    }
+
+    public AdvSearchParams getAdvancedSearchParams() {
+        return advancedSearchParams;
+    }
+
+    public void setAdvancedSearchParams(AdvSearchParams advancedSearchParams) {
+        this.advancedSearchParams = advancedSearchParams;
     }
 }

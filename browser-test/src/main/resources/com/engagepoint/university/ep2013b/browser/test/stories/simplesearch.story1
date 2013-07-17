@@ -3,7 +3,7 @@ Meta:
 Narrative:
 As a content management system (CMS) user
 I want to use simple search
-So that I can find content by a simple criteria
+So that I can find content by using a simple criteria
 
 Scenario: User uses simple search, checks pagination and checks returning to previous state
 

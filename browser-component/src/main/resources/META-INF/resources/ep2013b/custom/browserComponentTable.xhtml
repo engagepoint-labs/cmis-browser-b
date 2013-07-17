@@ -47,8 +47,8 @@
         <h:panelGrid columns="2">
             <h:outputLabel value="Document type:"/>
             <p:selectOneMenu id="searchDocumentType" value="#{cc.advancedSearchParams.documentType}" editable="true">
-                <f:selectItem itemLabel="Document" itemValue="cmis:document"/>
-                <f:selectItem itemLabel="Folder" itemValue="cmis:folder" />
+                <f:selectItem id="typeDocument" itemLabel="Document" itemValue="cmis:document"/>
+                <f:selectItem id="typeFolder" itemLabel="Folder" itemValue="cmis:folder" />
             </p:selectOneMenu>
 
             <h:outputLabel value="Date from:"/>
@@ -59,8 +59,8 @@
 
             <h:outputLabel value="Content type:"/>
             <p:selectOneMenu id="searchContentType" value="#{cc.advancedSearchParams.contentType}">
-                <f:selectItem itemLabel="Any" itemValue=""/>
-                <f:selectItem itemLabel="Complex Type" itemValue="ComplexType" />
+                <f:selectItem id="sctAny" itemLabel="Any" itemValue=""/>
+                <f:selectItem id="sctComplex" itemLabel="Complex Type" itemValue="ComplexType" />
             </p:selectOneMenu>
 
             <h:outputLabel value="Size (B):"/>

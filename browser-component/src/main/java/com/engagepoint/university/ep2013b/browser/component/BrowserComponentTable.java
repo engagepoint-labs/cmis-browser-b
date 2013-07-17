@@ -34,7 +34,7 @@ public class BrowserComponentTable extends UINamingContainer
 
     public BrowserComponentTable()
     {
-        System.out.println("BrowserComponentTable");
+//        System.out.println("BrowserComponentTable");
 
         service = BrowserFactory.getInstance("CMIS");
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
@@ -46,28 +46,32 @@ public class BrowserComponentTable extends UINamingContainer
 
         if (paramPageNum == null || "".equals(paramPageNum)) pageNum = 1;
         else pageNum = Integer.parseInt(paramPageNum);
+
+//        businessLogic();
     }
 
 
-    // Method executed when dataTable renders (during loading page or ajax request)
-    public List<BrowserItem> getDataList()
+    // TODO: Should have better name
+    // Process received parameters and decided what data to show (folder items or search results)
+    public void businessLogic()
     {
-        System.out.println("getDataList()");
-        System.out.println("folderID = " + folderId);
-        System.out.println("page = " + pageNum);
-        System.out.println("simple search = " + searchCriteria);
-        System.out.println("advanced search:");
-        System.out.println("\tDocumentType = " + advancedSearchParams.getDocumentType());
-        System.out.println("\tDateFrom = " + advancedSearchParams.getDateFrom());
-        System.out.println("\tDateTo = " + advancedSearchParams.getDateTo());
-        System.out.println("\tContentType = " + advancedSearchParams.getContentType());
-        System.out.println("\tSize = " + advancedSearchParams.getSize());
-        System.out.println("\tText = " + advancedSearchParams.getText());
+//        System.out.println("businessLogic()");
+//        System.out.println("\tfolderID       = " + folderId);
+//        System.out.println("\tpage           = " + pageNum);
+//        System.out.println("\tsimple search  = " + searchCriteria);
+//        System.out.println("\tadvanced search (isEmpty = "+ advancedSearchParams.isEmpty() +"):");
+//        System.out.println("\t\tDocumentType = " + advancedSearchParams.getDocumentType());
+//        System.out.println("\t\tDateFrom     = " + advancedSearchParams.getDateFrom());
+//        System.out.println("\t\tDateTo       = " + advancedSearchParams.getDateTo());
+//        System.out.println("\t\tContentType  = " + advancedSearchParams.getContentType());
+//        System.out.println("\t\tSize         = " + advancedSearchParams.getSize());
+//        System.out.println("\t\tText         = " + advancedSearchParams.getText());
 
 
         if((folderId == null) || ("".equals(folderId))|| ("null".equals(folderId)))
         {
             // first time at the page
+//            System.out.println("first time on page");
             currentFolder = service.findFolderByPath("/", 1, rowCounts);
         }
         else currentFolder = service.findFolderById(folderId, pageNum, rowCounts);
@@ -78,6 +82,7 @@ public class BrowserComponentTable extends UINamingContainer
         if ((searchCriteria == null) && advancedSearchParams.isEmpty())
         {
             // not searching
+//            System.out.println("shows folder items");
             pagesCount = service.getTotalPagesFromFolderById(folderId, rowCounts);
             dataList = currentFolder.getChildren();
         }
@@ -88,11 +93,13 @@ public class BrowserComponentTable extends UINamingContainer
             if ((searchCriteria != null))
             {
                 // simple search
+//                System.out.println("shows simple search");
                 item = service.simpleSearch(folderId, searchCriteria, pageNum, rowCounts);
             }
             else
             {
                 // advanced search
+//                System.out.println("shows advanced search");
                 item = service.advancedSearch(folderId, advancedSearchParams, pageNum, rowCounts);
             }
 
@@ -100,6 +107,13 @@ public class BrowserComponentTable extends UINamingContainer
             dataList = item.getChildren();
         }
 
+
+    }
+
+    // Method executed when dataTable renders (during loading page or ajax request)
+    public List<BrowserItem> getDataList()
+    {
+        businessLogic();
         return dataList;
     }
 

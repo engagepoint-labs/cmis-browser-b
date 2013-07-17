@@ -17,11 +17,11 @@
     <p:panel>
         <h:panelGrid columns="3">
             <p:column>
-                <p:inputText id="searchInput" value="#{cc.searchCriteria}"/>
+                <p:inputText id="search" value="#{cc.searchCriteria}"/>
             </p:column>
 
             <p:column>
-                <p:commandButton id="searchbtn" update="searchInput,table" ajax="true" icon="ui-icon-search" title="Search">
+                <p:commandButton id="searchbtn" update="search,table" ajax="true" icon="ui-icon-search" title="Search">
                     <f:param name="folderId" value="#{cc.folderId}"/>
                 </p:commandButton>
             </p:column>
@@ -46,10 +46,13 @@
         <!--<p:panel id="advancedSearch" toggleable="true" header="Advanced Search">-->
         <h:panelGrid columns="2">
             <h:outputLabel value="Document type:"/>
-            <p:selectOneMenu id="searchDocumentType" value="#{cc.advancedSearchParams.documentType}" editable="true">
-                <f:selectItem id="typeDocument" itemLabel="Document" itemValue="cmis:document"/>
-                <f:selectItem id="typeFolder" itemLabel="Folder" itemValue="cmis:folder" />
-            </p:selectOneMenu>
+            <!-- WARNING: Should be PrimeFace component <p:selectOneMenu>,
+                          but it sets itemLabel to documentType instead of itemValue-->
+            <h:selectOneMenu id="searchDocumentType" value="#{cc.advancedSearchParams.documentType}">
+                <f:selectItem itemLabel="" itemValue=""/>
+                <f:selectItem itemLabel="typeDocument" itemValue="cmis:document"/>
+                <f:selectItem itemLabel="typeFolder" itemValue="cmis:folder"/>
+            </h:selectOneMenu>
 
             <h:outputLabel value="Date from:"/>
             <p:calendar id="searchDateFrom" showOn="button" value="#{cc.advancedSearchParams.dateFrom}"/>
@@ -59,7 +62,7 @@
 
             <h:outputLabel value="Content type:"/>
             <p:selectOneMenu id="searchContentType" value="#{cc.advancedSearchParams.contentType}">
-                <f:selectItem id="sctAny" itemLabel="Any" itemValue=""/>
+                <f:selectItem id="sctAny" itemLabel="" itemValue=""/>
                 <f:selectItem id="sctComplex" itemLabel="Complex Type" itemValue="ComplexType" />
             </p:selectOneMenu>
 

@@ -8,6 +8,8 @@ import com.engagepoint.university.ep2013b.browser.cmis.AdvSearchParams;
 import javax.faces.component.FacesComponent;
 import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -23,7 +25,7 @@ public class BrowserComponentTable extends UINamingContainer
 
     // List which should be displayed
     private List<BrowserItem> dataList;
-    private String searchCriteria = "none";
+//    private String searchCriteria = "none";
     private BrowserItem currentFolder = null;
 
     // Maximum of rows per page
@@ -31,20 +33,26 @@ public class BrowserComponentTable extends UINamingContainer
 
     private AdvSearchParams advancedSearchParams = new AdvSearchParams();
 
+    enum Properties { search }
 
     public BrowserComponentTable()
     {
+        System.out.println("Table");
+
         service = BrowserFactory.getInstance("CMIS");
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 
         folderId = request.getParameter("folderId");
-        searchCriteria = request.getParameter("searchCriteria");
+//        searchCriteria = request.getParameter("searchCriteria");
 
         String paramPageNum = request.getParameter("pageNum");
 
         if (paramPageNum == null || "".equals(paramPageNum)) pageNum = 1;
         else pageNum = Integer.parseInt(paramPageNum);
+
+        businessLogic();
     }
+
 
 
     // TODO: Should have better name
@@ -65,7 +73,7 @@ public class BrowserComponentTable extends UINamingContainer
         System.out.println("businessLogic()");
         System.out.println("\tfolderID       = " + folderId);
         System.out.println("\tpage           = " + pageNum);
-        System.out.println("\tsimple search  = " + searchCriteria);
+        System.out.println("\tsimple search  = " + getSearchCriteria());
         System.out.println("\tadvanced search (isEmpty = "+ advancedSearchParams.isEmpty() +"):");
         System.out.println("\t\tid           = " + advancedSearchParams.getFolderId());
         System.out.println("\t\tDocumentType = " + advancedSearchParams.getDocumentType());
@@ -76,7 +84,7 @@ public class BrowserComponentTable extends UINamingContainer
         System.out.println("\t\tText         = " + advancedSearchParams.getText());
 
 
-        if ((searchCriteria == null) && advancedSearchParams.isEmpty())
+        if ((getSearchCriteria() == null) && advancedSearchParams.isEmpty())
         {
             // not searching
             pagesCount = service.getTotalPagesFromFolderById(folderId, rowCounts);
@@ -86,11 +94,11 @@ public class BrowserComponentTable extends UINamingContainer
         {
             BrowserItem item;
 
-            if ((searchCriteria != null))
+            if ((getSearchCriteria() != null))
             {
                 // simple search
 //                System.out.println("shows simple search");
-                item = service.simpleSearch(folderId, searchCriteria, pageNum, rowCounts);
+                item = service.simpleSearch(folderId, getSearchCriteria(), pageNum, rowCounts);
             }
             else
             {
@@ -106,10 +114,15 @@ public class BrowserComponentTable extends UINamingContainer
 
     }
 
+    public void search(ActionEvent event)
+    {
+        System.out.println("Search button clicked!");
+        businessLogic();
+    }
+
     // Method executed when dataTable renders (during loading page or ajax request)
     public List<BrowserItem> getDataList()
     {
-        businessLogic();
         return dataList;
     }
 
@@ -156,12 +169,15 @@ public class BrowserComponentTable extends UINamingContainer
 
     public String getSearchCriteria()
     {
-        return searchCriteria;
+        Object value = getStateHelper().get(Properties.search);
+        return ((value != null) && !("".equals(value)))? (String)value : null;
+//        return searchCriteria;
     }
 
     public void setSearchCriteria(String searchCriteria)
     {
-        this.searchCriteria = ((searchCriteria == null) || "".equals(searchCriteria) || "null".equals(searchCriteria)) ? null : searchCriteria;
+        getStateHelper().put(Properties.search, searchCriteria);
+//        this.searchCriteria = ((searchCriteria == null) || "".equals(searchCriteria) || "null".equals(searchCriteria)) ? null : searchCriteria;
     }
 
     public AdvSearchParams getAdvancedSearchParams() {

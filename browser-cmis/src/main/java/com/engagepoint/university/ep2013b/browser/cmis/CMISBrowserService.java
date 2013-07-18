@@ -7,6 +7,7 @@ import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
 import org.apache.chemistry.opencmis.commons.enums.BindingType;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisNameConstraintViolationException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -338,7 +339,7 @@ public class CMISBrowserService implements BrowserService {
         try {
             newFolder = parent.createFolder(folderProps);
             result = new BrowserItem(newFolder.getId(), newFolder.getName(), BrowserItem.TYPE.FOLDER);
-        } catch (Exception e) {
+        } catch (CmisNameConstraintViolationException e) {
             // TODO: exception handling task
             e.printStackTrace();
         }

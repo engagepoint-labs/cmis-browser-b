@@ -7,7 +7,7 @@ import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
 import org.apache.chemistry.opencmis.commons.enums.BindingType;
-import org.apache.chemistry.opencmis.commons.exceptions.CmisNameConstraintViolationException;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisBaseException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -326,20 +326,21 @@ public class CMISBrowserService implements BrowserService {
     @Override
     public BrowserItem createFolder(String id, String name, String type) {
 
-
         Map<String, String> folderProps = new HashMap<String, String>();
 
         folderProps.put(PropertyIds.OBJECT_TYPE_ID, type);
         folderProps.put(PropertyIds.NAME, name);
         folderProps.put(PropertyIds.PARENT_ID, id);
+
         Folder parent = (Folder) session.getObject(id);
+
         Folder newFolder = null;
         BrowserItem result = new BrowserItem();
 
         try {
             newFolder = parent.createFolder(folderProps);
             result = new BrowserItem(newFolder.getId(), newFolder.getName(), BrowserItem.TYPE.FOLDER);
-        } catch (CmisNameConstraintViolationException e) {
+        } catch (CmisBaseException e) {
             // TODO: exception handling task
             e.printStackTrace();
         }
@@ -348,22 +349,70 @@ public class CMISBrowserService implements BrowserService {
     }
 
     @Override
-    public Map<String,String> getTypeList(String type) {
+    public BrowserItem editFolder(String id, String name, String type) {
 
-        Map<String,String> result = new HashMap<String,String>();
+        Map<String, String> folderProps = new HashMap<String, String>();
 
-        ItemIterable<ObjectType> typeList =  session.getTypeChildren(type,true);
+        folderProps.put(PropertyIds.OBJECT_TYPE_ID, type);
+        folderProps.put(PropertyIds.NAME, name);
+        folderProps.put(PropertyIds.PARENT_ID, id);
 
-        for (ObjectType tt:typeList){
-            result.put(" - "+tt.getDisplayName(),tt.getId());
+        Folder current = (Folder) session.getObject(id);
+
+        Folder newFolder = null;
+        BrowserItem result = new BrowserItem();
+
+        try {
+
+            current.updateProperties(folderProps);
+            result = new BrowserItem(current.getId(), current.getName(), BrowserItem.TYPE.FOLDER);
+        } catch (CmisBaseException e) {
+            // TODO: exception handling task
+            e.printStackTrace();
+        }
+
+        return result;
+
+    }
+
+
+
+    @Override
+    public void deleteFolder(String id) {
+
+        Folder current = (Folder) session.getObject(id);
+
+        if(current.getId().equals("")){
+            return;
+        }
+
+
+        try {
+            current.delete();
+        } catch (CmisBaseException e) {
+            // TODO: exception handling task
+            e.printStackTrace();
+        }
+
+    }
+
+
+
+    @Override
+    public Map<String, String> getTypeList(String type) {
+
+        Map<String, String> result = new HashMap<String, String>();
+
+        ItemIterable<ObjectType> typeList = session.getTypeChildren(type, true);
+
+        for (ObjectType tt : typeList) {
+            result.put(" - " + tt.getDisplayName(), tt.getId());
 
             //System.out.println(" = "+tt.getDisplayName()+"  ["+tt.getId()+"]");
-            if(tt.getChildren().getTotalNumItems()>0){
-                for(ObjectType ch:tt.getChildren()){
-
+            if (tt.getChildren().getTotalNumItems() > 0) {
+                for (ObjectType ch : tt.getChildren()) {
                     result.put(" - - - " + ch.getDisplayName(), ch.getId());
                     //System.out.println(" === "+ch.getDisplayName()+"  ["+ch.getId()+"]");
-
                 }
 
             }
@@ -371,8 +420,8 @@ public class CMISBrowserService implements BrowserService {
         }
         return result;
 
-
     }
+
 
 
 }

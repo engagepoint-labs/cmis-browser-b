@@ -4,11 +4,14 @@ import com.engagepoint.university.ep2013b.browser.api.BrowserItem;
 import com.engagepoint.university.ep2013b.browser.api.BrowserService;
 import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
+import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
 import org.apache.chemistry.opencmis.commons.enums.BindingType;
 
-import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CMISBrowserService implements BrowserService {
 
@@ -318,5 +321,57 @@ public class CMISBrowserService implements BrowserService {
 
         return item;
     }
+
+    @Override
+    public BrowserItem createFolder(String id, String name, String type) {
+
+
+        Map<String, String> folderProps = new HashMap<String, String>();
+
+        folderProps.put(PropertyIds.OBJECT_TYPE_ID, type);
+        folderProps.put(PropertyIds.NAME, name);
+        folderProps.put(PropertyIds.PARENT_ID, id);
+        Folder parent = (Folder) session.getObject(id);
+        Folder newFolder = null;
+        BrowserItem result = new BrowserItem();
+
+        try {
+            newFolder = parent.createFolder(folderProps);
+            result = new BrowserItem(newFolder.getId(), newFolder.getName(), BrowserItem.TYPE.FOLDER);
+        } catch (Exception e) {
+            // TODO: exception handling task
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    @Override
+    public Map<String,String> getTypeList(String type) {
+
+        Map<String,String> result = new HashMap<String,String>();
+
+        ItemIterable<ObjectType> typeList =  session.getTypeChildren(type,true);
+
+        for (ObjectType tt:typeList){
+            result.put(" - "+tt.getDisplayName(),tt.getId());
+
+            //System.out.println(" = "+tt.getDisplayName()+"  ["+tt.getId()+"]");
+            if(tt.getChildren().getTotalNumItems()>0){
+                for(ObjectType ch:tt.getChildren()){
+
+                    result.put(" - - - " + ch.getDisplayName(), ch.getId());
+                    //System.out.println(" === "+ch.getDisplayName()+"  ["+ch.getId()+"]");
+
+                }
+
+            }
+
+        }
+        return result;
+
+
+    }
+
 
 }

@@ -21,11 +21,10 @@ public class BrowserComponentTable extends UINamingContainer
     private String folderId;
     private Integer pageNum;
     private int pagesCount;
-    private BrowserItem selectedItem = null;
 
     // List which should be displayed
     private List<BrowserItem> dataList;
-//    private String searchCriteria = "none";
+    private String searchCriteria = "none";
     private BrowserItem currentFolder = null;
 
     // Maximum of rows per page
@@ -33,22 +32,29 @@ public class BrowserComponentTable extends UINamingContainer
 
     private AdvSearchParams advancedSearchParams = new AdvSearchParams();
 
-    enum Properties { search }
+    private StateManager state;
+
 
     public BrowserComponentTable()
     {
         System.out.println("Table");
 
+        state = new StateManager(FacesContext.getCurrentInstance(), getClientId());
+
         service = BrowserFactory.getInstance("CMIS");
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 
         folderId = request.getParameter("folderId");
-//        searchCriteria = request.getParameter("searchCriteria");
 
-        String paramPageNum = request.getParameter("pageNum");
 
-        if (paramPageNum == null || "".equals(paramPageNum)) pageNum = 1;
-        else pageNum = Integer.parseInt(paramPageNum);
+//        String paramPageNum = request.getParameter("pageNum");
+//
+//        if (paramPageNum == null || "".equals(paramPageNum)) pageNum = 1;
+//        else pageNum = Integer.parseInt(paramPageNum);
+
+
+        searchCriteria = state.get("searchCriteria", null);
+        pageNum = state.get("pageNum", 1);
 
         businessLogic();
     }
@@ -59,6 +65,8 @@ public class BrowserComponentTable extends UINamingContainer
     // Process received parameters and decided what data to show (folder items or search results)
     public void businessLogic()
     {
+        pageNum = state.get("pageNum", 1);
+
         if((folderId == null) || ("".equals(folderId))|| ("null".equals(folderId)))
         {
             // first time at the page
@@ -69,22 +77,21 @@ public class BrowserComponentTable extends UINamingContainer
         folderId = currentFolder.getId();
         advancedSearchParams.setFolderId(folderId);
 
-
         System.out.println("businessLogic()");
         System.out.println("\tfolderID       = " + folderId);
         System.out.println("\tpage           = " + pageNum);
         System.out.println("\tsimple search  = " + getSearchCriteria());
-        System.out.println("\tadvanced search (isEmpty = "+ advancedSearchParams.isEmpty() +"):");
-        System.out.println("\t\tid           = " + advancedSearchParams.getFolderId());
-        System.out.println("\t\tDocumentType = " + advancedSearchParams.getDocumentType());
-        System.out.println("\t\tDateFrom     = " + advancedSearchParams.getDateFrom());
-        System.out.println("\t\tDateTo       = " + advancedSearchParams.getDateTo());
-        System.out.println("\t\tContentType  = " + advancedSearchParams.getContentType());
-        System.out.println("\t\tSize         = " + advancedSearchParams.getSize());
-        System.out.println("\t\tText         = " + advancedSearchParams.getText());
+//        System.out.println("\tadvanced search (isEmpty = "+ advancedSearchParams.isEmpty() +"):");
+//        System.out.println("\t\tid           = " + advancedSearchParams.getFolderId());
+//        System.out.println("\t\tDocumentType = " + advancedSearchParams.getDocumentType());
+//        System.out.println("\t\tDateFrom     = " + advancedSearchParams.getDateFrom());
+//        System.out.println("\t\tDateTo       = " + advancedSearchParams.getDateTo());
+//        System.out.println("\t\tContentType  = " + advancedSearchParams.getContentType());
+//        System.out.println("\t\tSize         = " + advancedSearchParams.getSize());
+//        System.out.println("\t\tText         = " + advancedSearchParams.getText());
 
 
-        if ((getSearchCriteria() == null) && advancedSearchParams.isEmpty())
+        if ((searchCriteria == null) && advancedSearchParams.isEmpty())
         {
             // not searching
             pagesCount = service.getTotalPagesFromFolderById(folderId, rowCounts);
@@ -94,7 +101,7 @@ public class BrowserComponentTable extends UINamingContainer
         {
             BrowserItem item;
 
-            if ((getSearchCriteria() != null))
+            if ((searchCriteria != null))
             {
                 // simple search
 //                System.out.println("shows simple search");
@@ -114,15 +121,63 @@ public class BrowserComponentTable extends UINamingContainer
 
     }
 
-    public void search(ActionEvent event)
+    public void search()
     {
-        System.out.println("Search button clicked!");
+        System.out.println("Search button is clicked!");
+        state.put("searchCriteria", searchCriteria);
+
+//        pageNum = 1;
+        state.put("pageNum", 1);
+
+        businessLogic();
+    }
+
+    public void firstPage()
+    {
+        System.out.println("FirstPage button is clicked!");
+
+//        pageNum = 1;
+//        state.put("pageNum", pageNum);
+
+        state.put("pageNum", 1);
+
+        businessLogic();
+    }
+
+    public void nextPage()
+    {
+        System.out.println("NextPage button is clicked!");
+
+        state.put("pageNum", ++pageNum);
+
+        businessLogic();
+    }
+
+    public void prevPage()
+    {
+        System.out.println("PrevPage button is clicked!");
+
+        state.put("pageNum", --pageNum);
+
+        businessLogic();
+    }
+
+    public void lastPage()
+    {
+        System.out.println("LastPage button is clicked!");
+
+//        pageNum = pagesCount;
+//        state.put("pageNum", pagesCount);
+
+        state.put("pageNum", pagesCount);
+
         businessLogic();
     }
 
     // Method executed when dataTable renders (during loading page or ajax request)
     public List<BrowserItem> getDataList()
     {
+//        System.out.println("getDataList");
         return dataList;
     }
 
@@ -130,13 +185,13 @@ public class BrowserComponentTable extends UINamingContainer
         return folderId;
     }
 
-    public void setPageNum(Integer pageNum) {
-        this.pageNum = pageNum;
-    }
-
-    public Integer getPageNum() {
-        return pageNum;
-    }
+//    public void setPageNum(Integer pageNum) {
+//        this.pageNum = pageNum;
+//    }
+//
+//    public Integer getPageNum() {
+//        return pageNum;
+//    }
 
     public boolean isPrevAllowed() {
         return pageNum > 1;
@@ -146,38 +201,28 @@ public class BrowserComponentTable extends UINamingContainer
         return pageNum + 1 <= pagesCount;
     }
 
-    public int getNextPageNum() {
-        return pageNum + 1;
-    }
+//    public int getNextPageNum() {
+//        return pageNum + 1;
+//    }
+//
+//    public int getPrevPageNum() {
+//        return pageNum - 1;
+//    }
 
-    public int getPrevPageNum() {
-        return pageNum - 1;
-    }
+//    public int getPagesCount() {
+//        return pagesCount;
+//    }
 
-    public int getPagesCount() {
-        return pagesCount;
-    }
-
-    public BrowserItem getSelectedItem() {
-        return selectedItem;
-    }
-
-    public void setSelectedItem(BrowserItem selectedItem) {
-        this.selectedItem = selectedItem;
-    }
 
 
     public String getSearchCriteria()
     {
-        Object value = getStateHelper().get(Properties.search);
-        return ((value != null) && !("".equals(value)))? (String)value : null;
-//        return searchCriteria;
+        return searchCriteria;
     }
 
     public void setSearchCriteria(String searchCriteria)
     {
-        getStateHelper().put(Properties.search, searchCriteria);
-//        this.searchCriteria = ((searchCriteria == null) || "".equals(searchCriteria) || "null".equals(searchCriteria)) ? null : searchCriteria;
+        this.searchCriteria = ((searchCriteria == null) || "".equals(searchCriteria) || "null".equals(searchCriteria)) ? null : searchCriteria;
     }
 
     public AdvSearchParams getAdvancedSearchParams() {

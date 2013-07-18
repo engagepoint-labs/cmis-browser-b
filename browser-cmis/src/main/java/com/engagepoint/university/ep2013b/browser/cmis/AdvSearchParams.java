@@ -199,7 +199,7 @@ public class AdvSearchParams implements Serializable {
             query.setString(paramCounter++, params.get("text").toString());
         }
 
-//        System.out.println("QueryStatement = " + query.toQueryString());
+        System.out.println("QueryStatement = " + query.toQueryString());
 
         return query;
 

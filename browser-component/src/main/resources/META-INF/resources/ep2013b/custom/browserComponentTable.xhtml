@@ -17,12 +17,12 @@
     <p:panel>
         <h:panelGrid columns="3">
             <p:column>
-                <p:inputText id="search" value="#{cc.searchCriteria}"/>
+                <p:inputText id="searchInput" value="#{cc.searchCriteria}"/>
             </p:column>
 
             <p:column>
                 <!--<p:commandButton id="searchbtn" update="search,table" ajax="true" icon="ui-icon-search" title="Search">-->
-                <p:commandButton id="searchbtn" action="browser" actionListener="#{cc.search}" icon="ui-icon-search" title="Search">
+                <p:commandButton id="searchbtn" action="#{cc.search}" update="table" icon="ui-icon-search" title="Search">
                     <f:param name="folderId" value="#{cc.folderId}"/>
                 </p:commandButton>
             </p:column>
@@ -94,29 +94,21 @@
 
             <!-- Paging Panel-->
             <f:facet name="footer">
-                <p:button id="butfirst" disabled="#{!cc.prevAllowed}"  icon="ui-icon-arrowthickstop-1-w">
+                <p:commandButton id="butfirst" action="#{cc.firstPage}" disabled="#{!cc.prevAllowed}" update="table" icon="ui-icon-arrowthickstop-1-w">
                     <f:param name="folderId" value="#{cc.folderId}"/>
-                    <f:param name="pageNum" value="1"/>
-                    <f:param name="searchCriteria" value="#{cc.searchCriteria}"/>
-                </p:button>
+                </p:commandButton>
 
-                <p:button id="butprev" disabled="#{!cc.prevAllowed}" icon="ui-icon-arrowthick-1-w">
+                <p:commandButton id="butprev" action="#{cc.prevPage}" disabled="#{!cc.prevAllowed}" update="table" icon="ui-icon-arrowthick-1-w">
                     <f:param name="folderId" value="#{cc.folderId}"/>
-                    <f:param name="pageNum" value="#{cc.prevPageNum}"/>
-                    <f:param name="searchCriteria" value="#{cc.searchCriteria}"/>
-                </p:button>
+                </p:commandButton>
 
-                <p:button id="butnext" disabled="#{!cc.nextAllowed}" icon="ui-icon-arrowthick-1-e">
+                <p:commandButton id="butnext" action="#{cc.nextPage}" disabled="#{!cc.nextAllowed}" update="table" icon="ui-icon-arrowthick-1-e">
                     <f:param name="folderId" value="#{cc.folderId}"/>
-                    <f:param name="pageNum" value="#{cc.nextPageNum}"/>
-                    <f:param name="searchCriteria" value="#{cc.searchCriteria}"/>
-                </p:button>
+                </p:commandButton>
 
-                <p:button id="butlast" disabled="#{!cc.nextAllowed}" icon="ui-icon-arrowthickstop-1-e">
+                <p:commandButton id="butlast" action="#{cc.lastPage}" disabled="#{!cc.nextAllowed}" update="table" icon="ui-icon-arrowthickstop-1-e">
                     <f:param name="folderId" value="#{cc.folderId}"/>
-                    <f:param name="pageNum" value="#{cc.pagesCount}"/>
-                    <f:param name="searchCriteria" value="#{cc.searchCriteria}"/>
-                </p:button>
+                </p:commandButton>
             </f:facet>
         </p:dataTable>
     </p:panel>

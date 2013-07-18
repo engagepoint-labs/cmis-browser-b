@@ -83,7 +83,7 @@ public class BrowserComponentTable extends UINamingContainer
         return dataList;
     }
 
-
+   // COMAND FOR RENDERED
     public boolean getRenderComponent(){
          if(isShowPanelButton() == true){
         return true;              }
@@ -92,12 +92,6 @@ public class BrowserComponentTable extends UINamingContainer
         }
 
     }
-
-
-//    public void savePerson(ActionEvent actionEvent) {
-//        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Welcome " ));
-////        FacesComponent.NAMESPACE
-//    }
 
 
 

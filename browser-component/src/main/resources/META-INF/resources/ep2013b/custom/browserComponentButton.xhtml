@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <cc:interface componentType="browserComponentButton">
+        <cc:attribute name="link"/>
+    </cc:interface>
+
+    <cc:implementation>
+        <p:layout id="buttonlayout" >
+        <p:layoutUnit position="center" >
+
+
+            <p:panel id="panel" header="New Folder" style="margin-bottom:10px;">
+                <p:messages id="messages"/>
+                <h:panelGrid columns="3">
+                    <h:outputLabel for="namefolder" value="Name:*"/>
+                    <p:inputText id="namefolder" required="true" label="Name">
+                        <f:validateLength minimum="2"/>
+                    </p:inputText>
+
+
+                    <p:message for="type"/>
+                    <h:outputLabel for = "type" value="Type:* "/>
+                    <p:selectOneMenu id="type">
+                        <f:selectItem itemLabel="Folder" itemValue="cmis:folder"/>
+                        <f:selectItem itemLabel="Document" itemValue="cmis:document"/>
+                    </p:selectOneMenu>
+
+                </h:panelGrid>
+            </p:panel>
+
+            <p:button id="save" value="Save" outcome="browser.xhtml?folderId=#{param.folderId}"
+                      styleClass="ui-priority-primary">
+                <!--<f:param name="name"/>-->
+                <!--<f:param type="type"/>-->
+            </p:button>
+
+            <p:button id="cancel" value="Cancel" outcome="browser.xhtml?folderId=#{param.folderId}"
+                      styleClass="ui-priority-primary"/>
+
+
+
+
+
+        </p:layoutUnit>
+      </p:layout>
+
+    </cc:implementation>
+</ui:composition>

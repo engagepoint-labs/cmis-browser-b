@@ -43,7 +43,7 @@
 
                     <!-- button : "New Folder"-->
 
-                        <p:button id="createfolde" value="New Folder" update = "table" ajax="true" action="#{cc.showPanelButton==true}" title="Create New Folder" rendered="true" >
+                        <p:button id="createfolde" value="New Folder" update = "table" ajax="true"  title="Create New Folder" rendered="true" >
                             <f:param name ="folderId" value="#{cc.folderId}" />
                             <f:param name="showPanelButton" value="#{cc.showPanelButton==false}"/>
                         </p:button>
@@ -70,6 +70,7 @@
                     <p:column headerText="Type">
                         <h:outputText value="#{item.type}" id="itemtype" />
                     </p:column>
+
 
                     <!-- Paging Panel-->
                     <f:facet name="footer">

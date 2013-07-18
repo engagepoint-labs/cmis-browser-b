@@ -16,7 +16,7 @@
         <p:growl id="messages" showDetail="true"/>
 
         <p:contextMenu id="treeContextMenu" for="tree">
-            <p:menuitem value="NewFolder" update="messages" outcome="browserFolder.xhtml" icon="ui-icon-search"/>
+            <p:menuitem value="NewFolder" update="messages"  icon="ui-icon-search"/>
             <p:menuitem value="Edit" update="messages" icon="ui-icon-search"/>
             <p:menuitem value="View" update="messages" actionListener="#{cc.displaySelectedSingle}" icon="ui-icon-search"/>
             <p:menuitem value="Delete" update="tree" actionListener="#{cc.deleteNode}" icon="ui-icon-close"/>

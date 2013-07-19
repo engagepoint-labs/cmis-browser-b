@@ -21,8 +21,7 @@
             </p:column>
 
             <p:column>
-                <!--<p:commandButton id="searchbtn" update="search,table" ajax="true" icon="ui-icon-search" title="Search">-->
-                <p:commandButton id="searchbtn" action="#{cc.search}" update="table" icon="ui-icon-search" title="Search">
+                <p:commandButton id="searchbtn" action="#{cc.simple}" update="table" icon="ui-icon-search" title="Search">
                     <f:param name="folderId" value="#{cc.folderId}"/>
                 </p:commandButton>
             </p:column>

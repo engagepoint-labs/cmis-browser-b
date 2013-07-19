@@ -40,22 +40,12 @@ public class BrowserComponentTable extends UINamingContainer
         System.out.println("Table");
 
         state = new StateManager(FacesContext.getCurrentInstance(), getClientId());
-
         service = BrowserFactory.getInstance("CMIS");
-        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         folderId = request.getParameter("folderId");
 
-
-//        String paramPageNum = request.getParameter("pageNum");
-//
-//        if (paramPageNum == null || "".equals(paramPageNum)) pageNum = 1;
-//        else pageNum = Integer.parseInt(paramPageNum);
-
-
-        searchCriteria = state.get("searchCriteria", null);
         pageNum = state.get("pageNum", 1);
-
         businessLogic();
     }
 
@@ -65,7 +55,10 @@ public class BrowserComponentTable extends UINamingContainer
     // Process received parameters and decided what data to show (folder items or search results)
     public void businessLogic()
     {
+        searchCriteria = state.get("searchCriteria", null);
+//        advancedSearchParams = state.get("advancedSearch", new AdvSearchParams());
         pageNum = state.get("pageNum", 1);
+
 
         if((folderId == null) || ("".equals(folderId))|| ("null".equals(folderId)))
         {
@@ -75,23 +68,16 @@ public class BrowserComponentTable extends UINamingContainer
         else currentFolder = service.findFolderById(folderId, pageNum, rowCounts);
 
         folderId = currentFolder.getId();
-        advancedSearchParams.setFolderId(folderId);
+
 
         System.out.println("businessLogic()");
         System.out.println("\tfolderID       = " + folderId);
         System.out.println("\tpage           = " + pageNum);
-        System.out.println("\tsimple search  = " + getSearchCriteria());
-//        System.out.println("\tadvanced search (isEmpty = "+ advancedSearchParams.isEmpty() +"):");
-//        System.out.println("\t\tid           = " + advancedSearchParams.getFolderId());
-//        System.out.println("\t\tDocumentType = " + advancedSearchParams.getDocumentType());
-//        System.out.println("\t\tDateFrom     = " + advancedSearchParams.getDateFrom());
-//        System.out.println("\t\tDateTo       = " + advancedSearchParams.getDateTo());
-//        System.out.println("\t\tContentType  = " + advancedSearchParams.getContentType());
-//        System.out.println("\t\tSize         = " + advancedSearchParams.getSize());
-//        System.out.println("\t\tText         = " + advancedSearchParams.getText());
+        System.out.println("\tsimple search  = " + searchCriteria);
+        System.out.println("\tadvanced search = "+ advancedSearchParams);
 
 
-        if ((searchCriteria == null) && advancedSearchParams.isEmpty())
+        if ((searchCriteria == null) && (advancedSearchParams.isEmpty()))
         {
             // not searching
             pagesCount = service.getTotalPagesFromFolderById(folderId, rowCounts);
@@ -104,13 +90,22 @@ public class BrowserComponentTable extends UINamingContainer
             if ((searchCriteria != null))
             {
                 // simple search
-//                System.out.println("shows simple search");
-                item = service.simpleSearch(folderId, getSearchCriteria(), pageNum, rowCounts);
+
+                item = service.simpleSearch(folderId, searchCriteria, pageNum, rowCounts);
             }
             else
             {
                 // advanced search
-//                System.out.println("shows advanced search");
+
+                advancedSearchParams.setFolderId(folderId);
+                System.out.println("\t\tid           = " + advancedSearchParams.getFolderId());
+                System.out.println("\t\tDocumentType = " + advancedSearchParams.getDocumentType());
+                System.out.println("\t\tDateFrom     = " + advancedSearchParams.getDateFrom());
+                System.out.println("\t\tDateTo       = " + advancedSearchParams.getDateTo());
+                System.out.println("\t\tContentType  = " + advancedSearchParams.getContentType());
+                System.out.println("\t\tSize         = " + advancedSearchParams.getSize());
+                System.out.println("\t\tText         = " + advancedSearchParams.getText());
+
                 item = service.advancedSearch(folderId, advancedSearchParams, pageNum, rowCounts);
             }
 
@@ -121,25 +116,34 @@ public class BrowserComponentTable extends UINamingContainer
 
     }
 
-    public void search()
+    public void simple()
     {
-        System.out.println("Search button is clicked!");
-        state.put("searchCriteria", searchCriteria);
+        System.out.println("Simple Search button is clicked!");
 
-//        pageNum = 1;
+        state.put("searchCriteria", searchCriteria);
+//        state.put("advancedSearch", advancedSearchParams);
         state.put("pageNum", 1);
 
         businessLogic();
     }
 
+//    public void searchAdvanced()
+//    {
+//        System.out.println("Advanced Search button is clicked!");
+//
+//        state.put("advancedSearch", advancedSearchParams);
+//        state.put("pageNum", 1);
+//
+//        businessLogic();
+//    }
+
+
     public void firstPage()
     {
         System.out.println("FirstPage button is clicked!");
 
-//        pageNum = 1;
-//        state.put("pageNum", pageNum);
-
-        state.put("pageNum", 1);
+        pageNum = 1;
+        state.put("pageNum", pageNum);
 
         businessLogic();
     }
@@ -148,7 +152,8 @@ public class BrowserComponentTable extends UINamingContainer
     {
         System.out.println("NextPage button is clicked!");
 
-        state.put("pageNum", ++pageNum);
+        pageNum++;
+        state.put("pageNum", pageNum);
 
         businessLogic();
     }
@@ -157,7 +162,8 @@ public class BrowserComponentTable extends UINamingContainer
     {
         System.out.println("PrevPage button is clicked!");
 
-        state.put("pageNum", --pageNum);
+        pageNum--;
+        state.put("pageNum", pageNum);
 
         businessLogic();
     }
@@ -166,9 +172,7 @@ public class BrowserComponentTable extends UINamingContainer
     {
         System.out.println("LastPage button is clicked!");
 
-//        pageNum = pagesCount;
-//        state.put("pageNum", pagesCount);
-
+        pageNum = pagesCount;
         state.put("pageNum", pagesCount);
 
         businessLogic();

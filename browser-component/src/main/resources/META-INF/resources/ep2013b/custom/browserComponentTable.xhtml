@@ -13,7 +13,7 @@
 
 <cc:implementation>
 
-    <p:layout id="tablelayout">
+    <p:layout id="tablelayout" rendered="#{cc.renderComponent}">
     <p:layoutUnit position="center" >
     <!-- Simple Search -->
     <p:panel>
@@ -134,6 +134,45 @@
     </p:layoutUnit>
     </p:layout>
 
+    <p:layout id="buttonlayout" rendered="#{!cc.renderComponent}">
+        <p:layoutUnit position="center">
+
+            <p:panel id="panel" style="margin-bottom:10px;">
+                <h:panelGrid columns="2">
+                    <h:outputLabel for="namefolder" value="Name:*"/>
+                    <p:inputText id="namefolder" required="true" label="Name" value="#{cc.newFolderItem.name}"/>
+
+
+                    <h:outputLabel for="type" value="Type:* "/>
+                    <h:selectOneMenu id="type" value="#{cc.newFolderItem.type}">
+                        <f:selectItem itemLabel="Folder" itemValue="cmis:folder"/>
+                        <f:selectItem itemLabel="Document" itemValue="cmis:document"/>
+                    </h:selectOneMenu>
+
+                    <p:commandButton id="savefolderbtn" action="#{cc.foo()}" value="Save" update = "@all" title="Create New Folder">
+                        <f:param name ="folderId" value="#{cc.folderId}" />
+                    </p:commandButton>
+
+                    <h:commandButton id="savefolderbtn2" actionListener="#{cc.foo()}" value="Save" title="Create New Folder">
+                        <f:param name ="folderId" value="#{cc.folderId}" />
+                        <f:ajax render = "@all"/>
+                    </h:commandButton>
+                </h:panelGrid>
+            </p:panel>
+
+            <!--<p:button id="save" value="Save" outcome="browser.xhtml?folderId=#{param.folderId}"-->
+                      <!--styleClass="ui-priority-primary">-->
+                <!--&lt;!&ndash;<f:param name="name"/>&ndash;&gt;-->
+                <!--&lt;!&ndash;<f:param type="type"/>&ndash;&gt;-->
+            <!--</p:button>-->
+
+
+
+            <p:button id="cancel" value="Cancel" outcome="browser.xhtml?folderId=#{param.folderId}"
+                      styleClass="ui-priority-primary"/>
+
+        </p:layoutUnit>
+    </p:layout>
 
 </cc:implementation>
 </ui:composition>

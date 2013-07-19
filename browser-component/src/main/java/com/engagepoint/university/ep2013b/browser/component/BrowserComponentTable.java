@@ -25,6 +25,8 @@ public class BrowserComponentTable extends UINamingContainer
     private String searchCriteria = "none";
     private BrowserItem currentFolder = null;
 
+    private NewFolderItem newFolderItem = new NewFolderItem();
+
     // Maximum of rows per page
     private static final int rowCounts = 2;
 
@@ -141,6 +143,20 @@ public class BrowserComponentTable extends UINamingContainer
     }
 
 
+    public void foo()
+    {
+        System.out.println("Save Folder - success");
+        System.out.println("name = " + newFolderItem.getName());
+        System.out.println("type = " + newFolderItem.getType());
+        service.createFolder(folderId, newFolderItem.getName(), newFolderItem.getType());
+
+
+        showPanelButton = true;
+        state.put("isShowNewFolder", showPanelButton);
+
+        businessLogic();
+    }
+
 
     // COMAND FOR RENDERED
     public boolean getRenderComponent()
@@ -214,8 +230,13 @@ public class BrowserComponentTable extends UINamingContainer
         return pageNum + 1 <= pagesCount;
     }
 
+    public NewFolderItem getNewFolderItem() {
+        return newFolderItem;
+    }
 
-
+    public void setNewFolderItem(NewFolderItem newFolderItem) {
+        this.newFolderItem = newFolderItem;
+    }
 
     public String getSearchCriteria()
     {
@@ -233,5 +254,27 @@ public class BrowserComponentTable extends UINamingContainer
 
     public void setAdvancedSearchParams(AdvSearchParams advancedSearchParams) {
         this.advancedSearchParams = advancedSearchParams;
+    }
+
+    public class NewFolderItem
+    {
+        private String name;
+        private String type;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
     }
 }

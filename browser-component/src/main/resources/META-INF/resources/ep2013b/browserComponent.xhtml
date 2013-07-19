@@ -8,13 +8,13 @@
       xmlns:custom="http://java.sun.com/jsf/composite/ep2013b/custom"
       xmlns:p="http://primefaces.org/ui">
 
-<cc:interface componentType="browserComponentTable">
+<cc:interface>
     <cc:attribute name="link"/>
 </cc:interface>
 
 <cc:implementation>
 
-    <p:layout id="componentlayout" rendered="#{cc.renderComponent}">
+    <p:layout id="componentlayout">
 
         <p:layoutUnit position="north" header="Location" size="auto">
             <custom:browserInfoPanel />
@@ -30,13 +30,6 @@
 
 
     </p:layout>
-
-    <p:layout id="newfolderlayout" rendered="#{!cc.renderComponent}">
-        <p:layoutUnit position="center" header="New Folder" resizable="true" >
-            <custom:browserComponentAction link="#{cc.attrs.link}"/>
-        </p:layoutUnit>
-    </p:layout>
-
 
 </cc:implementation>
 

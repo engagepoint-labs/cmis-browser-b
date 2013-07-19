@@ -15,6 +15,20 @@
         <module>browser-test</module>
     </modules>
 
+    <!--<properties>-->
+        <!--<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>-->
+        <!--<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>-->
+
+        <!--&lt;!&ndash; Sonar &ndash;&gt;-->
+        <!--<sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>-->
+        <!--<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>-->
+        <!--<sonar.jacoco.itReportPath>${project.basedir}/target/jacoco-it.exec</sonar.jacoco.itReportPath>-->
+        <!--&lt;!&ndash;<sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>&ndash;&gt;-->
+        <!--&lt;!&ndash;<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>&ndash;&gt;-->
+    <!--</properties>-->
+
+
+
     <!--for maven-release-plugin-->
     <scm>
         <url>https://github.com/engagepoint-labs/cmis-browser-b</url>
@@ -190,83 +204,189 @@
                 <version>2.1</version>
             </plugin>
 
+
+
+            <!--JaCoCo plugin-->
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>agent</id>
+                        <phase>pre-integration-test</phase>
+                        <goals><goal>prepare-agent</goal></goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>site</phase>
+                        <goals><goal>report</goal></goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+
+
             <!--JaCoCo plugin-->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.6.3.201306030806</version>
-
+                <!--<configuration>-->
+                <!--<includes>-->
+                <!--<include>**/*Test.java</include>-->
+                <!--</includes>-->
+                <!--</configuration>-->
                 <executions>
+
+
                     <execution>
-                        <id>prepare-agent</id>
+                        <id>pre-unit-test</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
                     <execution>
-                        <id>report</id>
-                        <phase>prepare-package</phase>
+                        <id>post-unit-test</id>
+                        <phase>test</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
                     </execution>
                     <execution>
-                        <id>check</id>
+                        <id>pre-integration-test</id>
+                        <phase>pre-integration-test</phase>
                         <goals>
-                            <goal>check</goal>
+                            <goal>prepare-agent</goal>
                         </goals>
                         <configuration>
-
-                            <rules>
-                                <rule>
-                                    <element>BUNDLE</element>
-                                    <limits>
-
-                                        <limit>
-                                            <counter>INSTRUCTION</counter>
-                                            <value>COVEREDRATIO</value>
-                                            <minimum>0</minimum>
-                                        </limit>
-
-                                        <limit>
-                                            <counter>BRANCH</counter>
-                                            <value>COVEREDRATIO</value>
-                                            <minimum>0</minimum>
-                                        </limit>
-
-                                        <limit>
-                                            <counter>COMPLEXITY</counter>
-                                            <value>MISSEDCOUNT</value>
-                                            <maximum>50</maximum>
-                                        </limit>
-
-                                        <limit>
-                                            <counter>LINE</counter>
-                                            <value>MISSEDCOUNT</value>
-                                            <maximum>50</maximum>
-                                        </limit>
-
-                                        <limit>
-                                            <counter>METHOD</counter>
-                                            <value>MISSEDCOUNT</value>
-                                            <maximum>50</maximum>
-                                        </limit>
-
-                                        <limit>
-                                            <counter>CLASS</counter>
-                                            <value>MISSEDCOUNT</value>
-                                            <maximum>50</maximum>
-                                        </limit>
-
-                                    </limits>
-
-                                </rule>
-                            </rules>
+                            <destFile>${project.build.directory}/jacoco-it.exec</destFile>
+                            <propertyName>failsafe.argLine</propertyName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>post-integration-test</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+                            <dataFile>${project.build.directory}/jacoco-it.exec</dataFile>
+                            <outputDirectory>${project.reporting.outputDirectory}/jacoco-it</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
-
             </plugin>
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-failsafe-plugin</artifactId>-->
+                <!--&lt;!&ndash;<configuration>&ndash;&gt;-->
+                <!--&lt;!&ndash;<argLine>${failsafe.argLine}</argLine>&ndash;&gt;-->
+                <!--&lt;!&ndash;</configuration>&ndash;&gt;-->
+                <!--<version>2.9</version>-->
+
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>integration-test</id>-->
+                        <!--<goals>-->
+                            <!--<goal>integration-test</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                    <!--<execution>-->
+                        <!--<id>verify</id>-->
+                        <!--<goals>-->
+                            <!--<goal>verify</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-compiler-plugin</artifactId>-->
+                <!--<version>2.5.1</version>-->
+            <!--</plugin>-->
+
+
+
+
+            <!--&lt;!&ndash;JaCoCo plugin&ndash;&gt;-->
+            <!--<plugin>-->
+                <!--<groupId>org.jacoco</groupId>-->
+                <!--<artifactId>jacoco-maven-plugin</artifactId>-->
+                <!--<version>0.6.3.201306030806</version>-->
+
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>prepare-agent</id>-->
+                        <!--<goals>-->
+                            <!--<goal>prepare-agent</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                    <!--<execution>-->
+                        <!--<id>report</id>-->
+                        <!--<phase>prepare-package</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>report</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                    <!--<execution>-->
+                        <!--<id>check</id>-->
+                        <!--<goals>-->
+                            <!--<goal>check</goal>-->
+                        <!--</goals>-->
+                        <!--<configuration>-->
+
+                            <!--<rules>-->
+                                <!--<rule>-->
+                                    <!--<element>BUNDLE</element>-->
+                                    <!--<limits>-->
+
+                                        <!--<limit>-->
+                                            <!--<counter>INSTRUCTION</counter>-->
+                                            <!--<value>COVEREDRATIO</value>-->
+                                            <!--<minimum>0</minimum>-->
+                                        <!--</limit>-->
+
+                                        <!--<limit>-->
+                                            <!--<counter>BRANCH</counter>-->
+                                            <!--<value>COVEREDRATIO</value>-->
+                                            <!--<minimum>0</minimum>-->
+                                        <!--</limit>-->
+
+                                        <!--<limit>-->
+                                            <!--<counter>COMPLEXITY</counter>-->
+                                            <!--<value>MISSEDCOUNT</value>-->
+                                            <!--<maximum>50</maximum>-->
+                                        <!--</limit>-->
+
+                                        <!--<limit>-->
+                                            <!--<counter>LINE</counter>-->
+                                            <!--<value>MISSEDCOUNT</value>-->
+                                            <!--<maximum>50</maximum>-->
+                                        <!--</limit>-->
+
+                                        <!--<limit>-->
+                                            <!--<counter>METHOD</counter>-->
+                                            <!--<value>MISSEDCOUNT</value>-->
+                                            <!--<maximum>50</maximum>-->
+                                        <!--</limit>-->
+
+                                        <!--<limit>-->
+                                            <!--<counter>CLASS</counter>-->
+                                            <!--<value>MISSEDCOUNT</value>-->
+                                            <!--<maximum>50</maximum>-->
+                                        <!--</limit>-->
+
+                                    <!--</limits>-->
+
+                                <!--</rule>-->
+                            <!--</rules>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+
+            <!--</plugin>-->
         </plugins>
     </build>
 

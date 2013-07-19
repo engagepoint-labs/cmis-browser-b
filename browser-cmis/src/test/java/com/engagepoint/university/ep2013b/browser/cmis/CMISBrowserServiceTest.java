@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
 
-public class CMISBrowserServiceIT
+public class CMISBrowserServiceTest
 {
     private CMISBrowserService cmisBrowserService = new CMISBrowserService();
 

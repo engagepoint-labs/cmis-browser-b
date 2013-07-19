@@ -12,7 +12,7 @@ import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 
 
-public class EverySearchTypeIT {
+public class EverySearchTypeTest {
 
     private CMISBrowserService cmisBrowserService = new CMISBrowserService();
 

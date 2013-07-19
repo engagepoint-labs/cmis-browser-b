@@ -8,8 +8,6 @@ import com.engagepoint.university.ep2013b.browser.cmis.AdvSearchParams;
 import javax.faces.component.FacesComponent;
 import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -21,7 +19,7 @@ public class BrowserComponentTable extends UINamingContainer
     private String folderId;
     private Integer pageNum;
     private int pagesCount;
-
+    private boolean showPanelButton = true;
     // List which should be displayed
     private List<BrowserItem> dataList;
     private String searchCriteria = "none";
@@ -44,9 +42,13 @@ public class BrowserComponentTable extends UINamingContainer
 
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         folderId = request.getParameter("folderId");
+//        String paramShowPanelButton = request.getParameter("showPanelButton");
 
         pageNum = state.get("pageNum", 1);
         businessLogic();
+
+//        if (paramShowPanelButton == null || "".equals(paramShowPanelButton)) showPanelButton = true;
+//        else showPanelButton = Boolean.parseBoolean(paramShowPanelButton);
     }
 
 
@@ -71,6 +73,7 @@ public class BrowserComponentTable extends UINamingContainer
 
 
         System.out.println("businessLogic()");
+        System.out.println("\tmode           = " + state.get("mode"));
         System.out.println("\tfolderID       = " + folderId);
         System.out.println("\tpage           = " + pageNum);
         System.out.println("\tsimple search  = " + searchCriteria);
@@ -127,16 +130,29 @@ public class BrowserComponentTable extends UINamingContainer
         businessLogic();
     }
 
-//    public void searchAdvanced()
-//    {
-//        System.out.println("Advanced Search button is clicked!");
-//
-//        state.put("advancedSearch", advancedSearchParams);
-//        state.put("pageNum", 1);
-//
-//        businessLogic();
-//    }
+    public void newFolder()
+    {
+        System.out.println("New Folder button is clicked!");
 
+        showPanelButton = false;
+        state.put("isShowNewFolder", showPanelButton);
+
+        businessLogic();
+    }
+
+
+
+    // COMAND FOR RENDERED
+    public boolean getRenderComponent()
+    {
+        Boolean isShow = state.get("isShowNewFolder", true);
+
+        showPanelButton = isShow;
+
+        System.out.println("getRenderComponent() = " + showPanelButton);
+
+        return showPanelButton;
+    }
 
     public void firstPage()
     {
@@ -189,13 +205,6 @@ public class BrowserComponentTable extends UINamingContainer
         return folderId;
     }
 
-//    public void setPageNum(Integer pageNum) {
-//        this.pageNum = pageNum;
-//    }
-//
-//    public Integer getPageNum() {
-//        return pageNum;
-//    }
 
     public boolean isPrevAllowed() {
         return pageNum > 1;
@@ -205,17 +214,6 @@ public class BrowserComponentTable extends UINamingContainer
         return pageNum + 1 <= pagesCount;
     }
 
-//    public int getNextPageNum() {
-//        return pageNum + 1;
-//    }
-//
-//    public int getPrevPageNum() {
-//        return pageNum - 1;
-//    }
-
-//    public int getPagesCount() {
-//        return pagesCount;
-//    }
 
 
 

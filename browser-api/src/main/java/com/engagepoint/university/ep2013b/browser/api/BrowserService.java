@@ -14,9 +14,6 @@ public interface BrowserService
     public BrowserItem findFolderById(String id, int page, int rowCount);
     public BrowserItem findFolderByPath(String path, int page, int rowCount);
 
-    public int getTotalPagesFromFolderById(String id, int rowCounts);
-    public int getTotalPagesFromFolderByPath(String id, int rowCounts);
-
     // Possibly better create some Util class for this method ?
     public String getCurrentLocationById(String id);
     public BrowserItem simpleSearch(String id, String parameter, int page, int rowCounts);

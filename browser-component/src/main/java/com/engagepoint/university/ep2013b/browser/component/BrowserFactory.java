@@ -10,16 +10,28 @@ import java.util.ServiceLoader;
 
 public class BrowserFactory
 {
+    private static BrowserService instance;
+
     // Creating new data service provider for specific name
     public static BrowserService getInstance(String serviceName) throws NullPointerException
     {
-        ServiceLoader<BrowserService> services = ServiceLoader.load(BrowserService.class);
-
-        for (BrowserService i : services)
+        // create instance only if not created before with the same serviceName
+        if ((instance == null) || (!instance.getServiceName().equalsIgnoreCase(serviceName)))
         {
-            if (i.getServiceName().equalsIgnoreCase(serviceName)) return i;
+            ServiceLoader<BrowserService> services = ServiceLoader.load(BrowserService.class);
+
+            for (BrowserService i : services)
+            {
+                if (i.getServiceName().equalsIgnoreCase(serviceName))
+                {
+                    instance = i;
+                    break;
+                };
+            }
+
         }
 
-        throw new NullPointerException("Service with name \"" + serviceName + "\" not found.");
+        if (instance == null) throw new NullPointerException("Service with name \"" + serviceName + "\" not found.");
+        return instance;
     }
 }

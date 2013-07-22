@@ -51,59 +51,50 @@ public class BrowserComponentTable extends UINamingContainer
     // Process received parameters and decided what data to show (folder items or search results)
     public void businessLogic()
     {
-        if((folderId == null) || ("".equals(folderId))|| ("null".equals(folderId)))
-        {
-            // first time at the page
-            currentFolder = service.findFolderByPath("/", 1, rowCounts);
-        }
-        else currentFolder = service.findFolderById(folderId, pageNum, rowCounts);
-
-        folderId = currentFolder.getId();
-        advancedSearchParams.setFolderId(folderId);
-
-
         System.out.println("businessLogic()");
         System.out.println("\tfolderID       = " + folderId);
         System.out.println("\tpage           = " + pageNum);
         System.out.println("\tsimple search  = " + searchCriteria);
-        System.out.println("\tadvanced search (isEmpty = "+ advancedSearchParams.isEmpty() +"):");
-        System.out.println("\t\tid           = " + advancedSearchParams.getFolderId());
-        System.out.println("\t\tDocumentType = " + advancedSearchParams.getDocumentType());
-        System.out.println("\t\tDateFrom     = " + advancedSearchParams.getDateFrom());
-        System.out.println("\t\tDateTo       = " + advancedSearchParams.getDateTo());
-        System.out.println("\t\tContentType  = " + advancedSearchParams.getContentType());
-        System.out.println("\t\tSize         = " + advancedSearchParams.getSize());
-        System.out.println("\t\tText         = " + advancedSearchParams.getText());
-
 
         if ((searchCriteria == null) && advancedSearchParams.isEmpty())
         {
             // not searching
-            pagesCount = service.getTotalPagesFromFolderById(folderId, rowCounts);
-            dataList = currentFolder.getChildren();
+            if((folderId == null) || ("".equals(folderId))|| ("null".equals(folderId)))
+            {
+                // first time at the page
+                currentFolder = service.findFolderByPath("/", 1, rowCounts);
+            }
+            else currentFolder = service.findFolderById(folderId, pageNum, rowCounts);
+
+            folderId = currentFolder.getId();
         }
         else
         {
-            BrowserItem item;
-
             if ((searchCriteria != null))
             {
                 // simple search
-//                System.out.println("shows simple search");
-                item = service.simpleSearch(folderId, searchCriteria, pageNum, rowCounts);
+                currentFolder = service.simpleSearch(folderId, searchCriteria, pageNum, rowCounts);
             }
             else
             {
                 // advanced search
-//                System.out.println("shows advanced search");
-                item = service.advancedSearch(folderId, advancedSearchParams, pageNum, rowCounts);
-            }
+                advancedSearchParams.setFolderId(folderId);
 
-            pagesCount = item.getTotalPages();
-            dataList = item.getChildren();
+                System.out.println("\tadvanced search (isEmpty = "+ advancedSearchParams.isEmpty() +"):");
+                System.out.println("\t\tid           = " + advancedSearchParams.getFolderId());
+                System.out.println("\t\tDocumentType = " + advancedSearchParams.getDocumentType());
+                System.out.println("\t\tDateFrom     = " + advancedSearchParams.getDateFrom());
+                System.out.println("\t\tDateTo       = " + advancedSearchParams.getDateTo());
+                System.out.println("\t\tContentType  = " + advancedSearchParams.getContentType());
+                System.out.println("\t\tSize         = " + advancedSearchParams.getSize());
+                System.out.println("\t\tText         = " + advancedSearchParams.getText());
+
+                currentFolder = service.advancedSearch(folderId, advancedSearchParams, pageNum, rowCounts);
+            }
         }
 
-
+        pagesCount = currentFolder.getTotalPages();
+        dataList = currentFolder.getChildren();
     }
 
     // Method executed when dataTable renders (during loading page or ajax request)

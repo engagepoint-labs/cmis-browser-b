@@ -12,8 +12,10 @@ public class CMISBrowserServiceIT
     @Test
     public void test_getTotalPagesFromFolderById()
     {
+        BrowserItem item = cmisBrowserService.findFolderById("101", 1, 2);
+
         int expected = 3;
-        int actual = cmisBrowserService.getTotalPagesFromFolderById("101", 2);
+        int actual = item.getTotalPages();
 
         assertEquals(expected, actual);
     }
@@ -21,8 +23,10 @@ public class CMISBrowserServiceIT
     @Test
     public void test_getTotalPagesFromFolderByPath()
     {
+        BrowserItem item = cmisBrowserService.findFolderByPath("/My_Folder-0-0", 1, 2);
+
         int expected = 3;
-        int actual = cmisBrowserService.getTotalPagesFromFolderByPath("/My_Folder-0-0", 2);
+        int actual = item.getTotalPages();
 
         assertEquals(expected, actual);
     }

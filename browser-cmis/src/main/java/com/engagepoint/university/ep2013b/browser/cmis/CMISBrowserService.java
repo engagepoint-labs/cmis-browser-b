@@ -53,24 +53,12 @@ public class CMISBrowserService implements BrowserService {
         return findFolder(current, page, rowCount);
     }
 
-
-    @Override
-    public int getTotalPagesFromFolderById(String id, int rowCounts) {
-        Folder current = (Folder) session.getObject(id);
-        return getTotalPagesFromFolder(current, rowCounts);
-    }
-
-    @Override
-    public int getTotalPagesFromFolderByPath(String path, int rowCounts) {
-        Folder current = (Folder) session.getObjectByPath(path);
-        return getTotalPagesFromFolder(current, rowCounts);
-    }
-
     @Override
     public String getCurrentLocationById(String id) {
         Folder current = (Folder) session.getObject(id);
         return getCurrentLocation(current);
     }
+
 
     private List<BrowserItem> findParents(Folder current) {
         List<BrowserItem> parents = new ArrayList<BrowserItem>();
@@ -110,6 +98,16 @@ public class CMISBrowserService implements BrowserService {
 
             // if enabled paging (paging only for selected folder, other parents without)
             if (((page != 0) && (rowCounts != 0)) && (i.equals(parents.get(0)))) {
+                // count total pages
+                long total = children.getTotalNumItems();
+                long rest = total % rowCounts;
+                int totalPages = (int) (total - rest) / rowCounts;
+
+                if (rest > 0) totalPages++;
+
+                i.setTotalPages(totalPages);
+
+                // count skipped records
                 long skip = (page - 1) * rowCounts;
                 children = current.getChildren().skipTo(skip).getPage(rowCounts);
             }
@@ -151,22 +149,6 @@ public class CMISBrowserService implements BrowserService {
 
         result = parents.get(0);
         return result;
-    }
-
-    private int getTotalPagesFromFolder(Folder current, int rowCounts) {
-        ItemIterable<CmisObject> children = current.getChildren();
-
-        long total = children.getTotalNumItems();
-
-        long rest = total % rowCounts;
-
-        int totalPages = (int) (total - rest) / rowCounts;
-
-        if ( rest > 0) {
-            totalPages++;
-        }
-
-       return totalPages;
     }
 
     private String getCurrentLocation(Folder current) {

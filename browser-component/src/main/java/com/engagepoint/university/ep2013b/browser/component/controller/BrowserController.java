@@ -1,16 +1,42 @@
 package com.engagepoint.university.ep2013b.browser.component.controller;
 
-/**
- * Created with IntelliJ IDEA.
- * User: evgeniy.shevchenko
- * Date: 7/22/13
- * Time: 3:27 PM
- * To change this template use File | Settings | File Templates.
- */
+import com.engagepoint.university.ep2013b.browser.api.BrowserItem;
+import com.engagepoint.university.ep2013b.browser.cmis.AdvSearchParams;
+
+import org.primefaces.model.TreeNode;
+import java.util.List;
+
 public interface BrowserController {
     void init();
     void tablePrev();
     void tableNext();
     void tableFirst();
     void tableLast();
+
+    // Tree
+    BrowserItem getRootFolder(BrowserItem item);
+    void makeTree(BrowserItem item, TreeNode parent);
+    TreeNode getRoot();
+    String getCurrentLocation();
+    TreeNode getSelectedNode();
+    void displaySelectedSingle();
+    void deleteNode();
+
+    // Table
+    void businessLogic();
+    List<BrowserItem> getDataList();
+    String getFolderId();
+    void setPageNum(Integer pageNum);
+    Integer getPageNum();
+    boolean isPrevAllowed();
+    boolean isNextAllowed();
+    int getNextPageNum();
+    int getPrevPageNum();
+    int getPagesCount();
+    BrowserItem getSelectedItem();
+    void setSelectedItem(BrowserItem selectedItem);
+    String getSearchCriteria();
+    void setSearchCriteria(String searchCriteria);
+    AdvSearchParams getAdvancedSearchParams();
+    void setAdvancedSearchParams(AdvSearchParams advancedSearchParams);
 }

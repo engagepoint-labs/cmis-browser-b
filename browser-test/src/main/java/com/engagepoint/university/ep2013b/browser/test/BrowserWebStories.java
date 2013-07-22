@@ -36,6 +36,7 @@ public class BrowserWebStories extends JUnitStories {
     private ContextView contextView = new LocalFrameContextView().sized(500, 100);
 
     public BrowserWebStories() {
+        System.out.println("============b");
         // If configuring lifecycle per-stories, you need to ensure that you a same-thread executor
         if ( lifecycleSteps instanceof PerStoriesWebDriverSteps ){
             configuredEmbedder().useExecutorService(MoreExecutors.sameThreadExecutor());
@@ -44,6 +45,7 @@ public class BrowserWebStories extends JUnitStories {
 
     @Override
     public Configuration configuration() {
+        System.out.println("============a");
         Class<? extends Embeddable> embeddableClass = this.getClass();
         return new SeleniumConfiguration()
                 .useSeleniumContext(context)
@@ -58,6 +60,7 @@ public class BrowserWebStories extends JUnitStories {
 
     @Override
     public InjectableStepsFactory stepsFactory() {
+        System.out.println("============0");
         Configuration configuration = configuration();
         return new InstanceStepsFactory(configuration,
                 new BrowserWebSteps(testedPage),
@@ -68,14 +71,18 @@ public class BrowserWebStories extends JUnitStories {
 
     @Override
     protected List<String> storyPaths() {
-        return new StoryFinder()
+        System.out.println("============2");
+        List<String> stories =new StoryFinder()
                 .findPaths(codeLocationFromClass(this.getClass()).getFile(), asList("**/*.story"), null);
+        System.out.println("============"+stories);
+        return stories;
     }
 
     // This Embedder is used by Maven or Ant and it will override anything set in the constructor
     public static class SameThreadEmbedder extends Embedder {
 
         public SameThreadEmbedder() {
+            System.out.println("============1");
             useExecutorService(MoreExecutors.sameThreadExecutor());
         }
 

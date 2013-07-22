@@ -13,13 +13,13 @@
     <packaging>jar</packaging>
 
     <properties>
+
+
+
     <jbehave.core.version>4.0-beta-3</jbehave.core.version>
     <jbehave.site.version>3.1.1</jbehave.site.version>
     <jbehave.web.version>3.6</jbehave.web.version>
     <embeddables>**/*Stories.java</embeddables>
-        <skipTests>false</skipTests>
-
-
             <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
             <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
@@ -27,9 +27,11 @@
             <sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
             <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
             <sonar.jacoco.itReportPath>${project.basedir}/target/jacoco-it.exec</sonar.jacoco.itReportPath>
-            <skipTests>false</skipTests>
+            <jbehave.tests.source.destination>${project.build.directory}/generated-test-sources</jbehave.tests.source.destination>
 
     </properties>
+
+
 
 
     <dependencyManagement>
@@ -42,22 +44,10 @@
         </dependencies>
     </dependencyManagement>
 
+
     <dependencies>
 
 
-        <dependency>
-            <groupId>com.sun.faces</groupId>
-            <artifactId>jsf-api</artifactId>
-            <version>2.2.0</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.sun.faces</groupId>
-            <artifactId>jsf-impl</artifactId>
-            <version>2.2.0</version>
-            <scope>provided</scope>
-        </dependency>
 
         <dependency>
             <groupId>org.apache.chemistry.opencmis</groupId>
@@ -66,41 +56,14 @@
             <scope>provided</scope>
         </dependency>
 
-        <!--jbehave-->
-        <dependency>
-            <groupId>org.jbehave</groupId>
-            <artifactId>jbehave-core</artifactId>
-            <version>${jbehave.core.version}</version>
-            <classifier>resources</classifier>
-            <type>zip</type>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jbehave.site</groupId>
-            <artifactId>jbehave-site-resources</artifactId>
-            <version>${jbehave.site.version}</version>
-            <type>zip</type>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jbehave.web</groupId>
-            <artifactId>jbehave-web-selenium</artifactId>
-            <version>3.5.4</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jbehave.web</groupId>
-            <artifactId>jbehave-web-runner</artifactId>
-            <version>3.5.4</version>
-        </dependency>
-
 
         <dependency>
             <groupId>com.engagepoint.university.ep2013b</groupId>
-            <artifactId>browser-component</artifactId>
-            <type>war</type>
+            <artifactId>browser-test</artifactId>
             <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
+
 
 
         <!-- browser-api -->
@@ -132,6 +95,8 @@
             <scope>provided</scope>
         </dependency>
 
+
+
         <!-- for TreeNode -->
         <dependency>
             <groupId>javax</groupId>
@@ -145,23 +110,43 @@
             <artifactId>primefaces</artifactId>
             <version>3.5</version>
         </dependency>
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.2.2</version>
+        </dependency>
+
+
     </dependencies>
+
+
+
 
   <build>
       <resources>
           <resource>
               <directory>src/main/java</directory>
               <filtering>true</filtering>
-              <excludes>
-                  <exclude>**/*.java</exclude>
-              </excludes>
+
           </resource>
           <resource>
               <directory>src/main/resources</directory>
               <filtering>true</filtering>
           </resource>
       </resources>
-
+      <testSourceDirectory>${project.build.directory}/generated-test-sources</testSourceDirectory>
+      <testResources>
+          <testResource>
+              <directory>src/test/resources</directory>
+          </testResource>
+          <testResource>
+                  <directory>${project.build.directory}/generated-test-sources</directory>
+                  <filtering>true</filtering>
+                  <includes>
+                      <include>**/**.story</include>
+                  </includes>
+          </testResource>
+      </testResources>
       <pluginManagement>
           <plugins>
               <plugin>
@@ -169,6 +154,7 @@
                   <artifactId>maven-compiler-plugin</artifactId>
                   <version>2.1</version>
                   <configuration>
+
                       <source>1.5</source>
                       <target>1.5</target>
                   </configuration>
@@ -177,42 +163,57 @@
       </pluginManagement>
 
       <plugins>
-          <plugin> <!-- genrate war of same project -->
-               <groupId>org.apache.maven.plugins</groupId>
-                     <artifactId>maven-war-plugin</artifactId>
-                   <executions>
-                       <execution>
-                             <phase>test</phase>
-                              <configuration>
-                               </configuration>
-                              <goals>
-                                <goal>war</goal>
-                              </goals>
-                            </execution>
-                          </executions>
-                    </plugin>
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-dependency-plugin</artifactId>
+              <version>2.6</version>
+              <executions>
+                  <execution>
+                      <phase>generate-test-sources</phase>
+                      <goals>
+                          <goal>unpack</goal>
+                      </goals>
+                      <configuration>
+
+                          <artifactItems>
+                              <artifactItem>
+                                  <groupId>${project.groupId}</groupId>
+                                  <artifactId>browser-test</artifactId>
+                                  <version>${project.version}</version>
+                                  <type>jar</type>
+                                  <classifier>sources</classifier>
+                                  <overWrite>true</overWrite>
+                                  <excludes>META-INF/**</excludes>
+                                  <outputDirectory>${jbehave.tests.source.destination}</outputDirectory>
+                              </artifactItem>
+                      </artifactItems>
+                      </configuration>
+                  </execution>
+              </executions>
+          </plugin>
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-war-plugin</artifactId>
+              <version>2.3</version>
+              <configuration>
+                  <archiveClasses>true</archiveClasses>
+                  <warSourceDirectory>src/test/webapp</warSourceDirectory>
+                  <primaryArtifact>false</primaryArtifact>
+
+              </configuration>
+              <executions>
+                  <execution>
+                      <id>repack</id>
+                      <phase>pre-integration-test</phase>
+                      <goals>
+                          <goal>exploded</goal>
+                      </goals>
+                  </execution>
+              </executions>
+          </plugin>
 
 
-          <!--<plugin>-->
-              <!--<artifactId>maven-assembly-plugin</artifactId>-->
-              <!--<version>2.4</version>-->
-              <!--<configuration>-->
-                  <!--<descriptorRefs>-->
-                      <!--<descriptorRef>jar-with-dependencies</descriptorRef>-->
-                  <!--</descriptorRefs>-->
-              <!--</configuration>-->
-              <!--<executions>-->
-                  <!--<execution>-->
-                      <!--<id>make-assembly</id> &lt;!&ndash; this is used for inheritance merges &ndash;&gt;-->
-                      <!--<phase>package</phase> &lt;!&ndash; bind to the packaging phase &ndash;&gt;-->
-                      <!--<goals>-->
-                          <!--<goal>single</goal>-->
-                      <!--</goals>-->
-                  <!--</execution>-->
-              <!--</executions>-->
-          <!--</plugin>-->
-
-    <plugin>
+        <plugin>
         <groupId>org.jbehave</groupId>
         <artifactId>jbehave-maven-plugin</artifactId>
         <version>${jbehave.core.version}</version>
@@ -225,17 +226,13 @@
                 </goals>
 
                 <configuration>
+                    <scope>test</scope>
                     <skip>${skipTests}</skip>
+                    <testSourceDirectory>${project.build.directory}/generated-test-sources</testSourceDirectory>
+                    <testOutputDirectory>${project.build.directory}/test-classes</testOutputDirectory>
+
                 </configuration>
             </execution>
-        </executions>
-    </plugin>
-    <plugin>
-        <groupId>org.jbehave</groupId>
-        <artifactId>jbehave-maven-plugin</artifactId>
-        <version>4.0-beta-3</version>
-
-        <executions>
             <execution>
                 <id>run-stories</id>
                 <phase>integration-test</phase>
@@ -244,47 +241,62 @@
                         <include>**/*Stories.java</include>
                     </includes>
                     <executorsClass>org.jbehave.core.embedder.executors.SameThreadExecutors</executorsClass>
+                    <scope>test</scope>
+                    <testSourceDirectory>${project.build.directory}/generated-test-sources</testSourceDirectory>
+                    <testOutputDirectory>${project.build.directory}/test-classes</testOutputDirectory>
 
                     <skip>${skipTests}</skip>
                 </configuration>
                 <goals>
-                    <goal>run-stories-as-embeddables</goal>
+                    <goal>run-stories-as-paths</goal>
                 </goals>
             </execution>
         </executions>
-        <dependencies>
-            <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>11.0.1</version>
-            </dependency>
-        </dependencies>
+            <dependencies>
+                <dependency>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                    <version>1.2.16</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.jbehave.web</groupId>
+                    <artifactId>jbehave-web-selenium</artifactId>
+                    <version>3.5.4</version>
+                </dependency>
+                <dependency>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                    <version>11.0.1</version>
+                </dependency>
+            </dependencies>
     </plugin>
 
 
 
-      <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-failsafe-plugin</artifactId>
-          <version>2.9</version>
-          <!--<configuration>-->
-          <!--<argLine>${failsafe.argLine}</argLine>-->
-          <!--</configuration>-->
-          <executions>
-              <execution>
-                  <id>integration-test</id>
-                  <goals>
-                      <goal>integration-test</goal>
-                  </goals>
-              </execution>
-              <execution>
-                  <id>verify</id>
-                  <goals>
-                      <goal>verify</goal>
-                  </goals>
-              </execution>
-          </executions>
-      </plugin>
+
+
+      <!--<plugin>-->
+          <!--<groupId>org.apache.maven.plugins</groupId>-->
+          <!--<artifactId>maven-failsafe-plugin</artifactId>-->
+          <!--<version>2.9</version>-->
+          <!--&lt;!&ndash;<configuration>&ndash;&gt;-->
+          <!--&lt;!&ndash;<argLine>${failsafe.argLine}</argLine>&ndash;&gt;-->
+          <!--&lt;!&ndash;</configuration>&ndash;&gt;-->
+          <!--<executions>-->
+              <!--<execution>-->
+                  <!--<id>integration-test</id>-->
+                  <!--<goals>-->
+                      <!--<goal>integration-test</goal>-->
+                  <!--</goals>-->
+              <!--</execution>-->
+              <!--<execution>-->
+                  <!--<id>verify</id>-->
+                  <!--<goals>-->
+                      <!--<goal>verify</goal>-->
+                  <!--</goals>-->
+              <!--</execution>-->
+          <!--</executions>-->
+      <!--</plugin>-->
 
 
               <plugin>
@@ -319,6 +331,7 @@
                   <configuration>
                       <container>
                           <containerId>tomcat7x</containerId>
+                          <log>${project.build.directory}/cargo.log</log>
                           <zipUrlInstaller>
                               <url>http://apache.cp.if.ua/tomcat/tomcat-7/v7.0.41/bin/apache-tomcat-7.0.41.zip</url>
                               <downloadDir>${user.home}/.m2/cargo/containers</downloadDir>
@@ -341,12 +354,12 @@
                           <properties>
                               <cargo.servlet.port>18080</cargo.servlet.port>
                               <!--for using debug-->
-                              <!--<cargo.jvmargs>-->
-                              <!---Xdebug-->
-                              <!---Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=18000-->
-                              <!---Xnoagent-->
-                              <!---Djava.compiler=NONE-->
-                              <!--</cargo.jvmargs>-->
+                             <!-- <cargo.jvmargs>
+                              -Xdebug
+                              -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=18000
+                              -Xnoagent
+                              -Djava.compiler=NONE
+                              </cargo.jvmargs>-->
                           </properties>
                       </configuration>
 
@@ -362,11 +375,11 @@
                           </deployable>
 
                           <!-- browser-showcase -->
-                          <deployable>
-                              <groupId>com.engagepoint.university.ep2013b</groupId>
-                              <artifactId>browser-component</artifactId>
-                              <type>war</type>
-                              <properties>
+                      <deployable>
+                          <type>war</type>
+                          <location>${project.build.directory}/${project.build.finalName}</location>
+
+                          <properties>
                                   <context>/browser</context>
                               </properties>
                           </deployable>

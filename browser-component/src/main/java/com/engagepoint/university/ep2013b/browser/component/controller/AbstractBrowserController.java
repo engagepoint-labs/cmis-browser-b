@@ -1,5 +1,7 @@
 package com.engagepoint.university.ep2013b.browser.component.controller;
 
+import javax.annotation.PostConstruct;
+
 /**
  * Created with IntelliJ IDEA.
  * User: evgeniy.shevchenko
@@ -8,9 +10,10 @@ package com.engagepoint.university.ep2013b.browser.component.controller;
  * To change this template use File | Settings | File Templates.
  */
 public abstract class AbstractBrowserController implements BrowserController {
-
+    private int currentPage;
+    @PostConstruct
     public void init() {
-        //To change body of implemented methods use File | Settings | File Templates.
+        currentPage=0;
     }
 
     public void tablePrev() {
@@ -22,10 +25,11 @@ public abstract class AbstractBrowserController implements BrowserController {
     }
 
     public void tableFirst() {
-        //To change body of implemented methods use File | Settings | File Templates.
+        currentPage--;
     }
 
     public void tableLast() {
-        //To change body of implemented methods use File | Settings | File Templates.
+        currentPage++;
     }
+
 }

@@ -17,33 +17,5 @@ import javax.faces.bean.ViewScoped;
 @ViewScoped
 public class ShowcaseBrowserController extends AbstractBrowserController{
 
-    @Override
-    public void init() {
-       // super.init();    //To change body of overridden methods use File | Settings | File Templates.
 
-    }
-
-    @Override
-    public void tablePrev() {
-        //super.tablePrev();    //To change body of overridden methods use File | Settings | File Templates.
-
-    }
-
-    @Override
-    public void tableNext() {
-        //super.tableNext();    //To change body of overridden methods use File | Settings | File Templates.
-
-    }
-
-    @Override
-    public void tableFirst() {
-        //super.tableFirst();    //To change body of overridden methods use File | Settings | File Templates.
-
-    }
-
-    @Override
-    public void tableLast() {
-        //super.tableLast();    //To change body of overridden methods use File | Settings | File Templates.
-
-    }
 }

@@ -59,39 +59,36 @@ public class BrowserComponentTable extends UINamingContainer
 //        advancedSearchParams = state.get("advancedSearch", new AdvSearchParams());
         pageNum = state.get("pageNum", 1);
 
-
-        if((folderId == null) || ("".equals(folderId))|| ("null".equals(folderId)))
-        {
-            // first time at the page
-            currentFolder = service.findFolderByPath("/", 1, rowCounts);
-        }
-        else currentFolder = service.findFolderById(folderId, pageNum, rowCounts);
-
-        folderId = currentFolder.getId();
-
-
         System.out.println("businessLogic()");
         System.out.println("\tfolderID       = " + folderId);
         System.out.println("\tpage           = " + pageNum);
         System.out.println("\tsimple search  = " + searchCriteria);
         System.out.println("\tadvanced search = "+ advancedSearchParams);
 
-
         if ((searchCriteria == null) && (advancedSearchParams.isEmpty()))
         {
             // not searching
-            pagesCount = service.getTotalPagesFromFolderById(folderId, rowCounts);
-            dataList = currentFolder.getChildren();
+
+            if((folderId == null) || ("".equals(folderId))|| ("null".equals(folderId)))
+            {
+                // first time at the page
+                currentFolder = service.findFolderByPath("/", 1, rowCounts);
+            }
+            else currentFolder = service.findFolderById(folderId, pageNum, rowCounts);
+
+            folderId = currentFolder.getId();
+
+//            // old functions, new BrowserItem.totalPages introduced
+//            int total = service.getTotalPagesFromFolderById(folderId, rowCounts);
+//            currentFolder.setTotalPages(total);
         }
         else
         {
-            BrowserItem item;
-
             if ((searchCriteria != null))
             {
                 // simple search
 
-                item = service.simpleSearch(folderId, searchCriteria, pageNum, rowCounts);
+                currentFolder = service.simpleSearch(folderId, searchCriteria, pageNum, rowCounts);
             }
             else
             {
@@ -106,14 +103,13 @@ public class BrowserComponentTable extends UINamingContainer
                 System.out.println("\t\tSize         = " + advancedSearchParams.getSize());
                 System.out.println("\t\tText         = " + advancedSearchParams.getText());
 
-                item = service.advancedSearch(folderId, advancedSearchParams, pageNum, rowCounts);
+                currentFolder = service.advancedSearch(folderId, advancedSearchParams, pageNum, rowCounts);
             }
-
-            pagesCount = item.getTotalPages();
-            dataList = item.getChildren();
         }
 
-
+        folderId = currentFolder.getId();
+        pagesCount = currentFolder.getTotalPages();
+        dataList = currentFolder.getChildren();
     }
 
     public void simple()

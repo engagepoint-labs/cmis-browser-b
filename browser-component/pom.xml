@@ -12,24 +12,6 @@
     <artifactId>browser-component</artifactId>
     <packaging>jar</packaging>
 
-    <properties>
-
-
-
-    <jbehave.core.version>4.0-beta-3</jbehave.core.version>
-    <jbehave.site.version>3.1.1</jbehave.site.version>
-    <jbehave.web.version>3.6</jbehave.web.version>
-    <embeddables>**/*Stories.java</embeddables>
-            <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-            <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
-            <!-- Sonar -->
-            <sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
-            <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-            <sonar.jacoco.itReportPath>${project.basedir}/target/jacoco-it.exec</sonar.jacoco.itReportPath>
-            <jbehave.tests.source.destination>${project.build.directory}/generated-test-sources</jbehave.tests.source.destination>
-
-    </properties>
 
 
 
@@ -57,12 +39,6 @@
         </dependency>
 
 
-        <dependency>
-            <groupId>com.engagepoint.university.ep2013b</groupId>
-            <artifactId>browser-test</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
 
 
 
@@ -72,7 +48,12 @@
             <artifactId>browser-api</artifactId>
             <version>${project.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.engagepoint.university.ep2013b</groupId>
+            <artifactId>browser-test</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
         <!-- browser-cmis -->
         <dependency>
             <groupId>com.engagepoint.university.ep2013b</groupId>
@@ -80,20 +61,7 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!-- JSF -->
-        <dependency>
-            <groupId>com.sun.faces</groupId>
-            <artifactId>jsf-api</artifactId>
-            <version>2.2.0</version>
-            <scope>provided</scope>
-        </dependency>
 
-        <dependency>
-            <groupId>com.sun.faces</groupId>
-            <artifactId>jsf-impl</artifactId>
-            <version>2.2.0</version>
-            <scope>provided</scope>
-        </dependency>
 
 
 
@@ -117,6 +85,7 @@
         </dependency>
 
 
+
     </dependencies>
 
 
@@ -127,26 +96,16 @@
           <resource>
               <directory>src/main/java</directory>
               <filtering>true</filtering>
-
+              <excludes>
+                   <exclude>*.java</exclude>
+              </excludes>
           </resource>
           <resource>
               <directory>src/main/resources</directory>
               <filtering>true</filtering>
           </resource>
       </resources>
-      <testSourceDirectory>${project.build.directory}/generated-test-sources</testSourceDirectory>
-      <testResources>
-          <testResource>
-              <directory>src/test/resources</directory>
-          </testResource>
-          <testResource>
-                  <directory>${project.build.directory}/generated-test-sources</directory>
-                  <filtering>true</filtering>
-                  <includes>
-                      <include>**/**.story</include>
-                  </includes>
-          </testResource>
-      </testResources>
+
       <pluginManagement>
           <plugins>
               <plugin>
@@ -154,7 +113,6 @@
                   <artifactId>maven-compiler-plugin</artifactId>
                   <version>2.1</version>
                   <configuration>
-
                       <source>1.5</source>
                       <target>1.5</target>
                   </configuration>
@@ -163,34 +121,7 @@
       </pluginManagement>
 
       <plugins>
-          <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-dependency-plugin</artifactId>
-              <version>2.6</version>
-              <executions>
-                  <execution>
-                      <phase>generate-test-sources</phase>
-                      <goals>
-                          <goal>unpack</goal>
-                      </goals>
-                      <configuration>
 
-                          <artifactItems>
-                              <artifactItem>
-                                  <groupId>${project.groupId}</groupId>
-                                  <artifactId>browser-test</artifactId>
-                                  <version>${project.version}</version>
-                                  <type>jar</type>
-
-                                  <overWrite>true</overWrite>
-                                  <excludes>META-INF/**</excludes>
-                                  <outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
-                              </artifactItem>
-                      </artifactItems>
-                      </configuration>
-                  </execution>
-              </executions>
-          </plugin>
           <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-war-plugin</artifactId>
@@ -212,7 +143,6 @@
               </executions>
           </plugin>
 
-
         <plugin>
         <groupId>org.jbehave</groupId>
         <artifactId>jbehave-maven-plugin</artifactId>
@@ -226,29 +156,12 @@
                 </goals>
 
                 <configuration>
-                    <scope>test</scope>
+
                     <skip>${skipTests}</skip>
 
                 </configuration>
             </execution>
-            <execution>
-                <id>run-stories</id>
-                <phase>integration-test</phase>
-                <configuration>
-                    <includes>
-                        <include>**/*Stories*</include>
-                    </includes>
-                    <executorsClass>org.jbehave.core.embedder.executors.SameThreadExecutors</executorsClass>
-                    <scope>test</scope>
 
-
-
-                    <skip>${skipTests}</skip>
-                </configuration>
-                <goals>
-                    <goal>run-stories-as-paths</goal>
-                </goals>
-            </execution>
         </executions>
             <dependencies>
                 <dependency>
@@ -273,93 +186,17 @@
 
 
 
-      <!--<plugin>-->
-          <!--<groupId>org.apache.maven.plugins</groupId>-->
-          <!--<artifactId>maven-failsafe-plugin</artifactId>-->
-          <!--<version>2.9</version>-->
-          <!--&lt;!&ndash;<configuration>&ndash;&gt;-->
-          <!--&lt;!&ndash;<argLine>${failsafe.argLine}</argLine>&ndash;&gt;-->
-          <!--&lt;!&ndash;</configuration>&ndash;&gt;-->
-          <!--<executions>-->
-              <!--<execution>-->
-                  <!--<id>integration-test</id>-->
-                  <!--<goals>-->
-                      <!--<goal>integration-test</goal>-->
-                  <!--</goals>-->
-              <!--</execution>-->
-              <!--<execution>-->
-                  <!--<id>verify</id>-->
-                  <!--<goals>-->
-                      <!--<goal>verify</goal>-->
-                  <!--</goals>-->
-              <!--</execution>-->
-          <!--</executions>-->
-      <!--</plugin>-->
 
 
-              <plugin>
+
+
+          <plugin>
                   <groupId>org.codehaus.cargo</groupId>
                   <artifactId>cargo-maven2-plugin</artifactId>
-                  <version>1.4.0</version>
-
-                  <executions>
-                      <execution>
-                          <id>start-container</id>
-                          <phase>pre-integration-test</phase>
-                          <goals>
-                              <goal>start</goal>
-                          </goals>
-                          <configuration>
-                              <skip>${skipTests}</skip>
-                          </configuration>
-                      </execution>
-
-                      <execution>
-                          <id>stop-container</id>
-                          <phase>post-integration-test</phase>
-                          <goals>
-                              <goal>stop</goal>
-                          </goals>
-                          <configuration>
-                              <skip>${skipTests}</skip>
-                          </configuration>
-                      </execution>
-                  </executions>
 
                   <configuration>
-                      <container>
-                          <containerId>tomcat7x</containerId>
-                          <log>${project.build.directory}/cargo.log</log>
-                          <zipUrlInstaller>
-                              <url>http://apache.cp.if.ua/tomcat/tomcat-7/v7.0.41/bin/apache-tomcat-7.0.41.zip</url>
-                              <downloadDir>${user.home}/.m2/cargo/containers</downloadDir>
-                          </zipUrlInstaller>
 
-                          <!--JSF for Tomcat server (not needed for glassfish) -->
-                          <dependencies>
-                              <dependency>
-                                  <groupId>com.sun.faces</groupId>
-                                  <artifactId>jsf-api</artifactId>
-                              </dependency>
-                              <dependency>
-                                  <groupId>com.sun.faces</groupId>
-                                  <artifactId>jsf-impl</artifactId>
-                              </dependency>
-                          </dependencies>
-                      </container>
 
-                      <configuration>
-                          <properties>
-                              <cargo.servlet.port>18080</cargo.servlet.port>
-                              <!--for using debug-->
-                             <!-- <cargo.jvmargs>
-                              -Xdebug
-                              -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=18000
-                              -Xnoagent
-                              -Djava.compiler=NONE
-                              </cargo.jvmargs>-->
-                          </properties>
-                      </configuration>
 
                       <deployables>
                           <!-- OpenCMIS Server InMemory -->

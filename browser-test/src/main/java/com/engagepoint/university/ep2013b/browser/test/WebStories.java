@@ -1,4 +1,4 @@
-package com.engagepoint.university.ep2013b.browser.component.test;
+package com.engagepoint.university.ep2013b.browser.test;
 
 import com.engagepoint.university.ep2013b.browser.test.pages.TestedPage;
 import com.engagepoint.university.ep2013b.browser.test.steps.BrowserWebSteps;
@@ -13,34 +13,22 @@ import org.jbehave.core.reporters.StoryReporterBuilder;
 import org.jbehave.core.steps.InjectableStepsFactory;
 import org.jbehave.core.steps.InstanceStepsFactory;
 import org.jbehave.core.steps.SilentStepMonitor;
-import org.jbehave.web.selenium.ContextView;
-import org.jbehave.web.selenium.LocalFrameContextView;
-import org.jbehave.web.selenium.PerStoriesWebDriverSteps;
-import org.jbehave.web.selenium.PropertyWebDriverProvider;
-import org.jbehave.web.selenium.SeleniumConfiguration;
-import org.jbehave.web.selenium.SeleniumContext;
-import org.jbehave.web.selenium.SeleniumStepMonitor;
-import org.jbehave.web.selenium.WebDriverProvider;
-import org.jbehave.web.selenium.WebDriverScreenshotOnFailure;
-import org.jbehave.web.selenium.WebDriverSteps;
+import org.jbehave.web.selenium.*;
 
 import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.jbehave.core.io.CodeLocations.codeLocationFromClass;
-import static org.jbehave.core.reporters.Format.CONSOLE;
-import static org.jbehave.core.reporters.Format.HTML;
-import static org.jbehave.core.reporters.Format.TXT;
-import static org.jbehave.core.reporters.Format.XML;
-
+import static org.jbehave.core.io.CodeLocations.codeLocationFromPath;
+import static org.jbehave.core.reporters.Format.*;
 /**
  * Created with IntelliJ IDEA.
- * User: evgeniy.shevchenko
- * Date: 7/22/13
- * Time: 5:23 PM
+ * User: iryna.domachuk
+ * Date: 6/19/13
+ * Time: 7:40 PM
  * To change this template use File | Settings | File Templates.
  */
-public class BrowserComponentIT extends JUnitStories {
+public abstract class WebStories extends JUnitStories {
 
     private WebDriverProvider driverProvider = new PropertyWebDriverProvider();
     private WebDriverSteps lifecycleSteps = new PerStoriesWebDriverSteps(driverProvider);
@@ -48,9 +36,7 @@ public class BrowserComponentIT extends JUnitStories {
     private SeleniumContext context = new SeleniumContext();
     private ContextView contextView = new LocalFrameContextView().sized(500, 100);
 
-    public BrowserComponentIT() {
-        System.out.println("============b");
-        // If configuring lifecycle per-stories, you need to ensure that you a same-thread executor
+    public WebStories() {
         if ( lifecycleSteps instanceof PerStoriesWebDriverSteps ){
             configuredEmbedder().useExecutorService(MoreExecutors.sameThreadExecutor());
         }
@@ -58,7 +44,6 @@ public class BrowserComponentIT extends JUnitStories {
 
     @Override
     public Configuration configuration() {
-        System.out.println("============a");
         Class<? extends Embeddable> embeddableClass = this.getClass();
         return new SeleniumConfiguration()
                 .useSeleniumContext(context)
@@ -73,7 +58,6 @@ public class BrowserComponentIT extends JUnitStories {
 
     @Override
     public InjectableStepsFactory stepsFactory() {
-        System.out.println("============0");
         Configuration configuration = configuration();
         return new InstanceStepsFactory(configuration,
                 new BrowserWebSteps(testedPage),
@@ -81,24 +65,7 @@ public class BrowserComponentIT extends JUnitStories {
                 new WebDriverScreenshotOnFailure(driverProvider, configuration.storyReporterBuilder()));
     }
 
-
     @Override
-    protected List<String> storyPaths() {
-        System.out.println("============2");
-        List<String> stories =new StoryFinder()
-                .findPaths(codeLocationFromClass(this.getClass()).getFile(), asList("**/*.story"), null);
-        System.out.println("============"+stories);
-        return stories;
-    }
-
-    // This Embedder is used by Maven or Ant and it will override anything set in the constructor
-    public static class SameThreadEmbedder extends Embedder {
-
-        public SameThreadEmbedder() {
-            System.out.println("============1");
-            useExecutorService(MoreExecutors.sameThreadExecutor());
-        }
-
-    }
+    protected abstract List<String> storyPaths();
 
 }

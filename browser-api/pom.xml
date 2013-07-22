@@ -13,15 +13,6 @@
     <packaging>jar</packaging>
 
     <dependencies>
-        <!-- OpenCMIS -->
-        <dependency>
-            <groupId>org.apache.chemistry.opencmis</groupId>
-            <artifactId>chemistry-opencmis-client-impl</artifactId>
-        </dependency>
-
-
-        <!-- browser-showcase -->
-
 
         <!-- JUnit -->
         <dependency>
@@ -31,13 +22,4 @@
         </dependency>
     </dependencies>
 
-
-
-
-    <build>
-            <plugins>
-
-
-   </plugins>
-  </build>
 </project>

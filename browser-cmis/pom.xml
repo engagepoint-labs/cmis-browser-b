@@ -11,34 +11,7 @@
 
     <artifactId>browser-cmis</artifactId>
     <packaging>jar</packaging>
-
-
-
-
-
-        <!-- browser-api -->
-        <!--<dependency>-->
-            <!--<groupId>com.engagepoint.university.ep2013b</groupId>-->
-            <!--<artifactId>browser-api</artifactId>-->
-            <!--<version>${project.version}</version>-->
-        <!--</dependency>-->
-
-
     <dependencies>
-
-        <dependency>
-            <groupId>com.sun.faces</groupId>
-            <artifactId>jsf-api</artifactId>
-            <version>2.2.0</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.sun.faces</groupId>
-            <artifactId>jsf-impl</artifactId>
-            <version>2.2.0</version>
-            <scope>provided</scope>
-        </dependency>
 
         <dependency>
             <groupId>org.apache.chemistry.opencmis</groupId>
@@ -74,66 +47,7 @@
             <plugin>
                 <groupId>org.codehaus.cargo</groupId>
                 <artifactId>cargo-maven2-plugin</artifactId>
-                <version>1.4.0</version>
-
-                <executions>
-                    <execution>
-                        <id>start-container</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>start</goal>
-                        </goals>
-                        <configuration>
-                            <skip>${skipTests}</skip>
-                        </configuration>
-                    </execution>
-
-                    <execution>
-                        <id>stop-container</id>
-                        <phase>post-integration-test</phase>
-                        <goals>
-                            <goal>stop</goal>
-                        </goals>
-                        <configuration>
-                            <skip>${skipTests}</skip>
-                        </configuration>
-                    </execution>
-                </executions>
-
                 <configuration>
-                    <container>
-                        <containerId>tomcat7x</containerId>
-                        <zipUrlInstaller>
-                            <url>http://apache.cp.if.ua/tomcat/tomcat-7/v7.0.41/bin/apache-tomcat-7.0.41.zip</url>
-                            <downloadDir>${user.home}/.m2/cargo/containers</downloadDir>
-                        </zipUrlInstaller>
-
-                        <!--JSF for Tomcat server (not needed for glassfish) -->
-                        <dependencies>
-                            <dependency>
-                                <groupId>com.sun.faces</groupId>
-                                <artifactId>jsf-api</artifactId>
-                            </dependency>
-                            <dependency>
-                                <groupId>com.sun.faces</groupId>
-                                <artifactId>jsf-impl</artifactId>
-                            </dependency>
-                        </dependencies>
-                    </container>
-
-                    <configuration>
-                        <properties>
-                            <cargo.servlet.port>18080</cargo.servlet.port>
-                            <!--for using debug-->
-                            <!-- <cargo.jvmargs>
-                             -Xdebug
-                             -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=18000
-                             -Xnoagent
-                             -Djava.compiler=NONE
-                             </cargo.jvmargs>-->
-                        </properties>
-                    </configuration>
-
                     <deployables>
                         <!-- OpenCMIS Server InMemory -->
                         <deployable>
@@ -144,18 +58,10 @@
                                 <context>/server</context>
                             </properties>
                         </deployable>
-
-
                     </deployables>
                 </configuration>
-
             </plugin>
-
-
      </plugins>
-
-
-
         <resources>
             <!-- Include implementations of Service Provided Interface -->
             <resource>

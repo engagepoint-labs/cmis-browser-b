@@ -8,10 +8,6 @@ import java.util.List;
 
 public interface BrowserController {
     void init();
-    void tablePrev();
-    void tableNext();
-    void tableFirst();
-    void tableLast();
 
     // Tree
     BrowserItem getRootFolder(BrowserItem item);

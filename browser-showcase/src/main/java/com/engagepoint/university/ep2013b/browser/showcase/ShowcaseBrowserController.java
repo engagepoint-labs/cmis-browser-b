@@ -17,5 +17,4 @@ import javax.faces.bean.ViewScoped;
 @ViewScoped
 public class ShowcaseBrowserController extends AbstractBrowserController{
 
-
 }

@@ -7,25 +7,44 @@ import com.engagepoint.university.ep2013b.browser.cmis.AdvSearchParams;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public abstract class AbstractBrowserController implements BrowserController {
 
+    @PostConstruct
     public void init() {
-    }
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        folderId = request.getParameter("folderId");
 
-    public void tablePrev() {
-    }
+        // Table
+        searchCriteria = request.getParameter("searchCriteria");
 
-    public void tableNext() {
-    }
+        String paramPageNum = request.getParameter("pageNum");
 
-    public void tableFirst() {
-    }
+        if (paramPageNum == null || "".equals(paramPageNum)) pageNum = 1;
+        else pageNum = Integer.parseInt(paramPageNum);
 
-    public void tableLast() {
+        // Tree
+
+        BrowserItem currentFolder = null;
+        if ((folderId == null) || ("".equals(folderId))|| ("null".equals(folderId)))
+        {
+            currentFolder = service.findFolderByPath("/");
+            folderId = currentFolder.getId();
+        }
+        else currentFolder = service.findFolderById(folderId);
+
+
+        root = new DefaultTreeNode("Root", null);
+        // create tree from RootFolder (for showing all parents of current folder)
+        BrowserItem rootFolder = getRootFolder(currentFolder);
+        makeTree(rootFolder, root);
+        currentLocation = service.getCurrentLocationById(folderId);
+
     }
 
     private BrowserService service;

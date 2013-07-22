@@ -61,7 +61,7 @@
             <groupId>com.engagepoint.university.ep2013b</groupId>
             <artifactId>browser-test</artifactId>
             <version>${project.version}</version>
-            <scope>provided</scope>
+            <scope>test</scope>
         </dependency>
 
 
@@ -181,10 +181,10 @@
                                   <artifactId>browser-test</artifactId>
                                   <version>${project.version}</version>
                                   <type>jar</type>
-                                  <classifier>sources</classifier>
+
                                   <overWrite>true</overWrite>
                                   <excludes>META-INF/**</excludes>
-                                  <outputDirectory>${jbehave.tests.source.destination}</outputDirectory>
+                                  <outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
                               </artifactItem>
                       </artifactItems>
                       </configuration>
@@ -228,8 +228,6 @@
                 <configuration>
                     <scope>test</scope>
                     <skip>${skipTests}</skip>
-                    <testSourceDirectory>${project.build.directory}/generated-test-sources</testSourceDirectory>
-                    <testOutputDirectory>${project.build.directory}/test-classes</testOutputDirectory>
 
                 </configuration>
             </execution>
@@ -238,12 +236,12 @@
                 <phase>integration-test</phase>
                 <configuration>
                     <includes>
-                        <include>**/*Stories.java</include>
+                        <include>**/*Stories*</include>
                     </includes>
                     <executorsClass>org.jbehave.core.embedder.executors.SameThreadExecutors</executorsClass>
                     <scope>test</scope>
-                    <testSourceDirectory>${project.build.directory}/generated-test-sources</testSourceDirectory>
-                    <testOutputDirectory>${project.build.directory}/test-classes</testOutputDirectory>
+
+
 
                     <skip>${skipTests}</skip>
                 </configuration>

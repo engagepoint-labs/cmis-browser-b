@@ -8,14 +8,8 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
     <artifactId>browser-component</artifactId>
     <packaging>jar</packaging>
-
-
-
-
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -25,23 +19,13 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-
     <dependencies>
-
-
-
         <dependency>
             <groupId>org.apache.chemistry.opencmis</groupId>
             <artifactId>chemistry-opencmis-server-inmemory</artifactId>
             <type>war</type>
             <scope>provided</scope>
         </dependency>
-
-
-
-
-
         <!-- browser-api -->
         <dependency>
             <groupId>com.engagepoint.university.ep2013b</groupId>
@@ -60,18 +44,6 @@
             <artifactId>browser-cmis</artifactId>
             <version>${project.version}</version>
         </dependency>
-
-
-
-
-
-        <!-- for TreeNode -->
-        <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
-            <version>6.0</version>
-        </dependency>
-
         <!-- PrimeFaces -->
         <dependency>
             <groupId>org.primefaces</groupId>
@@ -84,144 +56,121 @@
             <version>1.2.2</version>
         </dependency>
 
-
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>6.0</version>
+            <scope>provided</scope>
+        </dependency>
 
     </dependencies>
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <filtering>true</filtering>
+                <excludes>
+                    <exclude>*.java</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
 
-
-
-
-  <build>
-      <resources>
-          <resource>
-              <directory>src/main/java</directory>
-              <filtering>true</filtering>
-              <excludes>
-                   <exclude>*.java</exclude>
-              </excludes>
-          </resource>
-          <resource>
-              <directory>src/main/resources</directory>
-              <filtering>true</filtering>
-          </resource>
-      </resources>
-
-      <pluginManagement>
-          <plugins>
-              <plugin>
-                  <groupId>org.apache.maven.plugins</groupId>
-                  <artifactId>maven-compiler-plugin</artifactId>
-                  <version>2.1</version>
-                  <configuration>
-                      <source>1.5</source>
-                      <target>1.5</target>
-                  </configuration>
-              </plugin>
-          </plugins>
-      </pluginManagement>
-
-      <plugins>
-
-          <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-war-plugin</artifactId>
-              <version>2.3</version>
-              <configuration>
-                  <archiveClasses>true</archiveClasses>
-                  <warSourceDirectory>src/test/webapp</warSourceDirectory>
-                  <primaryArtifact>false</primaryArtifact>
-
-              </configuration>
-              <executions>
-                  <execution>
-                      <id>repack</id>
-                      <phase>pre-integration-test</phase>
-                      <goals>
-                          <goal>exploded</goal>
-                      </goals>
-                  </execution>
-              </executions>
-          </plugin>
-
-        <plugin>
-        <groupId>org.jbehave</groupId>
-        <artifactId>jbehave-maven-plugin</artifactId>
-        <version>${jbehave.core.version}</version>
-        <executions>
-            <execution>
-                <id>unpack-view-resources</id>
-                <phase>process-resources</phase>
-                <goals>
-                    <goal>unpack-view-resources</goal>
-                </goals>
-
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>2.1</version>
+                    <configuration>
+                        <source>1.5</source>
+                        <target>1.5</target>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+         <plugins>
+             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.3</version>
                 <configuration>
-
-                    <skip>${skipTests}</skip>
-
+                    <archiveClasses>true</archiveClasses>
+                    <warSourceDirectory>src/test/webapp</warSourceDirectory>
+                    <primaryArtifact>false</primaryArtifact>
                 </configuration>
-            </execution>
-
-        </executions>
-            <dependencies>
-                <dependency>
-                    <groupId>log4j</groupId>
-                    <artifactId>log4j</artifactId>
-                    <version>1.2.16</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.jbehave.web</groupId>
-                    <artifactId>jbehave-web-selenium</artifactId>
-                    <version>3.5.4</version>
-                </dependency>
-                <dependency>
-                    <groupId>com.google.guava</groupId>
-                    <artifactId>guava</artifactId>
-                    <version>11.0.1</version>
-                </dependency>
-            </dependencies>
-    </plugin>
-
-
-
-
-
-
-
-
-
-          <plugin>
-                  <groupId>org.codehaus.cargo</groupId>
-                  <artifactId>cargo-maven2-plugin</artifactId>
-
-                  <configuration>
-
-
-
-                      <deployables>
-                          <!-- OpenCMIS Server InMemory -->
-                          <deployable>
-                              <groupId>org.apache.chemistry.opencmis</groupId>
-                              <artifactId>chemistry-opencmis-server-inmemory</artifactId>
-                              <type>war</type>
-                              <properties>
-                                  <context>/server</context>
-                              </properties>
-                          </deployable>
-
-                          <!-- browser-showcase -->
-                      <deployable>
-                          <type>war</type>
-                          <location>${project.build.directory}/${project.build.finalName}</location>
-
-                          <properties>
-                                  <context>/browser</context>
-                              </properties>
-                          </deployable>
-                      </deployables>
-                  </configuration>
-
-              </plugin>
-    </plugins>
+                <executions>
+                    <execution>
+                        <id>repack</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exploded</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.jbehave</groupId>
+                <artifactId>jbehave-maven-plugin</artifactId>
+                <version>${jbehave.core.version}</version>
+                <executions>
+                    <execution>
+                        <id>unpack-view-resources</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>unpack-view-resources</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>log4j</groupId>
+                        <artifactId>log4j</artifactId>
+                        <version>1.2.16</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.jbehave.web</groupId>
+                        <artifactId>jbehave-web-selenium</artifactId>
+                        <version>3.5.4</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.google.guava</groupId>
+                        <artifactId>guava</artifactId>
+                        <version>11.0.1</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.cargo</groupId>
+                <artifactId>cargo-maven2-plugin</artifactId>
+                <configuration>
+                    <deployables>
+                        <!-- OpenCMIS Server InMemory -->
+                        <deployable>
+                            <groupId>org.apache.chemistry.opencmis</groupId>
+                            <artifactId>chemistry-opencmis-server-inmemory</artifactId>
+                            <type>war</type>
+                            <properties>
+                                <context>/server</context>
+                            </properties>
+                        </deployable>
+                        <!-- browser-showcase -->
+                        <deployable>
+                            <type>war</type>
+                            <location>${project.build.directory}/${project.build.finalName}</location>
+                            <properties>
+                                <context>/browser</context>
+                            </properties>
+                        </deployable>
+                    </deployables>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 </project>

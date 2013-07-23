@@ -26,10 +26,13 @@
 
         <!-- Sonar -->
         <sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
-        <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
         <sonar.jacoco.itReportPath>${project.basedir}/target/jacoco-it.exec</sonar.jacoco.itReportPath>
         <sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
+        <sonar.java.coveragePlugin>cobertura</sonar.java.coveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+        <sonar.cobertura.reportPath>${project.build.directory}/site/cobertura/coverage.xml</sonar.cobertura.reportPath>
+        <sonar.surefire.reportsPath>${project.build.directory}/surefire-reports</sonar.surefire.reportsPath>
+        <sonar.failsafe.reportsPath>${project.build.directory}/failsafe-reports</sonar.failsafe.reportsPath>
     </properties>
 
     <dependencyManagement>
@@ -179,9 +182,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <configuration>
-                    <argLine>${failsafe.argLine}</argLine>
-                </configuration>
+
                 <version>2.9</version>
 
                 <executions>
@@ -205,29 +206,26 @@
                 <version>2.5.1</version>
             </plugin>
 
-
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+            </plugin>
 
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.6.3.201306030806</version>
-                <configuration>
-                    <destFile>${basedir}/target/coverage-reports/jacoco-unit.exec</destFile>
-                    <dataFile>${basedir}/target/coverage-reports/jacoco-unit.exec</dataFile>
-                </configuration>
                 <executions>
                     <execution>
-                        <id>prepare-agent</id>
+                        <id>jacoco-initialize</id>
+                        <phase>process-resources</phase>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
-
-
-
                     <execution>
-                        <id>report</id>
-                        <phase>prepare-package</phase>
+                        <id>jacoco-site</id>
+                        <phase>post-integration-test</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
@@ -238,18 +236,15 @@
                             <goal>check</goal>
                         </goals>
                         <configuration>
-
                             <rules>
                                 <rule>
                                     <element>BUNDLE</element>
                                     <limits>
-
                                         <limit>
                                             <counter>INSTRUCTION</counter>
                                             <value>COVEREDRATIO</value>
                                             <minimum>0</minimum>
                                         </limit>
-
                                         <limit>
                                             <counter>BRANCH</counter>
                                             <value>COVEREDRATIO</value>
@@ -287,7 +282,6 @@
                         </configuration>
                     </execution>
                 </executions>
-
             </plugin>
 
             <plugin>

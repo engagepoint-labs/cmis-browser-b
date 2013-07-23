@@ -16,10 +16,10 @@
 
     <h:form id="form" style="margin: 10px; border-bottom-width: 1px">
 
-        <h3>Browser</h3>
+        <h3> <h:outputText value="Browser"/>  </h3>
         <p/>
 
-        <ep2013b:browserComponent link="#{request.contextPath}/browser.xhtml" controller="#{showcaseBrowserController}" />
+        <ep2013b:browserComponent id="royal" link="#{request.contextPath}/browser.xhtml" controller="#{showcaseBrowserController}" />
     </h:form>
 </h:body>
 </html>

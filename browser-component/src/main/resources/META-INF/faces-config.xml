@@ -3,26 +3,7 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
 
-    <component>
-        <component-type>browserComponentTree</component-type>
-        <component-class>com.engagepoint.university.ep2013b.browser.component.BrowserComponentTree</component-class>
-        <property>
-            <property-name>link</property-name>
-            <property-class>java.lang.String</property-class>
-        </property>
-    </component>
 
-    <component>
-        <component-type>browserComponentTable</component-type>
-        <component-class>com.engagepoint.university.ep2013b.browser.component.BrowserComponentTable</component-class>
-        <property>
-            <property-name>link</property-name>
-            <property-class>java.lang.String</property-class>
-        </property>
-    </component>
 
-    <!-- Phase Listener for debug -->
-    <lifecycle>
-        <phase-listener>com.engagepoint.university.ep2013b.browser.component.LifeCycleListener</phase-listener>
-    </lifecycle>
+
 </faces-config>

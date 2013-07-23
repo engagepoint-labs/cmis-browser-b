@@ -48,4 +48,14 @@ public interface BrowserController {
     public BrowserItem getNewFolderItem();
 
     public void setNewFolderItem(BrowserItem newFolderItem);
+
+    public String createFolder(String link);
+    public String editFolder(String link);
+    public String deleteFolder(String link);
+    public void setNameNewFolder(String name);
+    public String getNameNewFolder();
+
+
+
+
 }

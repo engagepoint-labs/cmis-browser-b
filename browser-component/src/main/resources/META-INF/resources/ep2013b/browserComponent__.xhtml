@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:custom="http://java.sun.com/jsf/composite/ep2013b/custom"
+      xmlns:p="http://primefaces.org/ui">
+
+<cc:interface>
+    <cc:attribute name="link"/>
+</cc:interface>
+
+<cc:implementation>
+
+    <p:layout id="componentlayout">
+
+        <p:layoutUnit position="north" header="Location" size="auto">
+            <custom:browserInfoPanel />
+        </p:layoutUnit>
+
+        <p:layoutUnit position="west" header="Tree" resizable="true">
+            <custom:browserComponentTree link="#{cc.attrs.link}"/>
+
+        </p:layoutUnit>
+
+        <p:layoutUnit position="center" header="Table" resizable="true">
+            <custom:browserComponentTable link="#{cc.attrs.link}"/>
+        </p:layoutUnit>
+    </p:layout>
+
+
+</cc:implementation>
+
+</html>

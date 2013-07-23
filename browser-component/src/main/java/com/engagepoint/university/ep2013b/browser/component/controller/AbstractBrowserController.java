@@ -4,6 +4,7 @@ package com.engagepoint.university.ep2013b.browser.component.controller;
 import com.engagepoint.university.ep2013b.browser.api.BrowserItem;
 import com.engagepoint.university.ep2013b.browser.api.BrowserService;
 import com.engagepoint.university.ep2013b.browser.cmis.AdvSearchParams;
+import com.engagepoint.university.ep2013b.browser.component.BrowserFactory;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
@@ -42,6 +43,8 @@ public abstract class AbstractBrowserController implements BrowserController {
 
     public void init() {
         System.out.println(" -------------  @PostConstruct  AbstractBrowserController   init()");
+
+        service = BrowserFactory.getInstance("CMIS");
 
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         folderId = request.getParameter("folderId");

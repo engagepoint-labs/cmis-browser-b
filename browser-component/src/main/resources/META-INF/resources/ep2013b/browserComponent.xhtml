@@ -14,12 +14,11 @@
 
 <cc:implementation>
 
-    <p:layout id="componentlayout" rendered="#{!cc.attrs.controller.isShowEditFolderPanel()}">
+    <p:layout id="componentlayout" >
 
         <h:commandButton action="#{cc.attrs.controller.init}" />
 
-
-        <p:layoutUnit position="north" size="auto">
+        <p:layoutUnit position="north" header="Location" size="auto">
 
             <h:outputText value="#{cc.attrs.controller.currentLocation}"/>
 
@@ -51,8 +50,7 @@
 
         </p:layoutUnit>
 
-
-        <p:layoutUnit position="center" header="Table">
+        <p:layoutUnit position="center" header="Table" rendered="#{!cc.attrs.controller.isShowEditFolderPanel()}">
             <!-- Simple Search -->
             <p:panel>
                 <h:panelGrid columns="3">
@@ -159,49 +157,11 @@
 
 
         </p:layoutUnit>
+
+
     </p:layout>
 
-    <p:layout id="folderlayout" rendered="#{cc.attrs.controller.isShowEditFolderPanel()}">
-        <p:layoutUnit position="center">
 
-            <p:panel id="panel" style="margin-bottom:10px;">
-                <h:panelGrid columns="2">
-                    <h:outputLabel for="namefolder" value="Name:*"/>
-                    <p:inputText id="namefolder" required="true" label="Name" value="#{cc.attrs.controller.newFolderItem.name}"/>
-
-
-                    <h:outputLabel for="type" value="Type:* "/>
-                    <!-- SHOULD BE TYPE INSTEAD OF ID!!! -->
-                    <h:selectOneMenu id="type" value="#{cc.attrs.controller.newFolderItem.id}">
-                        <f:selectItem itemLabel="Folder" itemValue="cmis:folder"/>
-                        <f:selectItem itemLabel="Document" itemValue="cmis:document"/>
-                    </h:selectOneMenu>
-
-                    <!--<p:commandButton id="savefolderbtn" action="#{cc.foo()}" value="Save" update = "@all" title="Create New Folder">-->
-                        <!--<f:param name ="folderId" value="#{cc.folderId}" />-->
-                    <!--</p:commandButton>-->
-
-                    <!--<h:commandButton id="savefolderbtn2" actionListener="#{cc.foo()}" value="Save" title="Create New Folder">-->
-                        <!--<f:param name ="folderId" value="#{cc.folderId}" />-->
-                        <!--<f:ajax render = "@all"/>-->
-                    <!--</h:commandButton>-->
-                </h:panelGrid>
-            </p:panel>
-
-            <!--<p:button id="save" value="Save" outcome="browser.xhtml?folderId=#{param.folderId}"-->
-            <!--styleClass="ui-priority-primary">-->
-            <!--&lt;!&ndash;<f:param name="name"/>&ndash;&gt;-->
-            <!--&lt;!&ndash;<f:param type="type"/>&ndash;&gt;-->
-            <!--</p:button>-->
-
-
-            <p:commandButton id="cancel" action="#{cc.attrs.controller.hidePanel()}" value="Cancel" update = "@all"/>
-
-            <!--<p:button id="cancel" value="Cancel" outcome="browser.xhtml?folderId=#{param.folderId}"-->
-                      <!--styleClass="ui-priority-primary"/>-->
-
-        </p:layoutUnit>
-    </p:layout>
 
 </cc:implementation>
 

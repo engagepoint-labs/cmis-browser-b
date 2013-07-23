@@ -1,5 +1,6 @@
 package com.engagepoint.university.ep2013b.browser.cmis;
 
+import com.engagepoint.university.ep2013b.browser.api.BrowserFolder;
 import com.engagepoint.university.ep2013b.browser.api.BrowserItem;
 import org.junit.Test;
 
@@ -12,7 +13,7 @@ public class CMISBrowserServiceIT
     @Test
     public void test_getTotalPagesFromFolderById()
     {
-        BrowserItem item = cmisBrowserService.findFolderById("101", 1, 2);
+        BrowserFolder item = cmisBrowserService.findFolderById("101", 1, 2);
 
         int expected = 3;
         int actual = item.getTotalPages();
@@ -23,7 +24,7 @@ public class CMISBrowserServiceIT
     @Test
     public void test_getTotalPagesFromFolderByPath()
     {
-        BrowserItem item = cmisBrowserService.findFolderByPath("/My_Folder-0-0", 1, 2);
+        BrowserFolder item = cmisBrowserService.findFolderByPath("/My_Folder-0-0", 1, 2);
 
         int expected = 3;
         int actual = item.getTotalPages();
@@ -34,7 +35,7 @@ public class CMISBrowserServiceIT
     @Test
     public void test_findFolderById_paging()
     {
-        BrowserItem item = cmisBrowserService.findFolderById("101", 2, 2);
+        BrowserFolder item = cmisBrowserService.findFolderById("101", 2, 2);
 
         assertEquals("My_Document-1-2", item.getChildren().get(0).getName());
         assertEquals("My_Folder-1-0", item.getChildren().get(1).getName());
@@ -48,7 +49,7 @@ public class CMISBrowserServiceIT
     @Test
     public void test_findFolderByPath_paging()
     {
-        BrowserItem item = cmisBrowserService.findFolderByPath("/My_Folder-0-0", 2, 2);
+        BrowserFolder item = cmisBrowserService.findFolderByPath("/My_Folder-0-0", 2, 2);
 
         assertEquals("My_Document-1-2", item.getChildren().get(0).getName());
         assertEquals("My_Folder-1-0", item.getChildren().get(1).getName());
@@ -62,7 +63,7 @@ public class CMISBrowserServiceIT
     @Test
     public void test_findFolderById_without_paging()
     {
-        BrowserItem item = cmisBrowserService.findFolderById("101");
+        BrowserFolder item = cmisBrowserService.findFolderById("101");
 
         assertEquals("My_Document-1-0", item.getChildren().get(0).getName());
         assertEquals("My_Document-1-1", item.getChildren().get(1).getName());
@@ -76,7 +77,7 @@ public class CMISBrowserServiceIT
     @Test
     public void test_findFolderByPath_without_paging()
     {
-        BrowserItem item = cmisBrowserService.findFolderByPath("/My_Folder-0-0");
+        BrowserFolder item = cmisBrowserService.findFolderByPath("/My_Folder-0-0");
 
         assertEquals("My_Document-1-0", item.getChildren().get(0).getName());
         assertEquals("My_Document-1-1", item.getChildren().get(1).getName());

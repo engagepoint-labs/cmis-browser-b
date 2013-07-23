@@ -1,6 +1,7 @@
 package com.engagepoint.university.ep2013b.browser.component.controller;
 
 
+import com.engagepoint.university.ep2013b.browser.api.BrowserFolder;
 import com.engagepoint.university.ep2013b.browser.api.BrowserItem;
 import com.engagepoint.university.ep2013b.browser.api.BrowserService;
 import com.engagepoint.university.ep2013b.browser.cmis.AdvSearchParams;
@@ -32,7 +33,7 @@ public abstract class AbstractBrowserController implements BrowserController {
     // List which should be displayed
     private List<BrowserItem> dataList;
     private String searchCriteria = "none";
-    private BrowserItem currentFolder = null;
+    private BrowserFolder currentFolder = null;
 
     // Maximum of rows per page
     private static final int rowCounts = 2;
@@ -41,7 +42,8 @@ public abstract class AbstractBrowserController implements BrowserController {
 
     private boolean showEditFolderPanel = false;
 
-    private BrowserItem newFolderItem = new BrowserItem();
+    private String newFolderName;
+    private String newFolderType;
 
 
     public void init() {
@@ -54,7 +56,6 @@ public abstract class AbstractBrowserController implements BrowserController {
 
         // Tree
 
-        BrowserItem currentFolder = null;
         if ((folderId == null) || ("".equals(folderId))|| ("null".equals(folderId)))
         {
             currentFolder = service.findFolderByPath("/");
@@ -65,7 +66,7 @@ public abstract class AbstractBrowserController implements BrowserController {
 
         root = new DefaultTreeNode("Root", null);
         // create tree from RootFolder (for showing all parents of current folder)
-        BrowserItem rootFolder = getRootFolder(currentFolder);
+        BrowserFolder rootFolder = getRootFolder(currentFolder);
         makeTree(rootFolder, root);
         currentLocation = service.getCurrentLocationById(folderId);
 
@@ -84,11 +85,13 @@ public abstract class AbstractBrowserController implements BrowserController {
 
     public void showPanel()
     {
+        System.out.println("showPanel");
         showEditFolderPanel = true;
     }
 
     public void hidePanel()
     {
+        System.out.println("hidePanel");
         showEditFolderPanel = false;
     }
 
@@ -97,17 +100,36 @@ public abstract class AbstractBrowserController implements BrowserController {
         return showEditFolderPanel;
     }
 
-    public BrowserItem getNewFolderItem() {
-        return newFolderItem;
+    public String getNewFolderName() {
+        return newFolderName;
     }
 
-    public void setNewFolderItem(BrowserItem newFolderItem) {
-        this.newFolderItem = newFolderItem;
+    public void setNewFolderName(String newFolderName) {
+        this.newFolderName = newFolderName;
     }
+
+    public String getNewFolderType() {
+        return newFolderType;
+    }
+
+    public void setNewFolderType(String newFolderType) {
+        this.newFolderType = newFolderType;
+    }
+
+    public void saveNewFolder()
+    {
+        System.out.println("Save Folder - success");
+        System.out.println("name = " + newFolderName);
+        System.out.println("type = " + newFolderType);
+        service.createFolder(folderId, newFolderName, newFolderType);
+
+        showEditFolderPanel = false;
+    }
+
 
 
     // Find Root from any folder
-    public BrowserItem getRootFolder(BrowserItem item)
+    public BrowserFolder getRootFolder(BrowserFolder item)
     {
         while (item.getParent() != null)
         {
@@ -118,7 +140,7 @@ public abstract class AbstractBrowserController implements BrowserController {
     }
 
     // fill tree recursively
-    public void makeTree(BrowserItem item, TreeNode parent)
+    public void makeTree(BrowserFolder item, TreeNode parent)
     {
         TreeNode node = new DefaultTreeNode(item, parent);
 
@@ -138,7 +160,7 @@ public abstract class AbstractBrowserController implements BrowserController {
             // tree includes only folders
             if (child.getType() == BrowserItem.TYPE.FOLDER)
             {
-                makeTree(child, node);
+                makeTree((BrowserFolder) child, node);
             }
         }
     }

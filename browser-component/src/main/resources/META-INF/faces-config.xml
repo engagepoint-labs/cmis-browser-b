@@ -20,9 +20,4 @@
             <property-class>java.lang.String</property-class>
         </property>
     </component>
-
-    <!-- Phase Listener for debug -->
-    <lifecycle>
-        <phase-listener>com.engagepoint.university.ep2013b.browser.component.LifeCycleListener</phase-listener>
-    </lifecycle>
 </faces-config>

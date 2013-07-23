@@ -1,6 +1,7 @@
 package com.engagepoint.university.ep2013b.browser.cmis;
 
 
+import com.engagepoint.university.ep2013b.browser.api.BrowserFolder;
 import com.engagepoint.university.ep2013b.browser.api.BrowserItem;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,7 +32,7 @@ public class EverySearchTypeIT {
         AdvSearchParams params =  new AdvSearchParams("101",
                 "cmis:document", dd.getTime(), dd2.getTime(), "ComplexType",null, null);
 
-        BrowserItem item = cmisBrowserService.advancedSearch("101", params,1,30);
+        BrowserFolder item = cmisBrowserService.advancedSearch("101", params,1,30);
 
         //assertEquals(1, item.getChildren().size());
         assertEquals(3, item.getChildren().size());
@@ -52,7 +53,7 @@ public class EverySearchTypeIT {
         AdvSearchParams params =  new AdvSearchParams("100",
                 "cmis:document",null, dd2.getTime(), null, 34010, null);
 
-        BrowserItem item = cmisBrowserService.advancedSearch("101", params,1,10);
+        BrowserFolder item = cmisBrowserService.advancedSearch("101", params,1,10);
 
         //assertEquals(21, item.getChildren().size());
         assertEquals(1, item.getChildren().size());
@@ -73,7 +74,7 @@ public class EverySearchTypeIT {
         AdvSearchParams params =  new AdvSearchParams("100",
                 "cmis:document",null, null, null, null, null);
 
-        BrowserItem item = cmisBrowserService.advancedSearch("101", params,1,100);
+        BrowserFolder item = cmisBrowserService.advancedSearch("101", params,1,100);
 
         //assertEquals(21, item.getChildren().size());
         assertEquals(3, item.getChildren().size());
@@ -94,7 +95,7 @@ public class EverySearchTypeIT {
         AdvSearchParams params =  new AdvSearchParams("100",
                 "cmis:folder",null, null, null, null, null);
 
-        BrowserItem item = cmisBrowserService.advancedSearch("101", params,1,100);
+        BrowserFolder item = cmisBrowserService.advancedSearch("101", params,1,100);
 
         //assertEquals(21, item.getChildren().size());
         assertEquals(2, item.getChildren().size());

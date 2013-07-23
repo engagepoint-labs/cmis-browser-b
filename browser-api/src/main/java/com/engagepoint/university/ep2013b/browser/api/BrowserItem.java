@@ -6,15 +6,12 @@ import java.util.List;
 
 public class BrowserItem implements Serializable
 {
-
     public enum TYPE {FILE, FOLDER}
 
     private String id = "";
     private TYPE type = TYPE.FILE;
     private String name = "";
-    private BrowserItem parent = null;
-    private List<BrowserItem> children = new ArrayList<BrowserItem>();
-    private int totalPages = 0;
+    private BrowserFolder parent = null;
 
     public BrowserItem()
     {
@@ -31,7 +28,7 @@ public class BrowserItem implements Serializable
         this.type = type;
     }
 
-    public BrowserItem(String name, TYPE type, BrowserItem parent)
+    public BrowserItem(String name, TYPE type, BrowserFolder parent)
     {
         this.name = name;
         this.type = type;
@@ -44,28 +41,13 @@ public class BrowserItem implements Serializable
         this.type = folder;
     }
 
-    public BrowserItem(String name, TYPE type, BrowserItem parent, List<BrowserItem> children) {
-        this.name = name;
-        this.type = type;
-        this.parent = parent;
-        this.children = children;
-    }
 
-    public BrowserItem(String name, TYPE type, BrowserItem parent, List<BrowserItem> children, int totalPages) {
-        this.name = name;
-        this.type = type;
-        this.parent = parent;
-        this.children = children;
-        this.totalPages = totalPages;
-    }
-
-
-    public BrowserItem(String id, String name, TYPE type, BrowserItem parent, List<BrowserItem> children) {
+    public BrowserItem(String id, String name, TYPE type, BrowserFolder parent)
+    {
         this.id = id;
         this.name = name;
         this.type = type;
         this.parent = parent;
-        this.children = children;
     }
 
 
@@ -99,30 +81,16 @@ public class BrowserItem implements Serializable
         this.name = name;
     }
 
-    public BrowserItem getParent()
+    public BrowserFolder getParent()
     {
         return parent;
     }
 
-    public void setParent(BrowserItem parent)
+    public void setParent(BrowserFolder parent)
     {
         this.parent = parent;
     }
 
-    public List<BrowserItem> getChildren()
-    {
-        return children;
-    }
-
-    public void setChildren(List<BrowserItem> children)
-    {
-        this.children.addAll(children);
-    }
-
-    public void setChild(BrowserItem child)
-    {
-        children.add(child);
-    }
 
     @Override
     public boolean equals(Object other)
@@ -138,29 +106,8 @@ public class BrowserItem implements Serializable
         String result = "BrowserItem ("+getId()+", "+getName()+", "+getType().name()+", ";
 
         result += (parent == null) ? "null" : parent.getId();
-        result += ", ";
-
-        if (children.isEmpty()) result += "empty";
-        else
-        {
-            result += "[";
-            for (BrowserItem i : children)
-            {
-                result += i.getId() + ", ";
-            }
-            result += "]";
-        }
-
         result += ")";
 
         return result;
-    }
-
-    public int getTotalPages() {
-        return totalPages;
-    }
-
-    public void setTotalPages(int totalPages) {
-        this.totalPages = totalPages;
     }
 }

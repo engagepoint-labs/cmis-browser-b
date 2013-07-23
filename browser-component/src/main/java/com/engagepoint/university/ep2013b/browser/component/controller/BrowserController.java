@@ -10,8 +10,6 @@ public interface BrowserController {
     void init();
 
     // Tree
-    BrowserItem getRootFolder(BrowserItem item);
-    void makeTree(BrowserItem item, TreeNode parent);
     TreeNode getRoot();
     String getCurrentLocation();
     TreeNode getSelectedNode();
@@ -22,15 +20,10 @@ public interface BrowserController {
     void businessLogic();
     List<BrowserItem> getDataList();
     String getFolderId();
-    void setPageNum(Integer pageNum);
-    Integer getPageNum();
+
     boolean isPrevAllowed();
     boolean isNextAllowed();
-    int getNextPageNum();
-    int getPrevPageNum();
-    int getPagesCount();
-    BrowserItem getSelectedItem();
-    void setSelectedItem(BrowserItem selectedItem);
+
     String getSearchCriteria();
     void setSearchCriteria(String searchCriteria);
     AdvSearchParams getAdvancedSearchParams();
@@ -45,7 +38,10 @@ public interface BrowserController {
     public void hidePanel();
     public boolean isShowEditFolderPanel();
 
-    public BrowserItem getNewFolderItem();
+    public String getNewFolderName();
+    public void setNewFolderName(String name);
 
-    public void setNewFolderItem(BrowserItem newFolderItem);
+    public String getNewFolderType();
+    public void setNewFolderType(String type);
+    public void saveNewFolder();
 }

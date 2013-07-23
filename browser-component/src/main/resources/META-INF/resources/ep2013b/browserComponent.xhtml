@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:custom="http://java.sun.com/jsf/composite/ep2013b/custom"
+      xmlns:p="http://primefaces.org/ui">
+
+<cc:interface >
+    <cc:attribute name="link"/>
+    <cc:attribute name="controller" type="com.engagepoint.university.ep2013b.browser.component.controller.BrowserController"/>
+</cc:interface>
+
+<cc:implementation>
+
+    <p:layout id="componentlayout" fullPage="true">
+
+        <h:commandButton action="#{cc.attrs.controller.init}" />
+
+
+        <p:layoutUnit position="north" size="auto">
+
+            <h:outputText value="#{cc.attrs.controller.currentLocation}"/>
+
+        </p:layoutUnit>
+
+        <p:layoutUnit position="west" header="Tree">
+
+            <p:growl id="messages" showDetail="true" />
+
+            <p:contextMenu id="treeContextMenu" for="tree">
+                <p:menuitem id="contextItemNewFolder" value="NewFolder" update="messages" actionListener="#{cc.attrs.controller.createNode}" icon="ui-icon-search" />
+                <p:menuitem id="contextItemEdit" value="Edit" update="messages"  icon="ui-icon-search" />
+                <p:menuitem id="contextItemView" value="View" update="messages" actionListener="#{cc.attrs.controller.displaySelectedSingle}" icon="ui-icon-search" />
+                <p:menuitem id="contextItemDelete" value="Delete" update="tree" actionListener="#{cc.attrs.controller.deleteNode}" icon="ui-icon-close"/>
+            </p:contextMenu>
+
+            <p:tree id="tree" value="#{cc.attrs.controller.root}" var="node" selectionMode="single" selection="#{cc.attrs.controller.selectedNode}"
+                    dynamic="true">
+
+                <p:treeNode id="node" expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
+
+                    <h:outputLink value="#{cc.attrs.link}" id="treelink" >
+                        <h:outputText value="#{node.name}"/>
+                        <f:param name="folderId" value="#{node.id}"/>
+                    </h:outputLink>
+
+                </p:treeNode>
+            </p:tree>
+
+        </p:layoutUnit>
+
+
+        <p:layoutUnit position="center" header="Table">
+            <!-- Simple Search -->
+            <p:panel>
+                <h:panelGrid columns="3">
+                    <p:column>
+                        <p:inputText id="searchInput" value="#{cc.attrs.controller.searchCriteria}"/>
+                    </p:column>
+
+                    <p:column>
+                        <p:commandButton id="searchbtn" update="searchInput,table" ajax="true" icon="ui-icon-search" title="Search">
+                            <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
+                        </p:commandButton>
+                    </p:column>
+
+                    <p:column>
+                        <p:ajaxStatus>
+                            <f:facet name="start">
+                                <h:outputText value="processing..."/>
+                            </f:facet>
+
+                            <f:facet name="complete">
+                                <h:outputText value="" />
+                            </f:facet>
+                        </p:ajaxStatus>
+                    </p:column>
+                </h:panelGrid>
+            </p:panel>
+
+            <!-- Advanced Search -->
+            <p:accordionPanel id="accordionAdvancedSearch" activeIndex="-1">
+                <p:tab id="accordionTabAdvancedSearch" title="Advanced Search">
+                    <!--<p:panel id="advancedSearch" toggleable="true" header="Advanced Search">-->
+                    <h:panelGrid columns="2">
+                        <h:outputLabel value="Document type:"/>
+                        <!-- WARNING: Should be PrimeFace component <p:selectOneMenu>,
+                                      but it sets itemLabel to documentType instead of itemValue-->
+                        <h:selectOneMenu id="searchDocumentType" value="#{cc.attrs.controller.advancedSearchParams.documentType}">
+                            <f:selectItem itemLabel="" itemValue=""/>
+                            <f:selectItem id="typeDocument" itemLabel="Document" itemValue="cmis:document"/>
+                            <f:selectItem id="typeFolder" itemLabel="Folder" itemValue="cmis:folder"/>
+                        </h:selectOneMenu>
+
+                        <h:outputLabel value="Date from:"/>
+                        <p:calendar id="searchDateFrom" showOn="button" value="#{cc.attrs.controller.advancedSearchParams.dateFrom}"/>
+
+                        <h:outputLabel value="Date to:"/>
+                        <p:calendar id="searchDateTo" showOn="button" value="#{cc.attrs.controller.advancedSearchParams.dateTo}"/>
+
+                        <h:outputLabel value="Content type:"/>
+                        <p:selectOneMenu id="searchContentType" value="#{cc.attrs.controller.advancedSearchParams.contentType}">
+                            <f:selectItem id="sctAny" itemLabel="" itemValue=""/>
+                            <f:selectItem id="sctComplex" itemLabel="Complex Type" itemValue="ComplexType" />
+                        </p:selectOneMenu>
+
+                        <h:outputLabel value="Size (B):"/>
+                        <p:spinner id="searchSize" value="#{cc.attrs.controller.advancedSearchParams.size}"/>
+
+                        <h:outputLabel value="Text in content:"/>
+                        <p:inputText id="searchText" value="#{cc.attrs.controller.advancedSearchParams.text}"/>
+                    </h:panelGrid>
+                    <!--</p:panel>-->
+                </p:tab>
+            </p:accordionPanel>
+
+            <!-- Table Panel-->
+            <p:panel>
+                <p:dataTable var="item" value="#{cc.attrs.controller.dataList}"  id="table" >
+                    <p:column headerText="Id">
+                        <h:outputText value="#{item.id}"  id="itemid" />
+                    </p:column>
+
+                    <p:column headerText="Name">
+                        <h:outputText value="#{item.name}" id="itemname" />
+                    </p:column>
+
+                    <p:column headerText="Type">
+                        <h:outputText value="#{item.type}" id="itemtype" />
+                    </p:column>
+
+                    <!-- Paging Panel-->
+                    <f:facet name="footer">
+                        <p:button id="butfirst" disabled="#{!cc.attrs.controller.prevAllowed}"  icon="ui-icon-arrowthickstop-1-w">
+                            <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
+                            <f:param name="pageNum" value="1"/>
+                            <f:param name="searchCriteria" value="#{cc.attrs.controller.searchCriteria}"/>
+                        </p:button>
+
+                        <p:button id="butprev" disabled="#{!cc.attrs.controller.prevAllowed}" icon="ui-icon-arrowthick-1-w">
+                            <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
+                            <f:param name="pageNum" value="#{cc.attrs.controller.prevPageNum}"/>
+                            <f:param name="searchCriteria" value="#{cc.attrs.controller.searchCriteria}"/>
+                        </p:button>
+
+                        <p:button id="butnext" disabled="#{!cc.attrs.controller.nextAllowed}" icon="ui-icon-arrowthick-1-e">
+                            <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
+                            <f:param name="pageNum" value="#{cc.attrs.controller.nextPageNum}"/>
+                            <f:param name="searchCriteria" value="#{cc.attrs.controller.searchCriteria}"/>
+                        </p:button>
+
+                        <p:button id="butlast" disabled="#{!cc.attrs.controller.nextAllowed}" icon="ui-icon-arrowthickstop-1-e">
+                            <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
+                            <f:param name="pageNum" value="#{cc.attrs.controller.pagesCount}"/>
+                            <f:param name="searchCriteria" value="#{cc.attrs.controller.searchCriteria}"/>
+                        </p:button>
+                    </f:facet>
+                </p:dataTable>
+            </p:panel>
+
+        </p:layoutUnit>
+    </p:layout>
+
+
+</cc:implementation>
+
+</html>

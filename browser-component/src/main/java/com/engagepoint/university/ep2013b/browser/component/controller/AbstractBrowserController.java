@@ -7,45 +7,12 @@ import com.engagepoint.university.ep2013b.browser.cmis.AdvSearchParams;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
-import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public abstract class AbstractBrowserController implements BrowserController {
-
-    @PostConstruct
-    public void init() {
-        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-        folderId = request.getParameter("folderId");
-
-        // Table
-        searchCriteria = request.getParameter("searchCriteria");
-
-        String paramPageNum = request.getParameter("pageNum");
-
-        if (paramPageNum == null || "".equals(paramPageNum)) pageNum = 1;
-        else pageNum = Integer.parseInt(paramPageNum);
-
-        // Tree
-
-        BrowserItem currentFolder = null;
-        if ((folderId == null) || ("".equals(folderId))|| ("null".equals(folderId)))
-        {
-            currentFolder = service.findFolderByPath("/");
-            folderId = currentFolder.getId();
-        }
-        else currentFolder = service.findFolderById(folderId);
-
-
-        root = new DefaultTreeNode("Root", null);
-        // create tree from RootFolder (for showing all parents of current folder)
-        BrowserItem rootFolder = getRootFolder(currentFolder);
-        makeTree(rootFolder, root);
-        currentLocation = service.getCurrentLocationById(folderId);
-
-    }
 
     private BrowserService service;
     private String folderId;
@@ -70,6 +37,45 @@ public abstract class AbstractBrowserController implements BrowserController {
     private static final int rowCounts = 2;
 
     private AdvSearchParams advancedSearchParams = new AdvSearchParams();
+
+
+
+    public void init() {
+        System.out.println(" -------------  @PostConstruct  AbstractBrowserController   init()");
+
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        folderId = request.getParameter("folderId");
+
+        // Tree
+
+        BrowserItem currentFolder = null;
+        if ((folderId == null) || ("".equals(folderId))|| ("null".equals(folderId)))
+        {
+            currentFolder = service.findFolderByPath("/");
+            folderId = currentFolder.getId();
+        }
+        else currentFolder = service.findFolderById(folderId);
+
+
+        root = new DefaultTreeNode("Root", null);
+        // create tree from RootFolder (for showing all parents of current folder)
+        BrowserItem rootFolder = getRootFolder(currentFolder);
+        makeTree(rootFolder, root);
+        currentLocation = service.getCurrentLocationById(folderId);
+
+
+        // Table
+        searchCriteria = request.getParameter("searchCriteria");
+
+        String paramPageNum = request.getParameter("pageNum");
+
+        if (paramPageNum == null || "".equals(paramPageNum)) pageNum = 1;
+        else pageNum = Integer.parseInt(paramPageNum);
+
+
+    }
+
+
 
     // Find Root from any folder
     public BrowserItem getRootFolder(BrowserItem item)

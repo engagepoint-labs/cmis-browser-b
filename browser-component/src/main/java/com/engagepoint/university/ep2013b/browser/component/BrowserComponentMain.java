@@ -10,13 +10,14 @@ public class BrowserComponentMain extends UINamingContainer {
 
     public BrowserComponentMain() {
 
-        Object attrs =   this.getAttributes().get("controller");
-
 
     }
 
     @PostConstruct
     public void init(){
+        System.out.println("  ----   BrowserComponentMain");
+
+        //Object attrs =   this.getAttributes().get("controller");
 
 
 

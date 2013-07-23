@@ -39,6 +39,9 @@ public abstract class AbstractBrowserController implements BrowserController {
 
     private AdvSearchParams advancedSearchParams = new AdvSearchParams();
 
+    private boolean showEditFolderPanel = false;
+
+    private BrowserItem newFolderItem = new BrowserItem();
 
 
     public void init() {
@@ -78,6 +81,29 @@ public abstract class AbstractBrowserController implements BrowserController {
 
     }
 
+
+    public void showPanel()
+    {
+        showEditFolderPanel = true;
+    }
+
+    public void hidePanel()
+    {
+        showEditFolderPanel = false;
+    }
+
+    public boolean isShowEditFolderPanel()
+    {
+        return showEditFolderPanel;
+    }
+
+    public BrowserItem getNewFolderItem() {
+        return newFolderItem;
+    }
+
+    public void setNewFolderItem(BrowserItem newFolderItem) {
+        this.newFolderItem = newFolderItem;
+    }
 
 
     // Find Root from any folder

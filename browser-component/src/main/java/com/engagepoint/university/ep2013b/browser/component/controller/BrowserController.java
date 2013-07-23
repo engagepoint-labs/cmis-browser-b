@@ -40,4 +40,12 @@ public interface BrowserController {
     void prevPage();
     void lastPage();
     void simple();
+
+    public void showPanel();
+    public void hidePanel();
+    public boolean isShowEditFolderPanel();
+
+    public BrowserItem getNewFolderItem();
+
+    public void setNewFolderItem(BrowserItem newFolderItem);
 }

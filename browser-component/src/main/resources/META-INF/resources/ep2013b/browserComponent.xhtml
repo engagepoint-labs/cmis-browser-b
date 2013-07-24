@@ -22,7 +22,6 @@
 
 <p/>
 <h:messages style="height: 11px;color: mediumvioletred; font-family: monospace;" id="info"/>
-
 <p/>
 
 
@@ -30,21 +29,36 @@
 <h:column style="width: 200px;" >
 
     <p:contextMenu id="treeContextMenu" for="tree">
-        <p:menuitem id="contextItemNewFolder" value="NewFolder" update="messages"
-                    actionListener="#{cc.attrs.controller.createNode}" icon="ui-icon-search"/>
-        <p:menuitem id="contextItemEdit" value="Edit" update="messages" icon="ui-icon-search"/>
-        <p:menuitem id="contextItemView" value="View" update="messages"
-                    actionListener="#{cc.attrs.controller.displaySelectedSingle}" icon="ui-icon-search"/>
-        <p:menuitem id="contextItemDelete" value="Delete" update="tree"
-                    actionListener="#{cc.attrs.controller.deleteNode}" icon="ui-icon-close"/>
+        <p:menuitem id="contextItemNewFolder" value="Create folder"
+                    update=":#{cc.clientId}:seniorpanel"
+                    actionListener="#{cc.attrs.controller.showPanel(1)}"
+                    icon="ui-icon-search"/>
+        <p:menuitem id="contextItemEdit" value="Edit folder"
+                    update=":#{cc.clientId}:seniorpanel"
+                    actionListener="#{cc.attrs.controller.showPanel(2)}"
+                    icon="ui-icon-search"/>
+        <p:menuitem id="contextItemView" value="View folder"
+                    update=":#{cc.clientId}:seniorpanel"
+                    actionListener="#{cc.attrs.controller.displaySelectedSingle}"
+                    icon="ui-icon-search"/>
+        <p:menuitem id="contextItemDelete" value="Delete folder"
+                    update=":#{cc.clientId}:seniorpanel"
+                    onclick="confirmDeleteDialog.show()"
+                    icon="ui-icon-close"/>
     </p:contextMenu>
 
     <p:tree id="tree" value="#{cc.attrs.controller.root}" var="node" selectionMode="single"
             selection="#{cc.attrs.controller.selectedNode}"
             dynamic="true">
+        <p:ajax event="expand"
+                listener="#{cc.attrs.controller.onNodeExpand}"
+                update=":#{cc.clientId}:messages"/>
+        <p:ajax event="collapse"
+                listener="#{cc.attrs.controller.onNodeExpand}"
+                update=":#{cc.clientId}:messages"/>
 
-        <p:treeNode id="node" expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
-
+        <p:treeNode id="node" expandedIcon="ui-icon-folder-open"
+                    collapsedIcon="ui-icon-folder-collapsed">
             <h:outputLink value="#{cc.attrs.link}" id="treelink">
                 <h:outputText value="#{node.name}"/>
                 <f:param name="folderId" value="#{node.id}"/>
@@ -55,10 +69,10 @@
 </h:column>
 
 
-<h:column style="width: 800px;">
+<h:column style="width: 850px;">
     <!-- Simple Search -->
     <p:panel rendered="#{!cc.attrs.controller.isShowEditFolderPanel()}">
-        <p:tabView id="tabView" style="height: 280px; width: 750px;">
+        <p:tabView id="tabView" style="height: 250px; width: 840px;">
 
             <p:tab id="tab1" title="Simple search">
                 <h:panelGrid columns="3">
@@ -72,7 +86,7 @@
 
                     <p:ajaxStatus>
                         <f:facet name="start">
-                            <h:outputText value="processing..."/>
+                            <h:outputText value="  processing..."/>
                         </f:facet>
 
                         <f:facet name="complete">
@@ -85,7 +99,7 @@
             <p:tab id="tab2" title="Advanced search">
 
                 <h:panelGrid columns="4">
-                    <h:outputLabel value="Document type:"/>
+                    <h:outputLabel value="Document type:" style="width: 80px; text-align: right;"  />
                     <!-- WARNING: Should be PrimeFace component <p:selectOneMenu>,
                                   but it sets itemLabel to documentType instead of itemValue-->
                     <h:selectOneMenu id="searchDocumentType"
@@ -95,46 +109,54 @@
                         <f:selectItem itemLabel="Folder" itemValue="cmis:folder"/>
                     </h:selectOneMenu>
 
-                    <h:outputLabel value="Content type:"/>
+                    <h:outputLabel value="Content type:" style="width: 80px; text-align: right;" />
                     <h:selectOneMenu id="searchContentType"
                                      value="#{cc.attrs.controller.advancedSearchParams.contentType}">
                         <f:selectItem itemLabel="" itemValue=""/>
                         <f:selectItem itemLabel="Complex Type" itemValue="ComplexType"/>
                     </h:selectOneMenu>
 
-                    <h:outputLabel value="Date from:"/>
+                    <h:outputLabel value="Date from:" style="width: 80px; text-align: right;" />
                     <p:calendar id="searchDateFrom" showOn="button"
                                 value="#{cc.attrs.controller.advancedSearchParams.dateFrom}"
                                 style="width: 80px;"/>
 
-                    <h:outputLabel value="Date to:"/>
+                    <h:outputLabel value="Date to:" style="width: 80px; text-align: right;" />
                     <p:calendar id="searchDateTo" showOn="button"
                                 value="#{cc.attrs.controller.advancedSearchParams.dateTo}"
                             style="width: 80px;"/>
 
 
-                    <h:outputLabel value="Size (B):"/>
+                    <h:outputLabel value="Size (B):" style="width: 80px; text-align: right;" />
                     <p:spinner id="searchSize" value="#{cc.attrs.controller.advancedSearchParams.size}"/>
 
-                    <h:outputLabel value="Text in content:"/>
+                    <h:outputLabel value="Text in content:" style="width: 80px; text-align: right;" />
                     <p:inputText id="searchText" value="#{cc.attrs.controller.advancedSearchParams.text}"/>
 
+                    <h:outputText value="" style="width: 80px; text-align: right;"  />
                     <p:commandButton id="advsearchbtn" action="#{cc.attrs.controller.simple}"
                                      update=":#{cc.clientId}:table"
-                                     value="Advanced search" icon="ui-icon-search" title="Advanced search">
+                                     value=" Advanced search"
+                                     icon="ui-icon-search"
+                                     title="Advanced search"  >
                         <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
                     </p:commandButton>
+                    <p:ajaxStatus>
+                        <f:facet name="start">
+                            <h:outputText value="processing..."  style="color: blueviolet;" />
+                        </f:facet>
 
-
+                        <f:facet name="complete">
+                            <h:outputText value=""/>
+                        </f:facet>
+                    </p:ajaxStatus>
                 </h:panelGrid>
-
-
             </p:tab>
         </p:tabView>
 
         <!-- button : "New Folder"-->
         <p:commandButton id="createfolder" action="#{cc.attrs.controller.showPanel(1)}" immediate="true"
-                         value="New Folder" update=":#{cc.clientId}:seniorpanel" title="Create New Folder">
+                         value="New Folder" update=":#{cc.clientId}:seniorpanel" title="Create new Folder">
 
             <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
         </p:commandButton>
@@ -145,7 +167,7 @@
             <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
         </p:commandButton>
         <p:commandButton id="deletefolder"
-                         value="Delete Folder"
+                         value="Delete folder"
                          type="button"
                          onclick="confirmDeleteDialog.show()"
                          immediate="true"/>
@@ -153,8 +175,10 @@
 
 
 
+        <h:outputText value="" style="height: 20px;" />
+
         <!-- Table Panel-->
-        <p:dataTable var="item" value="#{cc.attrs.controller.dataList}" id="table" style="width: 750px;" >
+        <p:dataTable var="item" value="#{cc.attrs.controller.dataList}" id="table" style="width: 840px;" >
             <p:column headerText="Id">
                 <h:outputText value="#{item.id}" id="itemid"/>
             </p:column>
@@ -170,25 +194,29 @@
             <!-- Paging Panel-->
             <f:facet name="footer">
                 <p:commandButton id="butfirst" action="#{cc.attrs.controller.firstPage}"
-                                 disabled="#{!cc.attrs.controller.prevAllowed}" update=":#{cc.clientId}:table"
+                                 disabled="#{!cc.attrs.controller.prevAllowed}"
+                                 update=":#{cc.clientId}:table"
                                  icon="ui-icon-arrowthickstop-1-w">
                     <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
                 </p:commandButton>
 
                 <p:commandButton id="butprev" action="#{cc.attrs.controller.prevPage}"
-                                 disabled="#{!cc.attrs.controller.prevAllowed}" update=":#{cc.clientId}:table"
+                                 disabled="#{!cc.attrs.controller.prevAllowed}"
+                                 update=":#{cc.clientId}:table"
                                  icon="ui-icon-arrowthick-1-w">
                     <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
                 </p:commandButton>
 
                 <p:commandButton id="butnext" action="#{cc.attrs.controller.nextPage}"
-                                 disabled="#{!cc.attrs.controller.nextAllowed}" update=":#{cc.clientId}:table"
+                                 disabled="#{!cc.attrs.controller.nextAllowed}"
+                                 update=":#{cc.clientId}:table"
                                  icon="ui-icon-arrowthick-1-e">
                     <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
                 </p:commandButton>
 
                 <p:commandButton id="butlast" action="#{cc.attrs.controller.lastPage}"
-                                 disabled="#{!cc.attrs.controller.nextAllowed}" update=":#{cc.clientId}:table"
+                                 disabled="#{!cc.attrs.controller.nextAllowed}"
+                                 update=":#{cc.clientId}:table"
                                  icon="ui-icon-arrowthickstop-1-e">
                     <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
                 </p:commandButton>
@@ -197,28 +225,35 @@
     </p:panel>
 
 
-    <p:panel id="panel" style="margin-bottom:10px; width: 400px;" rendered="#{cc.attrs.controller.isShowEditFolderPanel()}">
+    <p:panel id="panel" style="margin-bottom:10px; width: 400px;"
+             rendered="#{cc.attrs.controller.isShowEditFolderPanel()}">
+
         <h:panelGrid columns="3">
-            <h:outputLabel for="namefolder" value="Name: * "/>
+            <h:outputLabel for="namefolder" value="Name: * "
+                           rendered="#{cc.attrs.controller.operationFlag ne 3}" />
             <p:inputText id="namefolder" required="true" label="Name"
                          value="#{cc.attrs.controller.newFolderItem.name}"
-                         requiredMessage="Missing folder name!!!"/>
-            <h:message for="namefolder"/>
+                         requiredMessage="Missing folder name!!!"
+                         rendered="#{cc.attrs.controller.operationFlag ne 3}"/>
+            <h:message for="namefolder" rendered="#{cc.attrs.controller.operationFlag ne 3}" />
 
 
-            <h:outputLabel for="type" value="Type: * "/>
+            <h:outputLabel for="type" value="Type: * "
+                           rendered="#{cc.attrs.controller.operationFlag ne 3}" />
             <!-- SHOULD BE TYPE INSTEAD OF ID!!! -->
-            <h:selectOneMenu id="type" value="#{cc.attrs.controller.newFolderItem.id}">
+            <h:selectOneMenu id="type" value="#{cc.attrs.controller.newFolderItem.id}"
+                             rendered="#{cc.attrs.controller.operationFlag ne 3}">
                 <f:selectItem itemLabel="Folder" itemValue="cmis:folder"/>
                 <f:selectItem itemLabel="Document" itemValue="cmis:document"/>
             </h:selectOneMenu>
-            <h:message for="type"/>
+            <h:message for="type" rendered="#{cc.attrs.controller.operationFlag ne 3}" />
 
             <p:commandButton id="savefolderbtn"
                              action="#{cc.attrs.controller.createFolder(cc.attrs.link)}"
                              value="Save" ajax="false"
                              update=":#{cc.clientId}:seniorpanel"
-                             title="Create new folder"  rendered="#{cc.attrs.controller.operationFlag eq 1}">
+                             title="Create new folder"
+                             rendered="#{cc.attrs.controller.operationFlag eq 1}">
 
                 <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
             </p:commandButton>
@@ -227,7 +262,8 @@
                              action="#{cc.attrs.controller.editFolder(cc.attrs.link)}"
                              value="Edit" ajax="false"
                              update=":#{cc.clientId}:seniorpanel"
-                             title="Edit folder"  rendered="#{cc.attrs.controller.operationFlag eq 2}">
+                             title="Edit folder"
+                             rendered="#{cc.attrs.controller.operationFlag eq 2}">
 
                 <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
             </p:commandButton>
@@ -236,23 +272,14 @@
             <p:commandButton id="cancel" action="#{cc.attrs.controller.hidePanel()}" value="Cancel"
                              update=":#{cc.clientId}:seniorpanel" immediate="true"/>
 
-
         </h:panelGrid>
     </p:panel>
 
-    <!--<p:button id="save" value="Save" outcome="browser.xhtml?folderId=#{param.folderId}"-->
-    <!--styleClass="ui-priority-primary">-->
-    <!--&lt;!&ndash;<f:param name="name"/>&ndash;&gt;-->
-    <!--&lt;!&ndash;<f:param type="type"/>&ndash;&gt;-->
-    <!--</p:button>-->
-
-
-    <!--<p:button id="cancel" value="Cancel" outcome="browser.xhtml?folderId=#{param.folderId}"-->
-    <!--styleClass="ui-priority-primary"/>-->
 
 </h:column>
 </h:panelGrid>
-<p:confirmDialog id="confirmDeleteDialog" widgetVar="confirmDeleteDialog">
+<p:confirmDialog message="Are you sure about deleting the folder?"
+        id="confirmDeleteDialog" widgetVar="confirmDeleteDialog">
     <p:commandButton id="deletefolderbtn1"
                      actionListener="#{cc.attrs.controller.deleteFolder(cc.attrs.link)}"
                      value="Delete"

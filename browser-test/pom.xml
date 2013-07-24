@@ -137,14 +137,6 @@
                             <skip>${skipTests}</skip>
                         </configuration>
                     </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.jbehave</groupId>
-                <artifactId>jbehave-maven-plugin</artifactId>
-                <version>4.0-beta-3</version>
-
-                <executions>
                     <execution>
                         <id>run-stories</id>
                         <phase>integration-test</phase>
@@ -160,6 +152,7 @@
                             <goal>run-stories-as-embeddables</goal>
                         </goals>
                     </execution>
+
                 </executions>
                 <dependencies>
                     <dependency>
@@ -168,6 +161,7 @@
                         <version>11.0.1</version>
                     </dependency>
                 </dependencies>
+
             </plugin>
 
             <!-- Cargo -->

@@ -10,11 +10,8 @@ import org.primefaces.model.TreeNode;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.application.NavigationHandler;
-import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.List;
 
 public class AbstractBrowserController implements BrowserController {
@@ -374,6 +371,15 @@ public class AbstractBrowserController implements BrowserController {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
 
+    }
+
+
+    @Override
+    public void onNodeExpand() {
+
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_INFO,
+                        "Tree expanding for folder: "+folderId, null));
     }
 
     public String getNameNewFolder() {

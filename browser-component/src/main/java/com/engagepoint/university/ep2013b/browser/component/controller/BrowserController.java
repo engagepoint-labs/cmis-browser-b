@@ -56,6 +56,7 @@ public interface BrowserController {
     public String getNameNewFolder();
     public  void setOperationFlag(int operationFlag);
     public int   getOperationFlag();
+    public void onNodeExpand();
 
 
 

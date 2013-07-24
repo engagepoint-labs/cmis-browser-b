@@ -26,6 +26,9 @@ public interface BrowserService
     public void deleteFolder(String id);
     public Map<String,String> getTypeList(String type);
 
+	public BrowserItem createDocument(String id, String name);
+	public BrowserItem editDocument(String id, String name);
+	public void deleteDocument(String id);
 
     // ... add more here ...
 }

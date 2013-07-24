@@ -130,7 +130,7 @@ public class PreferencesHelperTest
     {
         String expected = "http://localhost:8080/server/";
         settings.put("CMIS_URL", "http://localhost:8080/server/");
-        String actual = helper.getCmisUrl();
+        String actual = helper.getCmisUrl("http://localhost:8080/server/services/");
 
         assertEquals(expected, actual);
     }
@@ -140,7 +140,7 @@ public class PreferencesHelperTest
     {
         String expected = "http://localhost:8080/server/services/";
         settings.remove("CMIS_URL");
-        String actual = helper.getCmisUrl();
+        String actual = helper.getCmisUrl("http://localhost:8080/server/services/");
 
         assertEquals(expected, actual);
     }

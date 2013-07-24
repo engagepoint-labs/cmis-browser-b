@@ -45,8 +45,8 @@ public class PreferencesHelper
         settings.put(CMIS_URL, url);
     }
 
-    public String getCmisUrl()
+    public String getCmisUrl(String defaultUrl)
     {
-        return settings.get(CMIS_URL, "http://localhost:8080/server/services/");
+        return settings.get(CMIS_URL, defaultUrl);
     }
 }

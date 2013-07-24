@@ -186,7 +186,12 @@ public class AdvSearchParams implements Serializable {
 
         if(params.get("toDate") != null){
 			Date date = (Date) params.get("toDate");
-			String d = format.format(date) + "T00:00:00";
+
+			String time = "T00:00:00";
+			if (params.get("toDate").equals(params.get("fromDate"))) time = "T23:59:59";
+			String d = format.format(date) + time;
+
+
 			query.setString(paramCounter++, d);
 //            query.setDateTime(paramCounter++, d);
         }

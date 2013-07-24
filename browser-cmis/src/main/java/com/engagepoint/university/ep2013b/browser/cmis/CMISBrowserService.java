@@ -12,6 +12,8 @@ import org.apache.chemistry.opencmis.commons.enums.VersioningState;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisBaseException;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 
+import java.lang.reflect.Type;
+import java.math.BigInteger;
 import java.util.*;
 
 public class CMISBrowserService implements BrowserService
@@ -159,27 +161,45 @@ public class CMISBrowserService implements BrowserService
 
 				if (index == -1)
 				{
+					// create child
 					child = new BrowserItem();
 					child.setId(o.getId());
 					child.setName(o.getName());
-					child.setType((o instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE);
 					child.setCreated(o.getCreationDate().getTime());
-					child.setParent(i);
-
-					if (o instanceof Folder)
+					if (o instanceof Document)
 					{
+						// ..child is Document
+						child.setType(BrowserItem.TYPE.FILE);
+						child.setContentType(((Document) o).getContentStreamMimeType());
+						child.setSize(BigInteger.valueOf(((Document) o).getContentStreamLength()));
+					}
+					else
+					{
+						// ..child is Folder
+						child.setType(BrowserItem.TYPE.FOLDER);
+
 						for (CmisObject s : ((Folder) o).getChildren())
 						{
+							// create subchild
 							subchild = new BrowserItem();
 							subchild.setId(s.getId());
 							subchild.setName(s.getName());
-							subchild.setType((s instanceof Folder) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE);
 							subchild.setCreated(s.getCreationDate().getTime());
-							subchild.setParent(child);
+							if (s instanceof Document)
+							{
+								// ..subchild is Document
+								subchild.setType(BrowserItem.TYPE.FILE);
+								subchild.setContentType(((Document) s).getContentStreamMimeType());
+								subchild.setSize(BigInteger.valueOf(((Document) s).getContentStreamLength()));
+							}
+							else subchild.setType(BrowserItem.TYPE.FOLDER);
 
+							subchild.setParent(child);
 							child.setChild(subchild);
 						}
 					}
+
+					child.setParent(i);
 
 				} else child = parents.get(index);
 
@@ -199,22 +219,22 @@ public class CMISBrowserService implements BrowserService
 		Map<String, String> parameter = new HashMap<String, String>();
 
 		// ATOM
-//        final String url = "http://localhost:8080/server/atom11";
-//        parameter.put(SessionParameter.ATOMPUB_URL, url);
-//        parameter.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
+        final String url = "http://localhost:18080/server/atom11";
+        parameter.put(SessionParameter.ATOMPUB_URL, url);
+        parameter.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
 
 		// WSDL
-		final String url = "http://localhost:18080/server/services/";
-		parameter.put(SessionParameter.BINDING_TYPE, BindingType.WEBSERVICES.value());
-		parameter.put(SessionParameter.WEBSERVICES_ACL_SERVICE, url + "ACLService?wsdl");
-		parameter.put(SessionParameter.WEBSERVICES_DISCOVERY_SERVICE, url + "DiscoveryService?wsdl");
-		parameter.put(SessionParameter.WEBSERVICES_MULTIFILING_SERVICE, url + "MultiFilingService?wsdl");
-		parameter.put(SessionParameter.WEBSERVICES_NAVIGATION_SERVICE, url + "NavigationService?wsdl");
-		parameter.put(SessionParameter.WEBSERVICES_OBJECT_SERVICE, url + "ObjectService?wsdl");
-		parameter.put(SessionParameter.WEBSERVICES_POLICY_SERVICE, url + "PolicyService?wsdl");
-		parameter.put(SessionParameter.WEBSERVICES_RELATIONSHIP_SERVICE, url + "RelationshipService?wsdl");
-		parameter.put(SessionParameter.WEBSERVICES_REPOSITORY_SERVICE, url + "RepositoryService?wsdl");
-		parameter.put(SessionParameter.WEBSERVICES_VERSIONING_SERVICE, url + "VersioningService?wsdl");
+//		final String url = "http://localhost:18080/server/services/";
+//		parameter.put(SessionParameter.BINDING_TYPE, BindingType.WEBSERVICES.value());
+//		parameter.put(SessionParameter.WEBSERVICES_ACL_SERVICE, url + "ACLService?wsdl");
+//		parameter.put(SessionParameter.WEBSERVICES_DISCOVERY_SERVICE, url + "DiscoveryService?wsdl");
+//		parameter.put(SessionParameter.WEBSERVICES_MULTIFILING_SERVICE, url + "MultiFilingService?wsdl");
+//		parameter.put(SessionParameter.WEBSERVICES_NAVIGATION_SERVICE, url + "NavigationService?wsdl");
+//		parameter.put(SessionParameter.WEBSERVICES_OBJECT_SERVICE, url + "ObjectService?wsdl");
+//		parameter.put(SessionParameter.WEBSERVICES_POLICY_SERVICE, url + "PolicyService?wsdl");
+//		parameter.put(SessionParameter.WEBSERVICES_RELATIONSHIP_SERVICE, url + "RelationshipService?wsdl");
+//		parameter.put(SessionParameter.WEBSERVICES_REPOSITORY_SERVICE, url + "RepositoryService?wsdl");
+//		parameter.put(SessionParameter.WEBSERVICES_VERSIONING_SERVICE, url + "VersioningService?wsdl");
 
 		Repository repository = sessionFactory.getRepositories(parameter).get(0);
 		parameter.put(SessionParameter.REPOSITORY_ID, repository.getId());
@@ -226,7 +246,7 @@ public class CMISBrowserService implements BrowserService
 	private BrowserItem search(QueryStatement query, int pageNum, int rowCounts)
 	{
 		BrowserItem result = new BrowserItem();
-		ArrayList<BrowserItem> browserItems = new ArrayList<BrowserItem>();
+		result.setType(BrowserItem.TYPE.FOLDER);
 
 		ItemIterable<QueryResult> results = query.query(false);
 
@@ -246,24 +266,27 @@ public class CMISBrowserService implements BrowserService
 
 		for (QueryResult hit : results)
 		{
-			result = new BrowserItem(
-					hit.getPropertyByQueryName("cmis:objectId").getFirstValue().toString(),
-					hit.getPropertyByQueryName("cmis:name").getFirstValue().toString(),
-					BrowserItem.TYPE.FILE
-			);
+			BrowserItem item = new BrowserItem();
 
-			result.setCreated(((GregorianCalendar) hit.getPropertyByQueryName("cmis:creationDate").getFirstValue()).getTime());
+			item.setId(hit.getPropertyByQueryName("cmis:objectId").getFirstValue().toString());
+			item.setName(hit.getPropertyByQueryName("cmis:name").getFirstValue().toString());
 
-			browserItems.add(result);
+			String t = hit.getPropertyByQueryName("cmis:baseTypeId").getFirstValue().toString();
+			item.setType(("cmis:folder".equals(t)) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE);
+
+			if (item.getType() == BrowserItem.TYPE.FILE)
+			{
+				item.setCreated(((GregorianCalendar) hit.getPropertyByQueryName("cmis:creationDate").getFirstValue()).getTime());
+				item.setContentType(hit.getPropertyByQueryName("cmis:contentStreamMimeType").getFirstValue().toString());
+				item.setSize((BigInteger) hit.getPropertyByQueryName("cmis:contentStreamLength").getFirstValue());
+			}
+
+			result.setChild(item);
 		}
 
-//		result = new BrowserItem("", BrowserItem.TYPE.FOLDER, null, browserItems, totalPages);
-		result.setType(BrowserItem.TYPE.FOLDER);
-		result.setChildren(browserItems);
 
 		return result;
 	}
-
 
 	@Override
 	public BrowserItem createFolder(String id, String name, String type) throws CmisBaseException

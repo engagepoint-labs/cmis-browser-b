@@ -153,6 +153,15 @@
                 <h:outputText value="#{item.created}" id="itemcreated"/>
             </p:column>
 
+            <p:column headerText="Content Type">
+                <h:outputText value="#{item.contentType == null ? '' : item.contentType}" id="itemcontetntype"/>
+            </p:column>
+
+            <p:column headerText="Size (B)">
+                <h:outputText value="#{item.size == 0 ? '' : (item.size)}" id="itemsize"/>
+            </p:column>
+
+
             <!-- Paging Panel-->
             <f:facet name="footer">
                 <p:commandButton id="butfirst" action="#{cc.attrs.controller.firstPage}"

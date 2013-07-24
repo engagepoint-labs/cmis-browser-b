@@ -1,6 +1,7 @@
 package com.engagepoint.university.ep2013b.browser.api;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,13 +10,16 @@ public class BrowserItem implements Serializable
 {
 	public enum TYPE { FILE, FOLDER	}
 
-	private String id = "";
-	private TYPE type = TYPE.FILE;
-	private String name = "";
+	private String id;
+	private TYPE type;
+	private String name;
 	private BrowserItem parent = null;
 	private List<BrowserItem> children = new ArrayList<BrowserItem>();
-	private int totalPages = 0;
+	private int totalPages;
 	private Date created;
+	private String contentType;
+	private BigInteger size;
+
 
 	public BrowserItem()
 	{
@@ -55,7 +59,6 @@ public class BrowserItem implements Serializable
 		this(name, type, parent, children);
 		this.totalPages = totalPages;
 	}
-
 
 	public BrowserItem(String id, String name, TYPE type, BrowserItem parent, List<BrowserItem> children)
 	{
@@ -138,6 +141,26 @@ public class BrowserItem implements Serializable
 	public void setCreated(Date created)
 	{
 		this.created = created;
+	}
+
+	public String getContentType()
+	{
+		return contentType;
+	}
+
+	public void setContentType(String contentType)
+	{
+		this.contentType = contentType;
+	}
+
+	public BigInteger getSize()
+	{
+		return size;
+	}
+
+	public void setSize(BigInteger size)
+	{
+		this.size = size;
 	}
 
 	// Get current path

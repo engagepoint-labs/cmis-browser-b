@@ -23,47 +23,55 @@
       <tag>v1.1</tag>
   </scm>
 
-    <!--for maven-release-plugin-->
-    <distributionManagement>
-        <repository>
-            <id>releases</id>
-            <name>releases</name>
-            <url>file:///${env.USERPROFILE}/.m2/</url>
-        </repository>
-
-        <snapshotRepository>
-            <id>snapshots</id>
-            <name>snapshots</name>
-            <url>file:///${env.USERPROFILE}/.m2/</url>
-            <uniqueVersion>false</uniqueVersion>
-        </snapshotRepository>
-    </distributionManagement>
-
-    <!--for maven-release-plugin-->
     <repositories>
-        <repository>
-            <snapshots>
-                <enabled>true</enabled>
-                <!--<updatePolicy>never</updatePolicy> -->
-                <checksumPolicy>ignore</checksumPolicy>
-            </snapshots>
-            <id>snapshots</id>
-            <name>libs-snapshots</name>
-            <url>file:///${env.USERPROFILE}/.m2/</url>
-        </repository>
+    <repository>
+    <id>prime-repo</id>
+    <name>PrimeFaces Maven Repository</name>
+    <url>http://repository.primefaces.org</url>
+    </repository>
     </repositories>
 
-    <!--for maven-release-plugin-->
-    <pluginRepositories>
-        <pluginRepository>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <id>snapshots</id>
-            <name>plugins-snapshots</name>
-            <url>file:///${env.USERPROFILE}/.m2/</url>
-        </pluginRepository>
-    </pluginRepositories>
+    <!--&lt;!&ndash;for maven-release-plugin&ndash;&gt;-->
+    <!--<distributionManagement>-->
+        <!--<repository>-->
+            <!--<id>releases</id>-->
+            <!--<name>releases</name>-->
+            <!--<url>file:///${env.USERPROFILE}/.m2/</url>-->
+        <!--</repository>-->
+
+        <!--<snapshotRepository>-->
+            <!--<id>snapshots</id>-->
+            <!--<name>snapshots</name>-->
+            <!--<url>file:///${env.USERPROFILE}/.m2/</url>-->
+            <!--<uniqueVersion>false</uniqueVersion>-->
+        <!--</snapshotRepository>-->
+    <!--</distributionManagement>-->
+
+    <!--&lt;!&ndash;for maven-release-plugin&ndash;&gt;-->
+    <!--<repositories>-->
+        <!--<repository>-->
+            <!--<snapshots>-->
+                <!--<enabled>true</enabled>-->
+                <!--&lt;!&ndash;<updatePolicy>never</updatePolicy> &ndash;&gt;-->
+                <!--<checksumPolicy>ignore</checksumPolicy>-->
+            <!--</snapshots>-->
+            <!--<id>snapshots</id>-->
+            <!--<name>libs-snapshots</name>-->
+            <!--<url>file:///${env.USERPROFILE}/.m2/</url>-->
+        <!--</repository>-->
+    <!--</repositories>-->
+
+    <!--&lt;!&ndash;for maven-release-plugin&ndash;&gt;-->
+    <!--<pluginRepositories>-->
+        <!--<pluginRepository>-->
+            <!--<snapshots>-->
+                <!--<enabled>true</enabled>-->
+            <!--</snapshots>-->
+            <!--<id>snapshots</id>-->
+            <!--<name>plugins-snapshots</name>-->
+            <!--<url>file:///${env.USERPROFILE}/.m2/</url>-->
+        <!--</pluginRepository>-->
+    <!--</pluginRepositories>-->
 
     <dependencyManagement>
         <dependencies>
@@ -88,13 +96,15 @@
                 <groupId>org.apache.chemistry.opencmis</groupId>
                 <artifactId>chemistry-opencmis-server-inmemory</artifactId>
                 <type>war</type>
-                <version>0.9.0-EP-SNAPSHOT</version>
+                <version>0.9.0</version>
+                <!--<version>0.9.0-EP-SNAPSHOT</version>-->
             </dependency>
 
             <dependency>
                 <groupId>org.apache.chemistry.opencmis</groupId>
                 <artifactId>chemistry-opencmis-client-impl</artifactId>
-                <version>0.9.0-EP-SNAPSHOT</version>
+                <version>0.9.0</version>
+                <!--<version>0.9.0-EP-SNAPSHOT</version>-->
             </dependency>
         </dependencies>
 

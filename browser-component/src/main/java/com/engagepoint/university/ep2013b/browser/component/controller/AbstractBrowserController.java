@@ -64,9 +64,9 @@ public abstract class AbstractBrowserController implements BrowserController {
 
         root = new DefaultTreeNode("Root", null);
         // create tree from RootFolder (for showing all parents of current folder)
-        BrowserItem rootFolder = getRootFolder(currentFolder);
+        BrowserItem rootFolder = currentFolder.getRootFolder();
         makeTree(rootFolder, root);
-        currentLocation = service.getCurrentLocationById(folderId);
+        currentLocation = currentFolder.getLocation();
 
 
         // Table
@@ -101,15 +101,6 @@ public abstract class AbstractBrowserController implements BrowserController {
         this.newFolderItem = newFolderItem;
     }
 
-
-    // Find Root from any folder
-    public BrowserItem getRootFolder(BrowserItem item) {
-        while (item.getParent() != null) {
-            item = item.getParent();
-        }
-
-        return item;
-    }
 
     // fill tree recursively
     public void makeTree(BrowserItem item, TreeNode parent) {
@@ -168,10 +159,10 @@ public abstract class AbstractBrowserController implements BrowserController {
     // TODO: Should have better name
     // Process received parameters and decided what data to show (folder items or search results)
     public void businessLogic() {
-        System.out.println("businessLogic()");
-        System.out.println("\tfolderID       = " + folderId);
-        System.out.println("\tpage           = " + pageNum);
-        System.out.println("\tsimple search  = " + searchCriteria);
+//        System.out.println("businessLogic()");
+//        System.out.println("\tfolderID       = " + folderId);
+//        System.out.println("\tpage           = " + pageNum);
+//        System.out.println("\tsimple search  = " + searchCriteria);
 
         if ((searchCriteria == null) && advancedSearchParams.isEmpty()) {
             // not searching

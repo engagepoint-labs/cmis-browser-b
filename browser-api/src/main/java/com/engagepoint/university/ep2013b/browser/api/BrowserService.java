@@ -16,10 +16,7 @@ public interface BrowserService
     public BrowserItem findFolderById(String id, int page, int rowCount);
     public BrowserItem findFolderByPath(String path, int page, int rowCount);
 
-    // Possibly better create some Util class for this method ?
-    public String getCurrentLocationById(String id);
     public BrowserItem simpleSearch(String id, String parameter, int page, int rowCounts);
-    //public int getTotalPagesFromSimpleSearch(String id, String parameter, int rowCounts);
     public BrowserItem advancedSearch(String id, Object parameter, int pageNum, int rowCounts);
     public BrowserItem createFolder(String id, String name, String type);
     public BrowserItem editFolder(String id, String name, String type);

@@ -1,6 +1,7 @@
 package com.engagepoint.university.ep2013b.browser.cmis;
 
 import com.engagepoint.university.ep2013b.browser.api.BrowserItem;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
@@ -9,6 +10,7 @@ public class CMISBrowserServiceIT
 {
     private CMISBrowserService cmisBrowserService = new CMISBrowserService();
 
+//	@Ignore
     @Test
     public void test_getTotalPagesFromFolderById()
     {
@@ -20,6 +22,7 @@ public class CMISBrowserServiceIT
         assertEquals(expected, actual);
     }
 
+//	@Ignore
     @Test
     public void test_getTotalPagesFromFolderByPath()
     {
@@ -31,6 +34,7 @@ public class CMISBrowserServiceIT
         assertEquals(expected, actual);
     }
 
+//	@Ignore
     @Test
     public void test_findFolderById_paging()
     {
@@ -45,6 +49,7 @@ public class CMISBrowserServiceIT
         assertEquals(5, item.getParent().getChildren().size());
     }
 
+//	@Ignore
     @Test
     public void test_findFolderByPath_paging()
     {
@@ -59,6 +64,7 @@ public class CMISBrowserServiceIT
         assertEquals(5, item.getParent().getChildren().size());
     }
 
+//	@Ignore
     @Test
     public void test_findFolderById_without_paging()
     {
@@ -73,6 +79,7 @@ public class CMISBrowserServiceIT
         assertEquals(5, item.getParent().getChildren().size());
     }
 
+//	@Ignore
     @Test
     public void test_findFolderByPath_without_paging()
     {
@@ -86,16 +93,4 @@ public class CMISBrowserServiceIT
         assertEquals("My_Document-0-1", item.getParent().getChildren().get(1).getName());
         assertEquals(5, item.getParent().getChildren().size());
     }
-
-    @Test
-    public void test_getCurrentLocationById()
-    {
-        String expected = "/My_Folder-0-0";
-        String actual = cmisBrowserService.getCurrentLocationById("101");
-
-        assertEquals(expected, actual);
-
-    }
-
-
 }

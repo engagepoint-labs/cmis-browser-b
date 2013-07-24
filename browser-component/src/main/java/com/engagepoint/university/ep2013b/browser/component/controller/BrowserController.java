@@ -10,7 +10,6 @@ public interface BrowserController {
     void init();
 
     // Tree
-    BrowserItem getRootFolder(BrowserItem item);
     void makeTree(BrowserItem item, TreeNode parent);
     TreeNode getRoot();
     String getCurrentLocation();

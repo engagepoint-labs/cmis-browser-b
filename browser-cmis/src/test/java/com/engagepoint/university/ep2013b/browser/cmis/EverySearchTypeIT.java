@@ -3,103 +3,97 @@ package com.engagepoint.university.ep2013b.browser.cmis;
 
 import com.engagepoint.university.ep2013b.browser.api.BrowserItem;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 
 
-public class EverySearchTypeIT {
+public class EverySearchTypeIT
+{
+	private CMISBrowserService service = new CMISBrowserService();
+	private Date date1 = new Date();
+	private Date date2 = new Date();
 
-    private CMISBrowserService cmisBrowserService = new CMISBrowserService();
+	@Before
+	public void setup()
+	{
+		// set date2 to next day
+		date2.setDate(date2.getDate() + 1);
 
+		System.out.println("date1 = " + date1.toString());
+		System.out.println("date2 = " + date2.toString());
+	}
 
+	@Ignore
+	@Test
+	public void test_advancedSearch_date_from()
+	{
+		AdvSearchParams params = new AdvSearchParams("101", "cmis:document", date1, null, null, null, null);
 
-    @Test
-    public void test_advancedSearch_date_range()
-    {
+		BrowserItem item = service.advancedSearch("101", params, 0, 0);
 
-        Calendar dd = new GregorianCalendar(2013, 6, 17, 3, 0, 0);
-        Calendar dd2 = new GregorianCalendar(2013, 6, 18, 3, 0, 0);
+		assertEquals(3, item.getChildren().size());
+		assertEquals("My_Document-1-1", item.getChildren().get(0).getName());
+	}
 
-//        AdvSearchParams params =  new AdvSearchParams(
-//                "cmis:document",dd, dd2, "audioFile",100, null);
+	@Ignore
+	@Test
+	public void test_advancedSearch_date_range()
+	{
+		AdvSearchParams params = new AdvSearchParams("101",
+				"cmis:document", date1, date2, null, null, null);
 
-        AdvSearchParams params =  new AdvSearchParams("101",
-                "cmis:document", dd.getTime(), dd2.getTime(), "ComplexType",null, null);
+		BrowserItem item = service.advancedSearch("101", params, 0, 0);
 
-        BrowserItem item = cmisBrowserService.advancedSearch("101", params,1,30);
-
-        //assertEquals(1, item.getChildren().size());
-        assertEquals(3, item.getChildren().size());
-
-    }
-
-
-    @Test
-    public void test_advancedSearch_to_date()
-    {
-
-        Calendar dd = new GregorianCalendar(2013, 6, 17, 3, 0, 0);
-        Calendar dd2 = new GregorianCalendar(2013, 6, 18, 3, 0, 0);
-
-//        AdvSearchParams params =  new AdvSearchParams(
-//                "cmis:document",dd, dd2, "plain/text",34036, null);
-
-        AdvSearchParams params =  new AdvSearchParams("100",
-                "cmis:document",null, dd2.getTime(), null, 34010, null);
-
-        BrowserItem item = cmisBrowserService.advancedSearch("101", params,1,10);
-
-        //assertEquals(21, item.getChildren().size());
-        assertEquals(1, item.getChildren().size());
-
-    }
+		assertEquals(3, item.getChildren().size());
+	}
 
 
-    @Test
-    public void test_advancedSearch_all_docs_in_folder()
-    {
+	@Ignore
+	@Test
+	public void test_advancedSearch_to_date()
+	{
+		AdvSearchParams params = new AdvSearchParams("100",
+				"cmis:document", null, date2, null, null, null);
 
-        Calendar dd = new GregorianCalendar(2013, 6, 17, 3, 0, 0);
-        Calendar dd2 = new GregorianCalendar(2013, 6, 18, 3, 0, 0);
+		BrowserItem item = service.advancedSearch("101", params, 0, 0);
 
-//        AdvSearchParams params =  new AdvSearchParams(
-//                "cmis:document",dd, dd2, "plain/text",34036, null);
+		//assertEquals(21, item.getChildren().size());
+		assertEquals(1, item.getChildren().size());
 
-        AdvSearchParams params =  new AdvSearchParams("100",
-                "cmis:document",null, null, null, null, null);
-
-        BrowserItem item = cmisBrowserService.advancedSearch("101", params,1,100);
-
-        //assertEquals(21, item.getChildren().size());
-        assertEquals(3, item.getChildren().size());
-
-    }
+	}
 
 
-    @Test
-    public void test_advancedSearch_all_folders_in_folder()
-    {
+//	@Ignore
+	@Test
+	public void test_advancedSearch_document()
+	{
+		AdvSearchParams params = new AdvSearchParams("100",	"cmis:document", null, null, null, null, null);
 
-        Calendar dd = new GregorianCalendar(2013, 6, 17, 3, 0, 0);
-        Calendar dd2 = new GregorianCalendar(2013, 6, 18, 3, 0, 0);
+		BrowserItem item = service.advancedSearch("101", params, 0, 0);
 
-//        AdvSearchParams params =  new AdvSearchParams(
-//                "cmis:document",dd, dd2, "plain/text",34036, null);
+		assertEquals(3, item.getChildren().size());
+		assertEquals("My_Document-0-1", item.getChildren().get(0).getName());
+	}
 
-        AdvSearchParams params =  new AdvSearchParams("100",
-                "cmis:folder",null, null, null, null, null);
 
-        BrowserItem item = cmisBrowserService.advancedSearch("101", params,1,100);
+//	@Ignore
+	@Test
+	public void test_advancedSearch_folder()
+	{
+		AdvSearchParams params = new AdvSearchParams("100",	"cmis:folder", null, null, null, null, null);
 
-        //assertEquals(21, item.getChildren().size());
-        assertEquals(2, item.getChildren().size());
+		BrowserItem item = service.advancedSearch("101", params, 0, 0);
 
-    }
+		assertEquals(2, item.getChildren().size());
+		assertEquals("My_Folder-1-1", item.getChildren().get(0).getName());
+	}
 
 
 }

@@ -185,6 +185,10 @@
                 <h:outputText value="#{item.type}" id="itemtype"/>
             </p:column>
 
+            <p:column headerText="Creation Date">
+                <h:outputText value="#{item.created}" id="itemcreated"/>
+            </p:column>
+
             <!-- Paging Panel-->
             <f:facet name="footer">
                 <p:commandButton id="butfirst" action="#{cc.attrs.controller.firstPage}"

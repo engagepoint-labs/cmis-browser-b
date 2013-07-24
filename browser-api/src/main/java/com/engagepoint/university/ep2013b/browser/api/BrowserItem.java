@@ -2,165 +2,205 @@ package com.engagepoint.university.ep2013b.browser.api;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class BrowserItem implements Serializable
 {
+	public enum TYPE { FILE, FOLDER	}
 
-    public enum TYPE {FILE, FOLDER}
+	private String id = "";
+	private TYPE type = TYPE.FILE;
+	private String name = "";
+	private BrowserItem parent = null;
+	private List<BrowserItem> children = new ArrayList<BrowserItem>();
+	private int totalPages = 0;
+	private Date created;
 
-    private String id = "";
-    private TYPE type = TYPE.FILE;
-    private String name = "";
-    private BrowserItem parent = null;
-    private List<BrowserItem> children = new ArrayList<BrowserItem>();
-    private int totalPages = 0;
+	public BrowserItem()
+	{
+	}
 
-    public BrowserItem()
-    {
-    }
+	public BrowserItem(String name)
+	{
+		this.name = name;
+	}
 
-    public BrowserItem(String name)
-    {
-        this.name = name;
-    }
+	public BrowserItem(String name, TYPE type)
+	{
+		this.name = name;
+		this.type = type;
+	}
 
-    public BrowserItem(String name, TYPE type)
-    {
-        this.name = name;
-        this.type = type;
-    }
+	public BrowserItem(String name, TYPE type, BrowserItem parent)
+	{
+		this(name, type);
+		this.parent = parent;
+	}
 
-    public BrowserItem(String name, TYPE type, BrowserItem parent)
-    {
-        this.name = name;
-        this.type = type;
-        this.parent = parent;
-    }
+	public BrowserItem(String id, String name, TYPE type)
+	{
+		this(name, type);
+		this.id = id;
+	}
 
-    public BrowserItem(String id, String name, TYPE folder) {
-        this.id = id;
-        this.name = name;
-        this.type = folder;
-    }
+	public BrowserItem(String name, TYPE type, BrowserItem parent, List<BrowserItem> children)
+	{
+		this(name, type, parent);
+		this.children = children;
+	}
 
-    public BrowserItem(String name, TYPE type, BrowserItem parent, List<BrowserItem> children) {
-        this.name = name;
-        this.type = type;
-        this.parent = parent;
-        this.children = children;
-    }
-
-    public BrowserItem(String name, TYPE type, BrowserItem parent, List<BrowserItem> children, int totalPages) {
-        this.name = name;
-        this.type = type;
-        this.parent = parent;
-        this.children = children;
-        this.totalPages = totalPages;
-    }
+	public BrowserItem(String name, TYPE type, BrowserItem parent, List<BrowserItem> children, int totalPages)
+	{
+		this(name, type, parent, children);
+		this.totalPages = totalPages;
+	}
 
 
-    public BrowserItem(String id, String name, TYPE type, BrowserItem parent, List<BrowserItem> children) {
-        this.id = id;
-        this.name = name;
-        this.type = type;
-        this.parent = parent;
-        this.children = children;
-    }
+	public BrowserItem(String id, String name, TYPE type, BrowserItem parent, List<BrowserItem> children)
+	{
+		this(name, type, parent);
+		this.id = id;
+		this.children = children;
+	}
 
 
-    public String getId()
-    {
-        return id;
-    }
+	public String getId()
+	{
+		return id;
+	}
 
-    public void setId(String id)
-    {
-        this.id = id;
-    }
+	public void setId(String id)
+	{
+		this.id = id;
+	}
 
-    public TYPE getType()
-    {
-        return type;
-    }
+	public TYPE getType()
+	{
+		return type;
+	}
 
-    public void setType(TYPE type)
-    {
-        this.type = type;
-    }
+	public void setType(TYPE type)
+	{
+		this.type = type;
+	}
 
-    public String getName()
-    {
-        return name;
-    }
+	public String getName()
+	{
+		return name;
+	}
 
-    public void setName(String name)
-    {
-        this.name = name;
-    }
+	public void setName(String name)
+	{
+		this.name = name;
+	}
 
-    public BrowserItem getParent()
-    {
-        return parent;
-    }
+	public BrowserItem getParent()
+	{
+		return parent;
+	}
 
-    public void setParent(BrowserItem parent)
-    {
-        this.parent = parent;
-    }
+	public void setParent(BrowserItem parent)
+	{
+		this.parent = parent;
+	}
 
-    public List<BrowserItem> getChildren()
-    {
-        return children;
-    }
+	public List<BrowserItem> getChildren()
+	{
+		return children;
+	}
 
-    public void setChildren(List<BrowserItem> children)
-    {
-        this.children.addAll(children);
-    }
+	public void setChildren(List<BrowserItem> children)
+	{
+		this.children.addAll(children);
+	}
 
-    public void setChild(BrowserItem child)
-    {
-        children.add(child);
-    }
+	public void setChild(BrowserItem child)
+	{
+		children.add(child);
+	}
 
-    @Override
-    public boolean equals(Object other)
-    {
-        if (!(other instanceof BrowserItem)) return false;
+	public int getTotalPages()
+	{
+		return totalPages;
+	}
 
-        return (this.getId().equals(((BrowserItem)other).getId()));
-    }
+	public void setTotalPages(int totalPages)
+	{
+		this.totalPages = totalPages;
+	}
 
-    @Override
-    public String toString()
-    {
-        String result = "BrowserItem ("+getId()+", "+getName()+", "+getType().name()+", ";
+	public Date getCreated()
+	{
+		return created;
+	}
 
-        result += (parent == null) ? "null" : parent.getId();
-        result += ", ";
+	public void setCreated(Date created)
+	{
+		this.created = created;
+	}
 
-        if (children.isEmpty()) result += "empty";
-        else
-        {
-            result += "[";
-            for (BrowserItem i : children)
-            {
-                result += i.getId() + ", ";
-            }
-            result += "]";
-        }
+	// Get current path
+	public String getLocation()
+	{
+		String result = "";
+		BrowserItem item = this;
 
-        result += ")";
+		if (item.getParent() == null) return "/";
 
-        return result;
-    }
+		while (item.getParent() != null)
+		{
+			result = "/" + item.getName() + result;
+			item = item.getParent();
+		}
 
-    public int getTotalPages() {
-        return totalPages;
-    }
+		return result;
+	}
 
-    public void setTotalPages(int totalPages) {
-        this.totalPages = totalPages;
-    }
+	// Find Root from any folder
+	public BrowserItem getRootFolder()
+	{
+		BrowserItem item = this;
+
+		while (item.getParent() != null)
+		{
+			item = item.getParent();
+		}
+
+		return item;
+	}
+
+	@Override
+	public boolean equals(Object other)
+	{
+		if (!(other instanceof BrowserItem)) return false;
+
+		return (this.getId().equals(((BrowserItem) other).getId()));
+	}
+
+	@Override
+	public String toString()
+	{
+		String result = "BrowserItem (" + getId() + ", " + getName() + ", " + getCreated() + ", " + getType().name() + ", ";
+
+		result += (parent == null) ? "null" : parent.getId();
+		result += ", ";
+
+		if (children.isEmpty()) result += "empty";
+		else
+		{
+			result += "[";
+			for (BrowserItem i : children)
+			{
+				result += i.getId() + ", ";
+			}
+			result += "]";
+		}
+
+		result += ")";
+
+		return result;
+	}
+
+
 }

@@ -4,6 +4,8 @@ import org.apache.chemistry.opencmis.client.api.QueryStatement;
 import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Date;
@@ -107,7 +109,7 @@ public class AdvSearchParams implements Serializable {
 
         String preparedQueryString = "";
 
-        String inDocums = "SELECT ?, ? FROM ?";
+        String inDocums = "SELECT * FROM ?";
         String inFolder = " WHERE IN_FOLDER(?)";
         String multiple = " AND ";
 
@@ -162,26 +164,31 @@ public class AdvSearchParams implements Serializable {
         String type = "cmis:document";   /// ???
 
         //// everytimes
-        query.setProperty(1, type, "cmis:objectId");
-        query.setProperty(2, type, "cmis:name");
         if(params.get("docType") != null){
-            query.setType(3, params.get("docType").toString());
+            query.setType(1, params.get("docType").toString());
         } else {
-            query.setType(3, type);
+            query.setType(1, type);
         }
-        query.setId(4, new ObjectIdImpl(params.get("folderId").toString()));
+        query.setId(2, new ObjectIdImpl(params.get("folderId").toString()));
 
-        int paramCounter = 5;  // have already 2 params
+        int paramCounter = 3;  // have already 2 params
 
 
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
         if(params.get("fromDate") != null){
-            query.setDateTime(paramCounter++, (Date) params.get("fromDate"));
+//            query.setDateTime(paramCounter++, (Date) params.get("fromDate"););
+			Date date = (Date) params.get("fromDate");
+			String d = format.format(date) + "T00:00:00";
+			query.setString(paramCounter++, d);
         }
 
 
         if(params.get("toDate") != null){
-            query.setDateTime(paramCounter++, (Date) params.get("toDate"));
+			Date date = (Date) params.get("toDate");
+			String d = format.format(date) + "T00:00:00";
+			query.setString(paramCounter++, d);
+//            query.setDateTime(paramCounter++, d);
         }
 
 
@@ -199,7 +206,7 @@ public class AdvSearchParams implements Serializable {
             query.setString(paramCounter++, params.get("text").toString());
         }
 
-        System.out.println("QueryStatement = " + query.toQueryString());
+//        System.out.println("QueryStatement = " + query.toQueryString());
 
         return query;
 

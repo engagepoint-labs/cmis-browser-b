@@ -39,7 +39,7 @@ public class PreferencesHelper
     public void setCmisUrl(String url)
     {
         // check if url is correct
-        String pattern = "^(https?)://((\\w|\\.\\w)*):(\\d{4})((?:/\\w+(?:_\\w+)*(?:-\\w+)*)+)/$";
+        String pattern = "^(https?)://((\\w|\\.\\w)*)(:(\\d{2,5}))?((?:/\\w+(?:_\\w+)*(?:-\\w+)*)+)/$";
         if (!url.matches(pattern)) throw new IllegalArgumentException();
 
         settings.put(CMIS_URL, url);

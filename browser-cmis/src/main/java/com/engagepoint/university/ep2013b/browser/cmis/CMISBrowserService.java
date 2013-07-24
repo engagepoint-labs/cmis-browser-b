@@ -6,8 +6,11 @@ import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
+import org.apache.chemistry.opencmis.commons.data.ContentStream;
 import org.apache.chemistry.opencmis.commons.enums.BindingType;
+import org.apache.chemistry.opencmis.commons.enums.VersioningState;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisBaseException;
+import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -217,6 +220,16 @@ public class CMISBrowserService implements BrowserService {
 
             if (((pageNum != 0) && (rowCounts != 0))) {
                 skip = (pageNum - 1) * rowCounts;
+
+				long total = results.getTotalNumItems();
+
+				long rest = total % rowCounts;
+
+				totalPages = (int) (total - rest) / rowCounts;
+
+				if ( rest > 0) {
+					totalPages++;
+				}
             }
 
 
@@ -231,16 +244,6 @@ public class CMISBrowserService implements BrowserService {
 
                 browserItems.add(item);
 
-            }
-
-            long total = results.getTotalNumItems();
-
-            long rest = total % rowCounts;
-
-            totalPages = (int) (total - rest) / rowCounts;
-
-            if ( rest > 0) {
-                totalPages++;
             }
 
         }  // valid id & parameter string
@@ -428,5 +431,62 @@ public class CMISBrowserService implements BrowserService {
         }
     }
 
+	// -----------------------------------------------------------------------------------------------------------------
+	@Override
+	public BrowserItem createDocument(String id, String name)
+	{
+		Folder current = (Folder) session.getObject(id);
+		return createDocument(current, name);
+	}
 
+	private BrowserItem createDocument(Folder current, String name)
+	{
+		BrowserItem result = new BrowserItem();
+
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(PropertyIds.OBJECT_TYPE_ID, "cmis:document");
+		properties.put(PropertyIds.NAME, name);
+
+		Document document = current.createDocument(properties, null, VersioningState.NONE);
+
+		result.setType(BrowserItem.TYPE.FILE);
+		result.setName(name);
+		result.setId(document.getId());
+
+		return result;
+	}
+
+	@Override
+	public BrowserItem editDocument(String id, String name)
+	{
+		Document current = (Document) session.getObject(id);
+		return editDocument(current, name);
+	}
+
+	private BrowserItem editDocument(Document document, String name)
+	{
+		BrowserItem result = new BrowserItem();
+
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(PropertyIds.NAME, name);
+
+		document.updateProperties(properties);
+
+		result.setName(name);
+		result.setId(document.getId());
+
+		return result;
+	}
+
+	@Override
+	public void deleteDocument(String id)
+	{
+		Document current = (Document) session.getObject(id);
+		deleteDocument(current);
+	}
+
+	private void deleteDocument(Document document)
+	{
+		document.delete();
+	}
 }

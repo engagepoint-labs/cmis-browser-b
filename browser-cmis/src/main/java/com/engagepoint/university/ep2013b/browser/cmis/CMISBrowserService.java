@@ -3,11 +3,13 @@ package com.engagepoint.university.ep2013b.browser.cmis;
 import com.engagepoint.university.ep2013b.browser.api.BrowserItem;
 import com.engagepoint.university.ep2013b.browser.api.BrowserService;
 import org.apache.chemistry.opencmis.client.api.*;
+import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
 import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
 import org.apache.chemistry.opencmis.commons.enums.BindingType;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisBaseException;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisRuntimeException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -389,6 +391,25 @@ public class CMISBrowserService implements BrowserService {
     }
 
 
+    @Override
+    public void moveFolder(BrowserItem source, BrowserItem target) throws CmisRuntimeException {
+
+        Folder folderSource = (Folder) session.getObject(source.getId());
+        Folder folderTarget = (Folder) session.getObject(target.getId());
+
+        Folder parent = folderSource.getFolderParent();
+
+        ObjectId targetObjectId = new ObjectIdImpl(folderTarget.getId());
+        ObjectId parentObjectId = new ObjectIdImpl(parent.getId());
+
+        try {
+            folderSource.move(parentObjectId, targetObjectId);
+        } catch (CmisRuntimeException e) {
+            e.printStackTrace();
+            // TODO: exception handling task
+        }
+
+    }
 
     @Override
     public Map<String, String> getTypeList(String type) {

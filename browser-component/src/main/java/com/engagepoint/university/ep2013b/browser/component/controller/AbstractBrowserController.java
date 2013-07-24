@@ -5,6 +5,7 @@ import com.engagepoint.university.ep2013b.browser.api.BrowserItem;
 import com.engagepoint.university.ep2013b.browser.api.BrowserService;
 import com.engagepoint.university.ep2013b.browser.cmis.AdvSearchParams;
 import com.engagepoint.university.ep2013b.browser.component.BrowserFactory;
+import org.primefaces.event.TreeDragDropEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
@@ -353,6 +354,17 @@ public abstract class AbstractBrowserController implements BrowserController {
         }
         return link + "?faces-redirect=true";
 
+    }
+
+    @Override
+    public void moveFolder(TreeDragDropEvent event) {
+        TreeNode dragNode = event.getDragNode();
+        TreeNode dropNode = event.getDropNode();
+
+        BrowserItem source = (BrowserItem) dragNode.getData();
+        BrowserItem target = (BrowserItem) dropNode.getData();
+
+        service.moveFolder(source, target);
     }
 
     public String getNameNewFolder() {

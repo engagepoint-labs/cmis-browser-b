@@ -2,6 +2,7 @@ package com.engagepoint.university.ep2013b.browser.component.controller;
 
 import com.engagepoint.university.ep2013b.browser.api.BrowserItem;
 import com.engagepoint.university.ep2013b.browser.cmis.AdvSearchParams;
+import org.primefaces.event.TreeDragDropEvent;
 import org.primefaces.model.TreeNode;
 
 import java.util.List;
@@ -55,7 +56,7 @@ public interface BrowserController {
     public void setNameNewFolder(String name);
     public String getNameNewFolder();
 
-
+    void moveFolder(TreeDragDropEvent event);
 
 
 }

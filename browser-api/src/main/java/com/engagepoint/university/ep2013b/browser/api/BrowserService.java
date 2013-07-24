@@ -26,6 +26,7 @@ public interface BrowserService
     public void deleteFolder(String id);
     public Map<String,String> getTypeList(String type);
 
+    void moveFolder(BrowserItem source, BrowserItem target);
 
     // ... add more here ...
 }

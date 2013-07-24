@@ -156,7 +156,7 @@ public class CMISBrowserService implements BrowserService {
         return current.getPath();
     }
 
-    public Session connect() {
+    private Session connect() {
         SessionFactory sessionFactory = SessionFactoryImpl.newInstance();
         Map<String, String> parameter = new HashMap<String, String>();
 

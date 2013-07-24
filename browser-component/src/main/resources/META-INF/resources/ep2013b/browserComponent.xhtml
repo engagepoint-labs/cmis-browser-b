@@ -10,27 +10,52 @@
 
 <cc:interface>
     <cc:attribute name="link"/>
+    <cc:attribute name="controller" type="com.engagepoint.university.ep2013b.browser.component.BrowserController"/>
 </cc:interface>
 
 <cc:implementation>
 
-    <p:layout id="componentlayout">
+    <!-- Table Panel-->
+    <p:dataTable var="item" value="#{cc.attrs.controller.dataList}" id="table">
+        <p:column headerText="Id">
+            <h:outputText value="#{item.id}" id="itemid"/>
+        </p:column>
 
-        <p:layoutUnit position="north" header="Location" size="auto">
-            <custom:browserInfoPanel />
-        </p:layoutUnit>
+        <p:column headerText="Name">
+            <h:outputText value="#{item.name}" id="itemname"/>
+        </p:column>
 
-        <p:layoutUnit position="west" header="Tree" resizable="true">
-            <custom:browserComponentTree link="#{cc.attrs.link}"/>
+        <p:column headerText="Type">
+            <h:outputText value="#{item.type}" id="itemtype"/>
+        </p:column>
 
-        </p:layoutUnit>
+        <!-- Paging Panel-->
+        <f:facet name="footer">
+            <p:commandButton id="butfirst" action="#{cc.attrs.controller.page.first}"
+                             disabled="#{!cc.attrs.controller.page.prevAllowed}" update="table"
+                             icon="ui-icon-arrowthickstop-1-w">
+                <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
+            </p:commandButton>
 
-        <p:layoutUnit position="center" header="Table" resizable="true">
-            <custom:browserComponentTable link="#{cc.attrs.link}"/>
-        </p:layoutUnit>
-    </p:layout>
+            <p:commandButton id="butprev" action="#{cc.attrs.controller.page.previous}"
+                             disabled="#{!cc.attrs.controller.page.prevAllowed}" update="table"
+                             icon="ui-icon-arrowthick-1-w">
+                <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
+            </p:commandButton>
 
+            <p:commandButton id="butnext" action="#{cc.attrs.controller.page.next}"
+                             disabled="#{!cc.attrs.controller.page.nextAllowed}" update="table"
+                             icon="ui-icon-arrowthick-1-e">
+                <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
+            </p:commandButton>
+
+            <p:commandButton id="butlast" action="#{cc.attrs.controller.page.last}"
+                             disabled="#{!cc.attrs.controller.page.nextAllowed}" update="table"
+                             icon="ui-icon-arrowthickstop-1-e">
+                <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
+            </p:commandButton>
+        </f:facet>
+    </p:dataTable>
 
 </cc:implementation>
-
 </html>

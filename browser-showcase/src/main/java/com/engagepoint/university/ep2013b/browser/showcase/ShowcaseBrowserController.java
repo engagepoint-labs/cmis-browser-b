@@ -2,7 +2,6 @@ package com.engagepoint.university.ep2013b.browser.showcase;
 
 import com.engagepoint.university.ep2013b.browser.component.controller.AbstractBrowserController;
 
-import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
@@ -18,13 +17,5 @@ import javax.faces.bean.ViewScoped;
 @ViewScoped
 public class ShowcaseBrowserController extends AbstractBrowserController{
 
-    public ShowcaseBrowserController() {
-        //super();
-    }
 
-    @PostConstruct
-    public void init(){
-        super.init();
-        System.out.println("-----------------  ShowcaseBrowserController ");
-    }
 }

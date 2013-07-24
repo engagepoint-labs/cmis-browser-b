@@ -41,7 +41,7 @@ public interface BrowserController {
     void lastPage();
     void simple();
 
-    public void showPanel();
+    public void showPanel(int flag);
     public void hidePanel();
     public boolean isShowEditFolderPanel();
 
@@ -54,6 +54,8 @@ public interface BrowserController {
     public String deleteFolder(String link);
     public void setNameNewFolder(String name);
     public String getNameNewFolder();
+    public  void setOperationFlag(int operationFlag);
+    public int   getOperationFlag();
 
 
 

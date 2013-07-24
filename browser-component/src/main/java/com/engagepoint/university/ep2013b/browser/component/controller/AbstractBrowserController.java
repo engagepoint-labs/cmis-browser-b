@@ -8,12 +8,13 @@ import com.engagepoint.university.ep2013b.browser.component.BrowserFactory;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-public abstract class AbstractBrowserController implements BrowserController {
+public class AbstractBrowserController implements BrowserController {
 
     private BrowserService service;
     private String folderId;
@@ -43,16 +44,17 @@ public abstract class AbstractBrowserController implements BrowserController {
 
     private BrowserItem newFolderItem = new BrowserItem();
     private String nameNewFolder = "";
+    private int operationFlag = 0;
 
-
+    @PostConstruct
     public void init() {
-        System.out.println(" -------------  @PostConstruct  AbstractBrowserController   init()");
 
         service = BrowserFactory.getInstance("CMIS");
 
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         folderId = request.getParameter("folderId");
-
+        System.out.println(" -------------    init()  folderId = request.getParameter(folderId) =  "+folderId);
+        System.out.println(" -------------    init()  folderId = request.getAttribute(folderId) =  "+ request.getAttribute("folderId"));
         // Tree
 
         BrowserItem currentFolder = null;
@@ -81,8 +83,10 @@ public abstract class AbstractBrowserController implements BrowserController {
     }
 
 
-    public void showPanel() {
+    public void showPanel(int flag) {
         showEditFolderPanel = true;
+        operationFlag = flag;
+
     }
 
     public void hidePanel() {
@@ -338,20 +342,28 @@ public abstract class AbstractBrowserController implements BrowserController {
     @Override
     public String deleteFolder(String link) {
 
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+
+        BrowserItem parent = service.findFolderById(folderId).getParent();
+
         try {
 
         service.deleteFolder(folderId);
-
         showEditFolderPanel = false;
+
+        //init();
+
         //System.out.println("" + link + "?faces-redirect=true");
-        init();
 
         } catch (Exception e){
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_WARN,
                             "Error during deleting folder by id: "+folderId, null));
         }
-        return link + "?faces-redirect=true";
+
+        System.out.println(" -------------      "+link + "?folderId="+parent.getId()+"&faces-redirect=true");
+
+        return link + "?folderId="+parent.getId()+"&faces-redirect=true";
 
     }
 
@@ -363,5 +375,11 @@ public abstract class AbstractBrowserController implements BrowserController {
         this.nameNewFolder = nameNewFolder;
     }
 
+    public int getOperationFlag() {
+        return operationFlag;
+    }
 
+    public void setOperationFlag(int operationFlag) {
+        this.operationFlag = operationFlag;
+    }
 }

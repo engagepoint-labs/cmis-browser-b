@@ -144,11 +144,13 @@
 
             <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
         </p:commandButton>
-        <p:commandButton id="deletefolder" action="#{cc.attrs.controller.showPanel(3)}" immediate="true"
-                         value="Delete Folder" update=":#{cc.clientId}:seniorpanel" title="Delete folder">
+        <p:commandButton id="deletefolder"
+                         value="Delete Folder"
+                         type="button"
+                         onclick="confirmDeleteDialog.show()"
+                         immediate="true"/>
 
-            <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
-        </p:commandButton>
+
 
 
         <!-- Table Panel-->
@@ -229,15 +231,6 @@
 
                 <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
             </p:commandButton>
-            <p:commandButton id="deletefolderbtn"
-                             action="#{cc.attrs.controller.deleteFolder(cc.attrs.link)}"
-                             value="Delete"
-                             ajax="false"
-                             immediate="true"
-                             title="Delete folder"  rendered="#{cc.attrs.controller.operationFlag eq 3}">
-
-                <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
-            </p:commandButton>
 
 
             <p:commandButton id="cancel" action="#{cc.attrs.controller.hidePanel()}" value="Cancel"
@@ -259,6 +252,22 @@
 
 </h:column>
 </h:panelGrid>
+<p:confirmDialog id="confirmDeleteDialog" widgetVar="confirmDeleteDialog">
+    <p:commandButton id="deletefolderbtn1"
+                     actionListener="#{cc.attrs.controller.deleteFolder(cc.attrs.link)}"
+                     value="Delete"
+                     immediate="true"
+
+                     title="Delete folder"  >
+        <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
+    </p:commandButton>
+    <p:commandButton id="cancel1"
+                     value="Cancel"
+                     onclick="confirmDeleteDialog.hide()"
+                     update=":#{cc.clientId}:seniorpanel"
+                     immediate="true"/>
+
+</p:confirmDialog>
 
 </cc:implementation>
 

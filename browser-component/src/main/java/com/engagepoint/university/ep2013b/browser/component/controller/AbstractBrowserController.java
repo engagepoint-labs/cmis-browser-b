@@ -10,8 +10,11 @@ import org.primefaces.model.TreeNode;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.application.NavigationHandler;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.List;
 
 public class AbstractBrowserController implements BrowserController {
@@ -221,7 +224,7 @@ public class AbstractBrowserController implements BrowserController {
 
     // Method executed when dataTable renders (during loading page or ajax request)
     public List<BrowserItem> getDataList() {
-        businessLogic();
+
         return dataList;
     }
 
@@ -340,7 +343,7 @@ public class AbstractBrowserController implements BrowserController {
 
 
     @Override
-    public String deleteFolder(String link) {
+    public void deleteFolder(String link) {
 
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 
@@ -362,8 +365,14 @@ public class AbstractBrowserController implements BrowserController {
         }
 
         System.out.println(" -------------      "+link + "?folderId="+parent.getId()+"&faces-redirect=true");
+        folderId=parent.getId();
 
-        return link + "?folderId="+parent.getId()+"&faces-redirect=true";
+        try {
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            FacesContext.getCurrentInstance().getExternalContext().redirect(link+"?folderId="+folderId);
+        } catch (Exception e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
 
     }
 

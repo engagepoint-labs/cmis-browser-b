@@ -207,7 +207,7 @@
                             <url>http://apache.cp.if.ua/tomcat/tomcat-7/v7.0.41/bin/apache-tomcat-7.0.41.zip</url>
                             <downloadDir>${user.home}/.m2/cargo/containers</downloadDir>
                         </zipUrlInstaller>
-
+                        <log>target/cargo.log</log>
                         <!--JSF for Tomcat server (not needed for glassfish) -->
                         <dependencies>
                             <dependency>

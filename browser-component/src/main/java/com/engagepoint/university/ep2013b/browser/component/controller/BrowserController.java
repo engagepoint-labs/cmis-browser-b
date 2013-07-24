@@ -51,7 +51,7 @@ public interface BrowserController {
 
     public String createFolder(String link);
     public String editFolder(String link);
-    public String deleteFolder(String link);
+    public void deleteFolder(String link);
     public void setNameNewFolder(String name);
     public String getNameNewFolder();
     public  void setOperationFlag(int operationFlag);

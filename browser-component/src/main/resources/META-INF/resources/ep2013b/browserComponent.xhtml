@@ -15,8 +15,10 @@
 
 <cc:implementation>
 
+<h:outputText value="Repository: #{cc.attrs.controller.currentUrl}"/>
+<br />
+<h:outputText value="Current location: #{cc.attrs.controller.currentLocation}"/>
 
-<h:outputText value="#{cc.attrs.controller.currentLocation}"/>
 
 <p:growl id="messages" showDetail="true"/>
 
@@ -124,7 +126,24 @@
 
                 </h:panelGrid>
 
+            </p:tab>
 
+            <p:tab id="tab3" title="Preferences">
+                <h:panelGrid columns="2">
+                    <p:column>
+                        <h:outputLabel value="URL:"/>
+                        <p:inputText id="inputNewLink"
+                                     value="#{cc.attrs.controller.currentUrl}"/>
+                    </p:column>
+
+                    <p:column>
+                        <p:commandButton id="newConnect"
+                                         value="Connect"
+                                         ajax="false"
+                                         actionListener="#{cc.attrs.controller.findLink(cc.attrs.link)}">
+                        </p:commandButton>
+                    </p:column>
+                </h:panelGrid>
             </p:tab>
         </p:tabView>
 

@@ -3,18 +3,20 @@ package com.engagepoint.university.ep2013b.browser.component.controller;
 
 import com.engagepoint.university.ep2013b.browser.api.BrowserItem;
 import com.engagepoint.university.ep2013b.browser.api.BrowserService;
+import com.engagepoint.university.ep2013b.browser.api.PreferencesHelper;
 import com.engagepoint.university.ep2013b.browser.cmis.AdvSearchParams;
 import com.engagepoint.university.ep2013b.browser.component.BrowserFactory;
 import org.primefaces.event.TreeDragDropEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-public abstract class AbstractBrowserController implements BrowserController {
+public  class AbstractBrowserController implements BrowserController {
 
     private BrowserService service;
     private String folderId;
@@ -45,11 +47,18 @@ public abstract class AbstractBrowserController implements BrowserController {
     private BrowserItem newFolderItem = new BrowserItem();
     private String nameNewFolder = "";
 
+    private String currentUrl = null;
+    private PreferencesHelper preferencesHelper;
 
+    private boolean reconnect = false;
+
+    @PostConstruct
     public void init() {
         System.out.println(" -------------  @PostConstruct  AbstractBrowserController   init()");
-
+        preferencesHelper = new PreferencesHelper();
+        currentUrl = preferencesHelper.getCmisUrl("http://localhost:18080/server/services/");
         service = BrowserFactory.getInstance("CMIS");
+        reconnect = false;
 
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         folderId = request.getParameter("folderId");
@@ -169,10 +178,10 @@ public abstract class AbstractBrowserController implements BrowserController {
     // TODO: Should have better name
     // Process received parameters and decided what data to show (folder items or search results)
     public void businessLogic() {
-        System.out.println("businessLogic()");
-        System.out.println("\tfolderID       = " + folderId);
-        System.out.println("\tpage           = " + pageNum);
-        System.out.println("\tsimple search  = " + searchCriteria);
+//        System.out.println("businessLogic()");
+//        System.out.println("\tfolderID       = " + folderId);
+//        System.out.println("\tpage           = " + pageNum);
+//        System.out.println("\tsimple search  = " + searchCriteria);
 
         if ((searchCriteria == null) && advancedSearchParams.isEmpty()) {
             // not searching
@@ -375,5 +384,23 @@ public abstract class AbstractBrowserController implements BrowserController {
         this.nameNewFolder = nameNewFolder;
     }
 
+    public String getCurrentUrl() {
+        return currentUrl;
+    }
 
+    public void setCurrentUrl(String currentUrl) {
+        this.currentUrl = currentUrl;
+    }
+
+    public void findLink(String link) {
+        preferencesHelper.setCmisUrl(currentUrl);
+        service.connect();
+        reconnect = true;
+        try {
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            FacesContext.getCurrentInstance().getExternalContext().redirect(link);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

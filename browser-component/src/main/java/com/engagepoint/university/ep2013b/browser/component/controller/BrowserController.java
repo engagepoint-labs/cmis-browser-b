@@ -57,6 +57,7 @@ public interface BrowserController {
     public String getNameNewFolder();
 
     void moveFolder(TreeDragDropEvent event);
-
-
+    String getCurrentUrl();
+    void setCurrentUrl(String currentUrl);
+    void findLink(String link);
 }

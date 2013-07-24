@@ -3,6 +3,8 @@ package com.engagepoint.university.ep2013b.browser.api;
 
 // Provides general interface for working with any data source like CMIS or File System
 
+import org.apache.chemistry.opencmis.client.api.Session;
+
 import java.util.Map;
 
 public interface BrowserService
@@ -27,6 +29,8 @@ public interface BrowserService
     public Map<String,String> getTypeList(String type);
 
     void moveFolder(BrowserItem source, BrowserItem target);
+
+    public void connect();
 
     // ... add more here ...
 }

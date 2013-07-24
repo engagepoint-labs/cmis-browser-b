@@ -2,6 +2,7 @@ package com.engagepoint.university.ep2013b.browser.cmis;
 
 import com.engagepoint.university.ep2013b.browser.api.BrowserItem;
 import com.engagepoint.university.ep2013b.browser.api.BrowserService;
+import com.engagepoint.university.ep2013b.browser.api.PreferencesHelper;
 import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
 import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
@@ -21,9 +22,11 @@ public class CMISBrowserService implements BrowserService {
     // Unique Service Provider name
     private static final String SERVICE_NAME = "CMIS";
     private Session session;
+    private PreferencesHelper preferencesHelper = new PreferencesHelper();
 
     public CMISBrowserService() {
-        session = connect();
+//        session = connect();
+        connect();
     }
 
     // Should return SERVICE_NAME
@@ -162,17 +165,26 @@ public class CMISBrowserService implements BrowserService {
         return current.getPath();
     }
 
-    public Session connect() {
+    @Override
+    public void connect()
+    {
+        String url = preferencesHelper.getCmisUrl("http://localhost:18080/server/services/");
+
+        session = connect(url);
+    }
+
+    private Session connect(String url) {
         SessionFactory sessionFactory = SessionFactoryImpl.newInstance();
         Map<String, String> parameter = new HashMap<String, String>();
 
         // ATOM
-//        final String url = "http://localhost:8080/server/atom11";
+//        final String url = "http://localhost:18080/server/atom11";
 //        parameter.put(SessionParameter.ATOMPUB_URL, url);
 //        parameter.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
 
         // WSDL
-        final String url = "http://localhost:18080/server/services/";
+//        final String url = "http://localhost:18080/server/services/";
+        System.out.println("Connecting to: " + url);
         parameter.put(SessionParameter.BINDING_TYPE, BindingType.WEBSERVICES.value());
         parameter.put(SessionParameter.WEBSERVICES_ACL_SERVICE, url + "ACLService?wsdl");
         parameter.put(SessionParameter.WEBSERVICES_DISCOVERY_SERVICE, url + "DiscoveryService?wsdl");
@@ -408,7 +420,6 @@ public class CMISBrowserService implements BrowserService {
             e.printStackTrace();
             // TODO: exception handling task
         }
-
     }
 
     @Override

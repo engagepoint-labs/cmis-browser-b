@@ -18,13 +18,5 @@ import javax.faces.bean.ViewScoped;
 @ViewScoped
 public class ShowcaseBrowserController extends AbstractBrowserController{
 
-    public ShowcaseBrowserController() {
-        //super();
-    }
 
-    @PostConstruct
-    public void init(){
-        super.init();
-        System.out.println("-----------------  ShowcaseBrowserController ");
-    }
 }

@@ -117,7 +117,7 @@ public class AdvSearchParams implements Serializable {
         String paramDateFrom = "cmis:creationDate >= TIMESTAMP ?";
         String paramDateTo = "cmis:creationDate <= TIMESTAMP ?";
 
-        String paramContType = "cmis:objectTypeId = ?"; // "cmis:contentStreamMimeType = ?";
+        String paramContType = "cmis:contentStreamMimeType = ?";//"cmis:objectTypeId = ?"; //
         String paramSize = "cmis:contentStreamLength = ?";
         String paramText = "CONTAINS(?)";
 

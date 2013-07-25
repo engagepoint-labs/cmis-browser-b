@@ -13,13 +13,17 @@
 
 <h:body>
 
+    <h1>Browser</h1>
+    <h3>cmis-browser-b</h3>
 
-    <h:form id="form" style="margin: 10px; border-bottom-width: 1px">
+    <div style="margin: 10px; padding:10px; border:1px solid #acacac;">
+        <h:form id="form">
+            <ep2013b:browserComponent
+                    id="royal"
+                    link="#{request.contextPath}/browser.xhtml"
+                    controller="#{showcaseBrowserController}" />
+        </h:form>
+    </div>
 
-        <h3> <h:outputText value="Browser"/>  </h3>
-        <p/>
-
-        <ep2013b:browserComponent id="royal" link="#{request.contextPath}/browser.xhtml" controller="#{showcaseBrowserController}" />
-    </h:form>
 </h:body>
 </html>

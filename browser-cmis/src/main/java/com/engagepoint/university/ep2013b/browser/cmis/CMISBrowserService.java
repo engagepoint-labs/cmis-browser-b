@@ -1,5 +1,6 @@
 package com.engagepoint.university.ep2013b.browser.cmis;
 
+import com.engagepoint.university.ep2013b.browser.api.BrowserDocumentContent;
 import com.engagepoint.university.ep2013b.browser.api.BrowserItem;
 import com.engagepoint.university.ep2013b.browser.api.BrowserService;
 import org.apache.chemistry.opencmis.client.api.*;
@@ -12,7 +13,6 @@ import org.apache.chemistry.opencmis.commons.enums.VersioningState;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisBaseException;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 
-import java.lang.reflect.Type;
 import java.math.BigInteger;
 import java.util.*;
 
@@ -21,6 +21,7 @@ public class CMISBrowserService implements BrowserService
 	// Unique Service Provider name
 	private static final String SERVICE_NAME = "CMIS";
 	private Session session;
+
 
 	public CMISBrowserService()
 	{
@@ -33,6 +34,7 @@ public class CMISBrowserService implements BrowserService
 	{
 		return SERVICE_NAME;
 	}
+
 
 	// Non paging methods
 	@Override
@@ -65,6 +67,7 @@ public class CMISBrowserService implements BrowserService
 		return findFolder(current, page, rowCount);
 	}
 
+	// Search methods
 	@Override
 	public BrowserItem simpleSearch(String id, String parameter, int pageNum, int rowCounts)
 	{
@@ -92,6 +95,125 @@ public class CMISBrowserService implements BrowserService
 		return search(query, pageNum, rowCounts);
 	}
 
+
+	// Folder management methods
+	@Override
+	public BrowserItem createFolder(String id, String name, String type) throws CmisBaseException
+	{
+
+		Map<String, String> folderProps = new HashMap<String, String>();
+
+		folderProps.put(PropertyIds.OBJECT_TYPE_ID, type);
+		folderProps.put(PropertyIds.NAME, name);
+		folderProps.put(PropertyIds.PARENT_ID, id);
+
+		Folder parent = (Folder) session.getObject(id);
+
+		Folder newFolder = null;
+		BrowserItem result = new BrowserItem();
+
+		newFolder = parent.createFolder(folderProps);
+		result = new BrowserItem(newFolder.getId(), newFolder.getName(), BrowserItem.TYPE.FOLDER);
+
+//
+//        try {
+//            newFolder = parent.createFolder(folderProps);
+//            result = new BrowserItem(newFolder.getId(), newFolder.getName(), BrowserItem.TYPE.FOLDER);
+//        } catch (CmisBaseException e) {
+//            // TODO: exception handling task
+//            e.printStackTrace();
+//        }
+
+		return result;
+	}
+
+	@Override
+	public BrowserItem editFolder(String id, String name, String type) throws CmisBaseException
+	{
+
+		Map<String, String> folderProps = new HashMap<String, String>();
+
+		folderProps.put(PropertyIds.OBJECT_TYPE_ID, type);
+		folderProps.put(PropertyIds.NAME, name);
+		folderProps.put(PropertyIds.PARENT_ID, id);
+
+		Folder current = (Folder) session.getObject(id);
+
+		Folder newFolder = null;
+		BrowserItem result = new BrowserItem();
+
+		current.updateProperties(folderProps);
+		result = new BrowserItem(current.getId(), current.getName(), BrowserItem.TYPE.FOLDER);
+
+//
+//        try {
+//
+//            current.updateProperties(folderProps);
+//            result = new BrowserItem(current.getId(), current.getName(), BrowserItem.TYPE.FOLDER);
+//        } catch (CmisBaseException e) {
+//            // TODO: exception handling task
+//            e.printStackTrace();
+//        }
+
+		return result;
+
+	}
+
+	@Override
+	public void deleteFolder(String id) throws CmisBaseException
+	{
+
+		Folder current = (Folder) session.getObject(id);
+
+		if (current.getId().equals(""))
+		{
+			return;
+		}
+		current.delete();
+
+//
+//        try {
+//            current.delete();
+//        } catch (CmisBaseException e) {
+//            // TODO: exception handling task
+//            e.printStackTrace();
+//        }
+
+	}
+
+
+	// Connect method
+	public Session connect()
+	{
+		SessionFactory sessionFactory = SessionFactoryImpl.newInstance();
+		Map<String, String> parameter = new HashMap<String, String>();
+
+		// ATOM
+//        final String url = "http://localhost:18080/server/atom11";
+//        parameter.put(SessionParameter.ATOMPUB_URL, url);
+//        parameter.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
+
+		// WSDL
+		final String url = "http://localhost:18080/server/services/";
+		parameter.put(SessionParameter.BINDING_TYPE, BindingType.WEBSERVICES.value());
+		parameter.put(SessionParameter.WEBSERVICES_ACL_SERVICE, url + "ACLService?wsdl");
+		parameter.put(SessionParameter.WEBSERVICES_DISCOVERY_SERVICE, url + "DiscoveryService?wsdl");
+		parameter.put(SessionParameter.WEBSERVICES_MULTIFILING_SERVICE, url + "MultiFilingService?wsdl");
+		parameter.put(SessionParameter.WEBSERVICES_NAVIGATION_SERVICE, url + "NavigationService?wsdl");
+		parameter.put(SessionParameter.WEBSERVICES_OBJECT_SERVICE, url + "ObjectService?wsdl");
+		parameter.put(SessionParameter.WEBSERVICES_POLICY_SERVICE, url + "PolicyService?wsdl");
+		parameter.put(SessionParameter.WEBSERVICES_RELATIONSHIP_SERVICE, url + "RelationshipService?wsdl");
+		parameter.put(SessionParameter.WEBSERVICES_REPOSITORY_SERVICE, url + "RepositoryService?wsdl");
+		parameter.put(SessionParameter.WEBSERVICES_VERSIONING_SERVICE, url + "VersioningService?wsdl");
+
+		Repository repository = sessionFactory.getRepositories(parameter).get(0);
+		parameter.put(SessionParameter.REPOSITORY_ID, repository.getId());
+
+		return sessionFactory.createSession(parameter);
+	}
+
+
+	// Helper methods
 	private List<BrowserItem> findParents(Folder current)
 	{
 		List<BrowserItem> parents = new ArrayList<BrowserItem>();
@@ -123,7 +245,26 @@ public class CMISBrowserService implements BrowserService
 		return parents;
 	}
 
-	private BrowserItem findFolder(Folder current, int page, int rowCounts)
+	// Subclass uses for calculating pages
+	private class Page
+	{
+		public long skip;
+		public int total;
+
+		public Page(long numItems, int pageNum, int rowCounts)
+		{
+			// count total pages
+			long rest = numItems % rowCounts;
+			int pages = (int) (numItems - rest) / rowCounts;
+			if (rest > 0) pages++;
+			total = pages;
+
+			// count skipped records
+			skip = (pageNum - 1) * rowCounts;
+		}
+	}
+
+	private BrowserItem findFolder(Folder current, int pageNum, int rowCounts)
 	{
 		BrowserItem result;
 		List<BrowserItem> parents = findParents(current);
@@ -134,20 +275,11 @@ public class CMISBrowserService implements BrowserService
 			ItemIterable<CmisObject> children = current.getChildren();
 
 			// if enabled paging (paging only for selected folder, other parents without)
-			if (((page != 0) && (rowCounts != 0)) && (i.equals(parents.get(0))))
+			if (((pageNum != 0) && (rowCounts != 0)) && (i.equals(parents.get(0))))
 			{
-				// count total pages
-				long total = children.getTotalNumItems();
-				long rest = total % rowCounts;
-				int totalPages = (int) (total - rest) / rowCounts;
-
-				if (rest > 0) totalPages++;
-
-				i.setTotalPages(totalPages);
-
-				// count skipped records
-				long skip = (page - 1) * rowCounts;
-				children = current.getChildren().skipTo(skip).getPage(rowCounts);
+				Page page = new Page(children.getTotalNumItems(), pageNum, rowCounts);
+				i.setTotalPages(page.total);
+				children = current.getChildren().skipTo(page.skip).getPage(rowCounts);
 			}
 
 			for (CmisObject o : children)
@@ -213,36 +345,6 @@ public class CMISBrowserService implements BrowserService
 		return result;
 	}
 
-	public Session connect()
-	{
-		SessionFactory sessionFactory = SessionFactoryImpl.newInstance();
-		Map<String, String> parameter = new HashMap<String, String>();
-
-		// ATOM
-        final String url = "http://localhost:18080/server/atom11";
-        parameter.put(SessionParameter.ATOMPUB_URL, url);
-        parameter.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
-
-		// WSDL
-//		final String url = "http://localhost:18080/server/services/";
-//		parameter.put(SessionParameter.BINDING_TYPE, BindingType.WEBSERVICES.value());
-//		parameter.put(SessionParameter.WEBSERVICES_ACL_SERVICE, url + "ACLService?wsdl");
-//		parameter.put(SessionParameter.WEBSERVICES_DISCOVERY_SERVICE, url + "DiscoveryService?wsdl");
-//		parameter.put(SessionParameter.WEBSERVICES_MULTIFILING_SERVICE, url + "MultiFilingService?wsdl");
-//		parameter.put(SessionParameter.WEBSERVICES_NAVIGATION_SERVICE, url + "NavigationService?wsdl");
-//		parameter.put(SessionParameter.WEBSERVICES_OBJECT_SERVICE, url + "ObjectService?wsdl");
-//		parameter.put(SessionParameter.WEBSERVICES_POLICY_SERVICE, url + "PolicyService?wsdl");
-//		parameter.put(SessionParameter.WEBSERVICES_RELATIONSHIP_SERVICE, url + "RelationshipService?wsdl");
-//		parameter.put(SessionParameter.WEBSERVICES_REPOSITORY_SERVICE, url + "RepositoryService?wsdl");
-//		parameter.put(SessionParameter.WEBSERVICES_VERSIONING_SERVICE, url + "VersioningService?wsdl");
-
-		Repository repository = sessionFactory.getRepositories(parameter).get(0);
-		parameter.put(SessionParameter.REPOSITORY_ID, repository.getId());
-
-		return sessionFactory.createSession(parameter);
-	}
-
-
 	private BrowserItem search(QueryStatement query, int pageNum, int rowCounts)
 	{
 		BrowserItem result = new BrowserItem();
@@ -252,16 +354,10 @@ public class CMISBrowserService implements BrowserService
 
 		if (((pageNum != 0) && (rowCounts != 0)))
 		{
-			long skip = (pageNum - 1) * rowCounts;
-			long total = results.getTotalNumItems();
-			long rest = total % rowCounts;
+			Page page = new Page(results.getTotalNumItems(), pageNum, rowCounts);
 
-			int totalPages = (int) (total - rest) / rowCounts;
-			if (rest > 0) totalPages++;
-
-			result.setTotalPages(totalPages);
-
-			results = results.skipTo(skip).getPage(rowCounts);
+			result.setTotalPages(page.total);
+			results = results.skipTo(page.skip).getPage(rowCounts);
 		}
 
 		for (QueryResult hit : results)
@@ -286,91 +382,6 @@ public class CMISBrowserService implements BrowserService
 
 
 		return result;
-	}
-
-	@Override
-	public BrowserItem createFolder(String id, String name, String type) throws CmisBaseException
-	{
-
-		Map<String, String> folderProps = new HashMap<String, String>();
-
-		folderProps.put(PropertyIds.OBJECT_TYPE_ID, type);
-		folderProps.put(PropertyIds.NAME, name);
-		folderProps.put(PropertyIds.PARENT_ID, id);
-
-		Folder parent = (Folder) session.getObject(id);
-
-		Folder newFolder = null;
-		BrowserItem result = new BrowserItem();
-
-		newFolder = parent.createFolder(folderProps);
-		result = new BrowserItem(newFolder.getId(), newFolder.getName(), BrowserItem.TYPE.FOLDER);
-
-//
-//        try {
-//            newFolder = parent.createFolder(folderProps);
-//            result = new BrowserItem(newFolder.getId(), newFolder.getName(), BrowserItem.TYPE.FOLDER);
-//        } catch (CmisBaseException e) {
-//            // TODO: exception handling task
-//            e.printStackTrace();
-//        }
-
-		return result;
-	}
-
-	@Override
-	public BrowserItem editFolder(String id, String name, String type) throws CmisBaseException
-	{
-
-		Map<String, String> folderProps = new HashMap<String, String>();
-
-		folderProps.put(PropertyIds.OBJECT_TYPE_ID, type);
-		folderProps.put(PropertyIds.NAME, name);
-		folderProps.put(PropertyIds.PARENT_ID, id);
-
-		Folder current = (Folder) session.getObject(id);
-
-		Folder newFolder = null;
-		BrowserItem result = new BrowserItem();
-
-		current.updateProperties(folderProps);
-		result = new BrowserItem(current.getId(), current.getName(), BrowserItem.TYPE.FOLDER);
-
-//
-//        try {
-//
-//            current.updateProperties(folderProps);
-//            result = new BrowserItem(current.getId(), current.getName(), BrowserItem.TYPE.FOLDER);
-//        } catch (CmisBaseException e) {
-//            // TODO: exception handling task
-//            e.printStackTrace();
-//        }
-
-		return result;
-
-	}
-
-
-	@Override
-	public void deleteFolder(String id) throws CmisBaseException
-	{
-
-		Folder current = (Folder) session.getObject(id);
-
-		if (current.getId().equals(""))
-		{
-			return;
-		}
-		current.delete();
-
-//
-//        try {
-//            current.delete();
-//        } catch (CmisBaseException e) {
-//            // TODO: exception handling task
-//            e.printStackTrace();
-//        }
-
 	}
 
 
@@ -419,14 +430,30 @@ public class CMISBrowserService implements BrowserService
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
+	// Folder management methods
 	@Override
 	public BrowserItem createDocument(String id, String name)
 	{
 		Folder current = (Folder) session.getObject(id);
-		return createDocument(current, name);
+		return createDocument(current, name, null);
 	}
 
-	private BrowserItem createDocument(Folder current, String name)
+	@Override
+	public BrowserItem createDocument(String id, String name, BrowserDocumentContent content)
+	{
+		Folder current = (Folder) session.getObject(id);
+
+		ContentStream con = new ContentStreamImpl(
+				content.getFilename(),
+				content.getSize(),
+				content.getType(),
+				content.getStream()
+		);
+
+		return createDocument(current, name, con);
+	}
+
+	private BrowserItem createDocument(Folder current, String name, ContentStream content)
 	{
 		BrowserItem result = new BrowserItem();
 
@@ -434,11 +461,13 @@ public class CMISBrowserService implements BrowserService
 		properties.put(PropertyIds.OBJECT_TYPE_ID, "cmis:document");
 		properties.put(PropertyIds.NAME, name);
 
-		Document document = current.createDocument(properties, null, VersioningState.NONE);
+		Document document = current.createDocument(properties, content, VersioningState.NONE);
 
 		result.setType(BrowserItem.TYPE.FILE);
 		result.setName(name);
 		result.setId(document.getId());
+		result.setContentType(document.getContentStreamMimeType());
+		result.setSize(document.getContentStreamLength());
 
 		return result;
 	}

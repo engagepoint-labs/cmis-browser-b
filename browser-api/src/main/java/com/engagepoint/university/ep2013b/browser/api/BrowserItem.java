@@ -163,6 +163,11 @@ public class BrowserItem implements Serializable
 		this.size = size;
 	}
 
+	public void setSize(long size)
+	{
+		this.size = BigInteger.valueOf(size);
+	}
+
 	// Get current path
 	public String getLocation()
 	{
@@ -204,10 +209,15 @@ public class BrowserItem implements Serializable
 	@Override
 	public String toString()
 	{
-		String result = "BrowserItem (" + getId() + ", " + getName() + ", " + getCreated() + ", " + getType().name() + ", ";
+		String result = "BrowserItem (id:" + getId() +
+				", name:" + getName() +
+				", date:" + getCreated() +
+				", type:" + getType().name() +
+				", mime:" + getContentType() +
+				", size:" + getSize() +
 
-		result += (parent == null) ? "null" : parent.getId();
-		result += ", ";
+				", parent:" + ((parent == null) ? "null" : parent.getId());
+		result += ", children:";
 
 		if (children.isEmpty()) result += "empty";
 		else

@@ -24,6 +24,7 @@ public interface BrowserService
     public Map<String,String> getTypeList(String type);
 
 	public BrowserItem createDocument(String id, String name);
+	public BrowserItem createDocument(String id, String name, BrowserDocumentContent content);
 	public BrowserItem editDocument(String id, String name);
 	public void deleteDocument(String id);
 

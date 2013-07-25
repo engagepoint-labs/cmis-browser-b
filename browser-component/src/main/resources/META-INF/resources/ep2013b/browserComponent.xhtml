@@ -99,12 +99,16 @@
                     <f:selectItem itemLabel="Folder" itemValue="cmis:folder"/>
                 </h:selectOneMenu>
 
-                    <h:outputLabel value="Content type:"/>
-                    <h:selectOneMenu id="searchContentType"
-                                     value="#{cc.attrs.controller.advancedSearchParams.contentType}">
-                        <f:selectItem itemLabel="" itemValue=""/>
-                        <f:selectItem itemLabel="Complex Type" itemValue="ComplexType"/>
-                    </h:selectOneMenu>
+                <h:outputLabel value="Content type:"/>
+                <h:selectOneMenu id="searchContentType"
+                                 value="#{cc.attrs.controller.advancedSearchParams.contentType}">
+                    <f:selectItem itemLabel="" itemValue=""/>
+                    <f:selectItem itemLabel="text/plain" itemValue="text/plain"/>
+                    <f:selectItem itemLabel="application/zip" itemValue="application/zip"/>
+                    <f:selectItem itemLabel="audio/mp4" itemValue="audio/mp4"/>
+                    <f:selectItem itemLabel="image/jpeg" itemValue="image/jpeg"/>
+                    <f:selectItem itemLabel="video/mp4" itemValue="video/mp4"/>
+                </h:selectOneMenu>
 
                 <h:outputLabel value="Date from:"/>
                 <p:calendar id="searchDateFrom" showOn="button"
@@ -128,8 +132,9 @@
         </p:tabView>
 
         <!-- button : "New Folder"-->
-        <p:commandButton id="createfolder" action="#{cc.attrs.controller.showPanel()}" immediate="true"
-                         value="New Folder" update=":#{cc.clientId}:seniorpanel" title="Create New Folder">
+        <p:commandButton id="createfolder" action="#{cc.attrs.controller.showPanel()}"
+                         immediate="true" update=":#{cc.clientId}:seniorpanel"
+                         value="New Folder" icon="ui-icon-plusthick" title="Create New Folder">
 
             <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
         </p:commandButton>
@@ -146,6 +151,9 @@
             </p:column>
 
             <p:column headerText="Type">
+                <!--<p:graphicImage-->
+                        <!--value="#{item.type == 'FOLDER' ? 'ui-icon-folder-open' : 'ui-icon-document'}"-->
+                        <!--width="16" height="16"/>-->
                 <h:outputText value="#{item.type}" id="itemtype"/>
             </p:column>
 
@@ -159,6 +167,14 @@
 
             <p:column headerText="Size (B)">
                 <h:outputText value="#{item.size == 0 ? '' : (item.size)}" id="itemsize"/>
+            </p:column>
+
+            <p:column>
+                <p:commandButton id="editbutn" icon="ui-icon-pencil" title="Edit" style="width: 20px; height: 20px"/>
+            </p:column>
+
+            <p:column>
+                <p:commandButton id="deletebutn" icon="ui-icon-trash" title="Delete" style="width: 20px; height: 20px"/>
             </p:column>
 
 

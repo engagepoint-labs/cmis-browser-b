@@ -15,9 +15,9 @@
 
 <cc:implementation>
 
-<h:outputText value="Repository: #{cc.attrs.controller.currentUrl}"/>
-<br />
-<h:outputText value="Current location: #{cc.attrs.controller.currentLocation}"/>
+<p:outputLabel value="Repository: #{cc.attrs.controller.currentUrl}"/>
+<br/>
+<p:outputLabel value="Current location: #{cc.attrs.controller.currentLocation}"/>
 
 
 <p:growl id="messages" showDetail="true"/>
@@ -59,7 +59,7 @@
 <h:column style="width: 500px;">
     <!-- Simple Search -->
     <p:panel rendered="#{!cc.attrs.controller.isShowEditFolderPanel()}">
-        <p:tabView id="tabView" style="height: 250px;" >
+        <p:tabView id="tabView" style="height: 250px;">
 
             <p:tab id="tab1" title="Simple search">
                 <h:panelGrid columns="3">
@@ -92,15 +92,15 @@
             <p:tab id="tab2" title="Advanced search">
 
                 <h:panelGrid columns="4">
-                <h:outputLabel value="Document type:"/>
-                <!-- WARNING: Should be PrimeFace component <p:selectOneMenu>,
-                              but it sets itemLabel to documentType instead of itemValue-->
-                <h:selectOneMenu id="searchDocumentType"
-                                 value="#{cc.attrs.controller.advancedSearchParams.documentType}">
-                    <f:selectItem itemLabel="" itemValue=""/>
-                    <f:selectItem itemLabel="Document" itemValue="cmis:document"/>
-                    <f:selectItem itemLabel="Folder" itemValue="cmis:folder"/>
-                </h:selectOneMenu>
+                    <h:outputLabel value="Document type:"/>
+                    <!-- WARNING: Should be PrimeFace component <p:selectOneMenu>,
+                                  but it sets itemLabel to documentType instead of itemValue-->
+                    <h:selectOneMenu id="searchDocumentType"
+                                     value="#{cc.attrs.controller.advancedSearchParams.documentType}">
+                        <f:selectItem itemLabel="" itemValue=""/>
+                        <f:selectItem itemLabel="Document" itemValue="cmis:document"/>
+                        <f:selectItem itemLabel="Folder" itemValue="cmis:folder"/>
+                    </h:selectOneMenu>
 
                     <h:outputLabel value="Content type:"/>
                     <h:selectOneMenu id="searchContentType"
@@ -109,20 +109,20 @@
                         <f:selectItem itemLabel="Complex Type" itemValue="ComplexType"/>
                     </h:selectOneMenu>
 
-                <h:outputLabel value="Date from:"/>
-                <p:calendar id="searchDateFrom" showOn="button"
-                            value="#{cc.attrs.controller.advancedSearchParams.dateFrom}"/>
+                    <h:outputLabel value="Date from:"/>
+                    <p:calendar id="searchDateFrom" showOn="button"
+                                value="#{cc.attrs.controller.advancedSearchParams.dateFrom}"/>
 
-                <h:outputLabel value="Date to:"/>
-                <p:calendar id="searchDateTo" showOn="button"
-                            value="#{cc.attrs.controller.advancedSearchParams.dateTo}"/>
+                    <h:outputLabel value="Date to:"/>
+                    <p:calendar id="searchDateTo" showOn="button"
+                                value="#{cc.attrs.controller.advancedSearchParams.dateTo}"/>
 
 
-                <h:outputLabel value="Size (B):"/>
-                <p:spinner id="searchSize" value="#{cc.attrs.controller.advancedSearchParams.size}"/>
+                    <h:outputLabel value="Size (B):"/>
+                    <p:spinner id="searchSize" value="#{cc.attrs.controller.advancedSearchParams.size}"/>
 
-                <h:outputLabel value="Text in content:"/>
-                <p:inputText id="searchText" value="#{cc.attrs.controller.advancedSearchParams.text}"/>
+                    <h:outputLabel value="Text in content:"/>
+                    <p:inputText id="searchText" value="#{cc.attrs.controller.advancedSearchParams.text}"/>
 
                 </h:panelGrid>
 

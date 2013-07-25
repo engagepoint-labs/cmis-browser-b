@@ -1,17 +1,14 @@
 package com.engagepoint.university.ep2013b.browser.cmis;
 
 import com.engagepoint.university.ep2013b.browser.api.BrowserItem;
-import org.junit.Before;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisRuntimeException;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class MoveFolderTest {
@@ -75,5 +72,30 @@ public class MoveFolderTest {
         assertEquals(5, actualRoot.size());
         assertEquals(5, actual101.size());
         assertFalse(findName(actual101, "My_Folder-0-1"));
+    }
+
+    // move 103 to 108 ---> Exception
+    @Test (expected = CmisRuntimeException.class)
+    public void Test3moveTest() {
+        BrowserItem item103 = service.findFolderById("103");
+        BrowserItem item108 = service.findFolderById("108");
+        BrowserItem item102 = service.findFolderById("102");
+        List<BrowserItem> actual108 = item108.getChildren();
+        List<BrowserItem> actual102 = item102.getChildren();
+
+        assertEquals(5, actual108.size());
+        assertEquals(5, actual102.size());
+
+        service.moveFolder(item103, item108);
+
+        item108 = service.findFolderById("108");
+        item102 = service.findFolderById("102");
+        actual108 = item108.getChildren();
+        actual102 = item102.getChildren();
+
+        assertEquals(5, actual108.size());
+        assertEquals(5, actual102.size());
+        assertNotEquals(6, actual108.size());
+
     }
 }

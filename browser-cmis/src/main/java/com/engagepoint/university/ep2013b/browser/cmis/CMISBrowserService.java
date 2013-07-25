@@ -166,8 +166,7 @@ public class CMISBrowserService implements BrowserService {
     }
 
     @Override
-    public void connect()
-    {
+    public void connect() {
         String url = preferencesHelper.getCmisUrl("http://localhost:18080/server/services/");
 
         session = connect(url);
@@ -253,7 +252,7 @@ public class CMISBrowserService implements BrowserService {
 
             totalPages = (int) (total - rest) / rowCounts;
 
-            if ( rest > 0) {
+            if (rest > 0) {
                 totalPages++;
             }
 
@@ -263,7 +262,6 @@ public class CMISBrowserService implements BrowserService {
 
         return item;
     }
-
 
 
     //// ==========================================   advanced search by several parameters
@@ -309,7 +307,7 @@ public class CMISBrowserService implements BrowserService {
 
         totalPages = (int) (total - rest) / rowCounts;
 
-        if ( rest > 0) {
+        if (rest > 0) {
             totalPages++;
         }
 
@@ -387,7 +385,7 @@ public class CMISBrowserService implements BrowserService {
 
         Folder current = (Folder) session.getObject(id);
 
-        if(current.getId().equals("")){
+        if (current.getId().equals("")) {
             return;
         }
         current.delete();
@@ -408,18 +406,17 @@ public class CMISBrowserService implements BrowserService {
 
         Folder folderSource = (Folder) session.getObject(source.getId());
         Folder folderTarget = (Folder) session.getObject(target.getId());
-
         Folder parent = folderSource.getFolderParent();
-
         ObjectId targetObjectId = new ObjectIdImpl(folderTarget.getId());
         ObjectId parentObjectId = new ObjectIdImpl(parent.getId());
 
-        try {
-            folderSource.move(parentObjectId, targetObjectId);
-        } catch (CmisRuntimeException e) {
-            e.printStackTrace();
-            // TODO: exception handling task
-        }
+        folderSource.move(parentObjectId, targetObjectId);
+
+//        try {
+//        } catch (CmisRuntimeException e) {
+//            e.printStackTrace();
+//            // TODO: exception handling task
+//        }
     }
 
     @Override
@@ -428,34 +425,34 @@ public class CMISBrowserService implements BrowserService {
         Map<String, String> result = new HashMap<String, String>();
 
         ItemIterable<ObjectType> typeList = session.getTypeChildren(type, true);
-        roundTrip(typeList,1, result);
+        roundTrip(typeList, 1, result);
 
         return result;
 
     }
 
-    private String countStr(String template, int count){
+    private String countStr(String template, int count) {
 
         String result = "";
 
-        for (int i=0;i<count; i++){
-            result = template  + result;
+        for (int i = 0; i < count; i++) {
+            result = template + result;
         }
 
         return result;
     }
 
 
-    private  void  roundTrip(ItemIterable<ObjectType> list,int level, Map<String, String> result){
+    private void roundTrip(ItemIterable<ObjectType> list, int level, Map<String, String> result) {
 
-        String prefix =  countStr(" - ",level);
+        String prefix = countStr(" - ", level);
 
-        for(ObjectType tt : list){
-            System.out.println(""+level+prefix+tt.getDisplayName()+"  ["+tt.getId()+"]");
-            result.put(prefix+tt.getDisplayName(), tt.getId());
+        for (ObjectType tt : list) {
+            System.out.println("" + level + prefix + tt.getDisplayName() + "  [" + tt.getId() + "]");
+            result.put(prefix + tt.getDisplayName(), tt.getId());
 
             if (tt.getChildren().getTotalNumItems() > 0) {
-                roundTrip(tt.getChildren(),++level, result);
+                roundTrip(tt.getChildren(), ++level, result);
             }
         }
     }

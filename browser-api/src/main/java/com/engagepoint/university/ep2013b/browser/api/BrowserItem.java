@@ -88,6 +88,14 @@ public class BrowserItem implements Serializable
 		this.type = type;
 	}
 
+	public void setType(String type)
+	{
+		for (TYPE i: TYPE.values())
+		{
+			if (i.name().equalsIgnoreCase(type)) this.type = i;
+		}
+	}
+
 	public String getName()
 	{
 		return name;
@@ -150,6 +158,7 @@ public class BrowserItem implements Serializable
 
 	public void setContentType(String contentType)
 	{
+		if (!"".equals(contentType))
 		this.contentType = contentType;
 	}
 
@@ -160,11 +169,13 @@ public class BrowserItem implements Serializable
 
 	public void setSize(BigInteger size)
 	{
+		if (size != BigInteger.ZERO)
 		this.size = size;
 	}
 
 	public void setSize(long size)
 	{
+		if (size > 0)
 		this.size = BigInteger.valueOf(size);
 	}
 

@@ -35,7 +35,7 @@ public class EverySearchTypeIT
 	@Test
 	public void test_advancedSearch_document()
 	{
-		AdvSearchParams params = new AdvSearchParams("101",	"cmis:document", null, null, null, null, null);
+		SearchParams params = new SearchParams("document", null, null, null, null, null);
 
 		BrowserItem item = service.advancedSearch("101", params, 0, 0);
 
@@ -48,7 +48,7 @@ public class EverySearchTypeIT
 	@Test
 	public void test_advancedSearch_folder()
 	{
-		AdvSearchParams params = new AdvSearchParams("101",	"cmis:folder", null, null, null, null, null);
+		SearchParams params = new SearchParams("folder", null, null, null, null, null);
 
 		BrowserItem item = service.advancedSearch("101", params, 0, 0);
 
@@ -60,7 +60,7 @@ public class EverySearchTypeIT
 	@Test
 	public void test_advancedSearch_date_from()
 	{
-		AdvSearchParams params = new AdvSearchParams("101", "cmis:document", date1, null, null, null, null);
+		SearchParams params = new SearchParams("document", date1, null, null, null, null);
 
 		BrowserItem item = service.advancedSearch("101", params, 0, 0);
 
@@ -73,7 +73,7 @@ public class EverySearchTypeIT
 	@Test
 	public void test_advancedSearch_date_to()
 	{
-		AdvSearchParams params = new AdvSearchParams("101",	"cmis:document", null, date2, null, null, null);
+		SearchParams params = new SearchParams("document", null, date2, null, null, null);
 
 		BrowserItem item = service.advancedSearch("101", params, 0, 0);
 
@@ -85,7 +85,7 @@ public class EverySearchTypeIT
 	@Test
 	public void test_advancedSearch_date_range()
 	{
-		AdvSearchParams params = new AdvSearchParams("101",	"cmis:document", date1, date2, null, null, null);
+		SearchParams params = new SearchParams("document", date1, date2, null, null, null);
 
 		BrowserItem item = service.advancedSearch("101", params, 0, 0);
 
@@ -97,7 +97,7 @@ public class EverySearchTypeIT
 	@Test
 	public void test_advancedSearch_date_same()
 	{
-		AdvSearchParams params = new AdvSearchParams("101",	"cmis:document", date1, date1, null, null, null);
+		SearchParams params = new SearchParams("document", date1, date1, null, null, null);
 
 		BrowserItem item = service.advancedSearch("101", params, 0, 0);
 
@@ -109,7 +109,7 @@ public class EverySearchTypeIT
 	@Test
 	public void test_advancedSearch_content()
 	{
-		AdvSearchParams params = new AdvSearchParams("101",	"cmis:document", null, null, "ComplexType", null, null);
+		SearchParams params = new SearchParams("document", null, null, "text/plain", null, null);
 
 		BrowserItem item = service.advancedSearch("101", params, 0, 0);
 
@@ -121,7 +121,7 @@ public class EverySearchTypeIT
 	@Test
 	public void test_advancedSearch_size()
 	{
-		AdvSearchParams params = new AdvSearchParams("101",	"cmis:document", null, null, null, 33299, null);
+		SearchParams params = new SearchParams("document", null, null, null, 33299, null);
 
 		BrowserItem item = service.advancedSearch("101", params, 0, 0);
 
@@ -133,7 +133,7 @@ public class EverySearchTypeIT
 	@Test
 	public void test_advancedSearch_text()
 	{
-		AdvSearchParams params = new AdvSearchParams("101",	"cmis:document", null, null, null, null, "Lorem");
+		SearchParams params = new SearchParams("document", null, null, null, null, "Lorem");
 
 		BrowserItem item = service.advancedSearch("101", params, 0, 0);
 

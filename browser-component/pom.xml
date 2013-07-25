@@ -10,6 +10,14 @@
     <artifactId>browser-component</artifactId>
     <packaging>jar</packaging>
 
+    <repositories>
+        <repository>
+            <id>prime-repo</id>
+            <name>PrimeFaces Maven Repository</name>
+            <url>http://repository.primefaces.org</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <!-- browser-api -->
         <dependency>

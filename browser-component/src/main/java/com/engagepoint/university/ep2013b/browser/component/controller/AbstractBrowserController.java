@@ -3,7 +3,7 @@ package com.engagepoint.university.ep2013b.browser.component.controller;
 
 import com.engagepoint.university.ep2013b.browser.api.BrowserItem;
 import com.engagepoint.university.ep2013b.browser.api.BrowserService;
-import com.engagepoint.university.ep2013b.browser.cmis.AdvSearchParams;
+import com.engagepoint.university.ep2013b.browser.cmis.SearchParams;
 import com.engagepoint.university.ep2013b.browser.component.BrowserFactory;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
@@ -19,6 +19,9 @@ public class AbstractBrowserController implements BrowserController
 	private BrowserService service;
 	private String folderId;
 
+	private static enum STATE { NORMAL, SEARCH_SIMPLE, SEARCH_ADVANCED }
+	private STATE state = STATE.NORMAL;
+
 	// Tree
 	private TreeNode root;
 	private String currentLocation;
@@ -30,11 +33,11 @@ public class AbstractBrowserController implements BrowserController
 
 	// List which should be displayed
 	private List<BrowserItem> dataList;
-	private String searchCriteria = "none";
+	private String searchCriteria = "";
 
 	BrowserItem table, tree;
 
-	private AdvSearchParams advancedSearchParams = new AdvSearchParams();
+	private SearchParams searchParams = new SearchParams();
 
 	private boolean showEditFolderPanel = false;
 
@@ -82,16 +85,37 @@ public class AbstractBrowserController implements BrowserController
 	{
 		System.out.println("updateTable()");
 
-		table = (folderId == null) ?
-				service.findTableByPath("/", 1, page.max) :
-				service.findTableById(folderId, page.number, page.max);
+		switch (state)
+		{
+			case NORMAL:
+			{
+				table = (folderId == null) ?
+						service.findTableByPath("/", 1, page.max) :
+						service.findTableById(folderId, page.number, page.max);
+			}
+			break;
+
+			case SEARCH_SIMPLE:
+			{
+				table = service.simpleSearch(folderId, searchCriteria, page.number, page.max);
+			}
+			break;
+
+			case SEARCH_ADVANCED:
+			{
+//				searchParams.setFolderId(folderId);
+				table = service.advancedSearch(folderId, searchParams, page.number, page.max);
+			}
+			break;
+		}
 
 		page.total = table.getTotalPages();
 		dataList = table.getChildren();
 
-		System.out.println("\tfolderId = " + folderId);
+		System.out.println("\tstate       = " + state.name());
+		System.out.println("\tfolderId    = " + folderId);
 		System.out.println("\tpage.number = " + page.number);
-		System.out.println("\tpage.total = " + page.total);
+		System.out.println("\tpage.total  = " + page.total);
 	}
 
 	private void updateTree()
@@ -109,37 +133,10 @@ public class AbstractBrowserController implements BrowserController
 
 		currentLocation = tree.getLocation();
 
+		System.out.println("\tstate    = " + state.name());
 		System.out.println("\tfolderId = " + folderId);
-		System.out.println("\tcurrentLocation = " + currentLocation);
+		System.out.println("\tlocation = '" + currentLocation + "'");
 	}
-
-
-	public void showPanel(int flag)
-	{
-		showEditFolderPanel = true;
-		operationFlag = flag;
-	}
-
-	public void hidePanel()
-	{
-		showEditFolderPanel = false;
-	}
-
-	public boolean isShowEditFolderPanel()
-	{
-		return showEditFolderPanel;
-	}
-
-	public BrowserItem getNewFolderItem()
-	{
-		return newFolderItem;
-	}
-
-	public void setNewFolderItem(BrowserItem newFolderItem)
-	{
-		this.newFolderItem = newFolderItem;
-	}
-
 
 	// fill tree recursively
 	public void makeTree(BrowserItem item, TreeNode parent)
@@ -165,6 +162,32 @@ public class AbstractBrowserController implements BrowserController
 				makeTree(child, node);
 			}
 		}
+	}
+
+	public void showPanel(int flag)
+	{
+		showEditFolderPanel = true;
+		operationFlag = flag;
+	}
+
+	public void hidePanel()
+	{
+		showEditFolderPanel = false;
+	}
+
+	public boolean isShowEditFolderPanel()
+	{
+		return showEditFolderPanel;
+	}
+
+	public BrowserItem getNewFolderItem()
+	{
+		return newFolderItem;
+	}
+
+	public void setNewFolderItem(BrowserItem newFolderItem)
+	{
+		this.newFolderItem = newFolderItem;
 	}
 
 	public TreeNode getRoot()
@@ -207,59 +230,34 @@ public class AbstractBrowserController implements BrowserController
 		selectedNode = null;
 	}
 
-//	// TODO: Should have better name
-//	// Process received parameters and decided what data to show (folder items or search results)
-//	public void businessLogic()
-//	{
-////        System.out.println("businessLogic()");
-////        System.out.println("\tfolderID       = " + folderId);
-////        System.out.println("\tpage           = " + pageNum);
-////        System.out.println("\tsimple search  = " + searchCriteria);
-//
-//		if ((searchCriteria == null) && advancedSearchParams.isEmpty())
-//		{
-//			// not searching
-//			if ((folderId == null) || ("".equals(folderId)) || ("null".equals(folderId)))
-//			{
-//				// first time at the number
-//				currentFolder = service.findFolderByPath("/", 1, rowCounts);
-//			} else currentFolder = service.findFolderById(folderId, pageNum, rowCounts);
-//
-//			folderId = currentFolder.getId();
-//		} else
-//		{
-//			if ((searchCriteria != null))
-//			{
-//				// simple search
-//				currentFolder = service.simpleSearch(folderId, searchCriteria, pageNum, rowCounts);
-//			} else
-//			{
-//				// advanced search
-//				advancedSearchParams.setFolderId(folderId);
-//
-//				System.out.println("\tadvanced search (isEmpty = " + advancedSearchParams.isEmpty() + "):");
-//				System.out.println("\t\tid           = " + advancedSearchParams.getFolderId());
-//				System.out.println("\t\tDocumentType = " + advancedSearchParams.getDocumentType());
-//				System.out.println("\t\tDateFrom     = " + advancedSearchParams.getDateFrom());
-//				System.out.println("\t\tDateTo       = " + advancedSearchParams.getDateTo());
-//				System.out.println("\t\tContentType  = " + advancedSearchParams.getContentType());
-//				System.out.println("\t\tSize         = " + advancedSearchParams.getSize());
-//				System.out.println("\t\tText         = " + advancedSearchParams.getText());
-//
-//				currentFolder = service.advancedSearch(folderId, advancedSearchParams, pageNum, rowCounts);
-//			}
-//		}
-//
-//		pagesCount = currentFolder.getTotalPages();
-//		dataList = currentFolder.getChildren();
-//	}
 
-	public void simple()
+	public void searchSimple()
 	{
-//        state.put("searchCriteria", searchCriteria);
-////        state.put("advancedSearch", advancedSearchParams);
-//        state.put("pageNum", 1);
+		System.out.println("-- searchSimple() --------------- ");
+		state = (searchCriteria != null) ? STATE.SEARCH_SIMPLE : STATE.NORMAL;
+		page.number = 1;
+		updateTable();
 	}
+
+	public void searchAdvanced()
+	{
+		System.out.println("-- searchAdvanced() --------------- ");
+		System.out.println("params = \n" + searchParams);
+		state = (!searchParams.isEmpty()) ? STATE.SEARCH_ADVANCED : STATE.NORMAL;
+		page.number = 1;
+		updateTable();
+	}
+
+	public String getSearchCriteria()
+	{
+		return searchCriteria;
+	}
+
+	public void setSearchCriteria(String searchCriteria)
+	{
+		this.searchCriteria = (!"".equals(searchCriteria)) ? searchCriteria : null;
+	}
+
 
 
 	// Method executed when dataTable renders (during loading number or ajax request)
@@ -284,24 +282,15 @@ public class AbstractBrowserController implements BrowserController
 		this.selectedItem = selectedItem;
 	}
 
-	public String getSearchCriteria()
+
+	public SearchParams getSearchParams()
 	{
-		return searchCriteria;
+		return searchParams;
 	}
 
-	public void setSearchCriteria(String searchCriteria)
+	public void setSearchParams(SearchParams searchParams)
 	{
-		this.searchCriteria = ((searchCriteria == null) || "".equals(searchCriteria) || "null".equals(searchCriteria)) ? null : searchCriteria;
-	}
-
-	public AdvSearchParams getAdvancedSearchParams()
-	{
-		return advancedSearchParams;
-	}
-
-	public void setAdvancedSearchParams(AdvSearchParams advancedSearchParams)
-	{
-		this.advancedSearchParams = advancedSearchParams;
+		this.searchParams = searchParams;
 	}
 
 	@Override

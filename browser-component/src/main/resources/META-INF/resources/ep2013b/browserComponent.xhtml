@@ -18,11 +18,20 @@
 
 <h:outputText value="#{cc.attrs.controller.currentLocation}"/>
 
+<p:ajaxStatus>
+    <f:facet name="start">
+        <h:outputText value="  processing..."/>
+    </f:facet>
+
+    <f:facet name="complete">
+        <h:outputText value=""/>
+    </f:facet>
+</p:ajaxStatus>
+
 <p:growl id="messages" showDetail="true"/>
 
 <p/>
 <h:messages style="height: 11px;color: mediumvioletred; font-family: monospace;" id="info"/>
-
 <p/>
 
 
@@ -74,22 +83,11 @@
             <h:panelGrid columns="3">
                 <p:inputText id="searchInput" value="#{cc.attrs.controller.searchCriteria}"/>
 
-                <p:commandButton id="searchbtn" action="#{cc.attrs.controller.simple}"
+                <p:commandButton id="searchbtn" action="#{cc.attrs.controller.searchSimple}"
                                  update=":#{cc.clientId}:table"
                                  icon="ui-icon-search" title="Search">
-                    <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
+                    <!--<f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>-->
                 </p:commandButton>
-
-                <p:ajaxStatus>
-                    <f:facet name="start">
-                        <h:outputText value="  processing..."/>
-                    </f:facet>
-
-                    <f:facet name="complete">
-                        <h:outputText value=""/>
-                    </f:facet>
-                </p:ajaxStatus>
-
             </h:panelGrid>
         </p:tab>
 
@@ -101,15 +99,15 @@
                 <!-- WARNING: Should be PrimeFace component <p:selectOneMenu>,
                               but it sets itemLabel to documentType instead of itemValue-->
                 <h:selectOneMenu id="searchDocumentType"
-                                 value="#{cc.attrs.controller.advancedSearchParams.documentType}">
+                                 value="#{cc.attrs.controller.searchParams.document}">
                     <f:selectItem itemLabel="" itemValue=""/>
-                    <f:selectItem itemLabel="Document" itemValue="cmis:document"/>
-                    <f:selectItem itemLabel="Folder" itemValue="cmis:folder"/>
+                    <f:selectItem itemLabel="Document" itemValue="document"/>
+                    <f:selectItem itemLabel="Folder" itemValue="folder"/>
                 </h:selectOneMenu>
 
                 <h:outputLabel value="Content type:" style="width: 80px; text-align: right;"/>
                 <h:selectOneMenu id="searchContentType"
-                                 value="#{cc.attrs.controller.advancedSearchParams.contentType}">
+                                 value="#{cc.attrs.controller.searchParams.content}">
                     <f:selectItem itemLabel="" itemValue=""/>
                     <f:selectItem itemLabel="text/plain" itemValue="text/plain"/>
                     <f:selectItem itemLabel="application/zip" itemValue="application/zip"/>
@@ -120,61 +118,57 @@
 
                 <h:outputLabel value="Date from:" style="width: 80px; text-align: right;"/>
                 <p:calendar id="searchDateFrom" showOn="button"
-                            value="#{cc.attrs.controller.advancedSearchParams.dateFrom}"
+                            value="#{cc.attrs.controller.searchParams.from}"
                             style="width: 80px;"/>
 
                 <h:outputLabel value="Date to:" style="width: 80px; text-align: right;"/>
                 <p:calendar id="searchDateTo" showOn="button"
-                            value="#{cc.attrs.controller.advancedSearchParams.dateTo}"
+                            value="#{cc.attrs.controller.searchParams.to}"
                             style="width: 80px;"/>
 
 
                 <h:outputLabel value="Size (B):" style="width: 80px; text-align: right;"/>
-                <p:spinner id="searchSize" value="#{cc.attrs.controller.advancedSearchParams.size}"/>
+                <p:spinner id="searchSize" value="#{cc.attrs.controller.searchParams.size}"/>
 
                 <h:outputLabel value="Text in content:" style="width: 80px; text-align: right;"/>
-                <p:inputText id="searchText" value="#{cc.attrs.controller.advancedSearchParams.text}"/>
+                <p:inputText id="searchText" value="#{cc.attrs.controller.searchParams.text}"/>
 
                 <h:outputText value="" style="width: 80px; text-align: right;"/>
-                <p:commandButton id="advsearchbtn" action="#{cc.attrs.controller.simple}"
+                <p:commandButton id="advsearchbtn" action="#{cc.attrs.controller.searchAdvanced}"
                                  update=":#{cc.clientId}:table"
-                                 value=" Advanced search"
+                                 value="Advanced search"
                                  icon="ui-icon-search"
                                  title="Advanced search">
                     <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
                 </p:commandButton>
-                <p:ajaxStatus>
-                    <f:facet name="start">
-                        <h:outputText value="processing..." style="color: blueviolet;"/>
-                    </f:facet>
-
-                    <f:facet name="complete">
-                        <h:outputText value=""/>
-                    </f:facet>
-                </p:ajaxStatus>
             </h:panelGrid>
         </p:tab>
     </p:tabView>
 
-    <!-- button : "New Folder"-->
-    <p:commandButton id="createfolder" action="#{cc.attrs.controller.showPanel(1)}"
-                     update=":#{cc.clientId}:seniorpanel" immediate="true"
-                     value="New Folder" icon="ui-icon-plusthick" title="Create new Folder">
+    <p:toolbar>
+        <p:toolbarGroup align="left">
+            <!-- button : "New Folder"-->
+            <p:commandButton id="createfolder" action="#{cc.attrs.controller.showPanel(1)}"
+                             update=":#{cc.clientId}:seniorpanel" immediate="true"
+                             value="New Folder" icon="ui-icon-plusthick" title="Create new Folder">
+                <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
+            </p:commandButton>
 
-        <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
-    </p:commandButton>
+            <p:commandButton id="editfolder" action="#{cc.attrs.controller.showPanel(2)}" immediate="true"
+                             value="Edit Folder" update=":#{cc.clientId}:seniorpanel" title="Edit folder">
 
-    <p:commandButton id="editfolder" action="#{cc.attrs.controller.showPanel(2)}" immediate="true"
-                     value="Edit Folder" update=":#{cc.clientId}:seniorpanel" title="Edit folder">
+                <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
+            </p:commandButton>
 
-        <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
-    </p:commandButton>
+            <p:commandButton id="deletefolder"
+                             value="Delete folder"
+                             type="button"
+                             onclick="confirmDeleteDialog.show()"
+                             immediate="true"/>
 
-    <p:commandButton id="deletefolder"
-                     value="Delete folder"
-                     type="button"
-                     onclick="confirmDeleteDialog.show()"
-                     immediate="true"/>
+            <p:separator />
+        </p:toolbarGroup>
+    </p:toolbar>
 
     <!--Was ist das???-->
     <h:outputText value="" style="height: 20px;"/>

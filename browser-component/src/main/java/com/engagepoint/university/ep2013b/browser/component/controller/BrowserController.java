@@ -1,7 +1,7 @@
 package com.engagepoint.university.ep2013b.browser.component.controller;
 
 import com.engagepoint.university.ep2013b.browser.api.BrowserItem;
-import com.engagepoint.university.ep2013b.browser.cmis.AdvSearchParams;
+import com.engagepoint.university.ep2013b.browser.cmis.SearchParams;
 import org.apache.chemistry.opencmis.client.runtime.util.AbstractPageFetcher;
 import org.primefaces.model.TreeNode;
 
@@ -20,7 +20,6 @@ public interface BrowserController
 	void init();
 
     // Tree
-    void makeTree(BrowserItem item, TreeNode parent);
     TreeNode getRoot();
     String getCurrentLocation();
     TreeNode getSelectedNode();
@@ -35,9 +34,10 @@ public interface BrowserController
     void setSelectedItem(BrowserItem selectedItem);
     String getSearchCriteria();
     void setSearchCriteria(String searchCriteria);
-    AdvSearchParams getAdvancedSearchParams();
-    void setAdvancedSearchParams(AdvSearchParams advancedSearchParams);
-    void simple();
+    SearchParams getSearchParams();
+    void setSearchParams(SearchParams advancedSearchParams);
+    void searchSimple();
+	public void searchAdvanced();
 
     public void showPanel(int flag);
     public void hidePanel();

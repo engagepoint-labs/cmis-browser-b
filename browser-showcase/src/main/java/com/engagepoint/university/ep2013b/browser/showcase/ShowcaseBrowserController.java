@@ -15,7 +15,7 @@ import javax.faces.bean.ViewScoped;
 
 @ManagedBean
 @ViewScoped
-public class ShowcaseBrowserController extends AbstractBrowserController{
+public class ShowcaseBrowserController extends AbstractBrowserController {
 
 
 }

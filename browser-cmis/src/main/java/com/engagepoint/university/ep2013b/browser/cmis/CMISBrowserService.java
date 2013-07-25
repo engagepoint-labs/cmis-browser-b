@@ -376,15 +376,12 @@ public class CMISBrowserService implements BrowserService {
         if(current.getId().equals("")){
             return;
         }
-        current.delete();
 
-//
-//        try {
-//            current.delete();
-//        } catch (CmisBaseException e) {
-//            // TODO: exception handling task
-//            e.printStackTrace();
-//        }
+        if(current.getChildren().getTotalNumItems()>0){
+            //System.out.println(" find children:  "+current.getName());
+            deleteDescendants(current.getChildren());
+        }
+        current.delete();
 
     }
 
@@ -419,7 +416,7 @@ public class CMISBrowserService implements BrowserService {
         String prefix =  countStr(" - ",level);
 
         for(ObjectType tt : list){
-            System.out.println(""+level+prefix+tt.getDisplayName()+"  ["+tt.getId()+"]");
+            //System.out.println(""+level+prefix+tt.getDisplayName()+"  ["+tt.getId()+"]");
             result.put(prefix+tt.getDisplayName(), tt.getId());
 
             if (tt.getChildren().getTotalNumItems() > 0) {
@@ -427,6 +424,41 @@ public class CMISBrowserService implements BrowserService {
             }
         }
     }
+
+
+   private void deleteDescendants  (ItemIterable<CmisObject> list) {
+
+       for(CmisObject tt : list){
+
+           if(tt instanceof Folder){
+               if (((Folder) tt).getChildren().getTotalNumItems() > 0) {
+                   //System.out.println(" -- find children:  ["+ tt.getId()+"]  "+tt.getName());
+                   deleteDescendants(((Folder)tt).getChildren());
+               }
+               else {
+                   System.out.println(" ...  deleting folder: ["+ tt.getId()+"]  "+tt.getName());
+                   try{
+                   tt.delete();
+                   } catch (CmisBaseException e){
+                       e.printStackTrace();
+                   }
+
+               }
+
+           }else {
+               //System.out.println(" ...  deleting document: ["+tt.getProperty(PropertyIds.PARENT_ID)+"]  "+tt.getName());
+               try {
+                   tt.delete();
+               } catch (CmisBaseException e){
+                    e.printStackTrace();
+               }
+
+           }
+
+           }
+   } ////   deleteDescendants
+
+
 
 
 }

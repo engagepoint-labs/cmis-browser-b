@@ -26,7 +26,7 @@ public class AbstractBrowserController implements BrowserController {
     private TreeNode selectedNode;
 
     // Table
-    private Integer pageNum;
+    private Integer pageNum=1;
     private int pagesCount;
     private BrowserItem selectedItem = null;
 
@@ -46,6 +46,11 @@ public class AbstractBrowserController implements BrowserController {
     private String nameNewFolder = "";
     private int operationFlag = 0;
 
+
+    public AbstractBrowserController() {
+
+    }
+
     @PostConstruct
     public void init() {
 
@@ -57,11 +62,12 @@ public class AbstractBrowserController implements BrowserController {
         System.out.println(" -------------    init()  folderId = request.getAttribute(folderId) =  "+ request.getAttribute("folderId"));
         // Tree
 
-        BrowserItem currentFolder = null;
         if ((folderId == null) || ("".equals(folderId)) || ("null".equals(folderId))) {
-            currentFolder = service.findFolderByPath("/");
-            folderId = currentFolder.getId();
-        } else currentFolder = service.findFolderById(folderId);
+            // first time at the page
+            currentFolder = service.findFolderByPath("/", 1, rowCounts);
+        } else currentFolder = service.findFolderById(folderId, pageNum, rowCounts);
+
+        folderId = currentFolder.getId();
 
 
         root = new DefaultTreeNode("Root", null);
@@ -70,6 +76,8 @@ public class AbstractBrowserController implements BrowserController {
         makeTree(rootFolder, root);
         currentLocation = service.getCurrentLocationById(folderId);
 
+        System.out.println(" -------------    init()  currentFolder = "+currentFolder);
+        //System.out.println(" -------------    init()  folderId = request.getAttribute(folderId) =  "+ request.getAttribute("folderId"));
 
         // Table
         searchCriteria = request.getParameter("searchCriteria");
@@ -79,6 +87,9 @@ public class AbstractBrowserController implements BrowserController {
         if (paramPageNum == null || "".equals(paramPageNum)) pageNum = 1;
         else pageNum = Integer.parseInt(paramPageNum);
 
+        pagesCount = currentFolder.getTotalPages();
+        dataList = currentFolder.getChildren();
+        System.out.println(" -------------    init()  dataList = "+dataList.size());
 
     }
 
@@ -366,9 +377,9 @@ public class AbstractBrowserController implements BrowserController {
 
         try {
             FacesContext facesContext = FacesContext.getCurrentInstance();
-            FacesContext.getCurrentInstance().getExternalContext().redirect(link+"?folderId="+folderId);
+            FacesContext.getCurrentInstance().getExternalContext().redirect(link+"?folderId="+parent.getId());
         } catch (Exception e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
 
     }

@@ -2,17 +2,15 @@ package com.engagepoint.university.ep2013b.browser.cmis;
 
 
 import com.engagepoint.university.ep2013b.browser.api.BrowserItem;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisNameConstraintViolationException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import java.util.Map;
 
-import static junit.framework.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -30,7 +28,7 @@ public class FolderOperationsTest {
     }
 
 
-    @Ignore
+
     @Test
     public void test1_create_folder_positive()
     {
@@ -43,19 +41,17 @@ public class FolderOperationsTest {
 
     }
 
-    @Ignore
-    @Test
+
+    @Test  (expected = CmisNameConstraintViolationException.class)
     public void test2_create_folder_negative()
     {
 
         BrowserItem item = cmisBrowserService.createFolder("100","test_folder_b","cmis:folder");
 
-        assertTrue(item.getId().equals(""));
-
+        //assertTrue(item.getId().equals(""));
     }
 
 
-    @Ignore
     @Test
     public void test3_edit_folder_positive()
     {
@@ -68,35 +64,20 @@ public class FolderOperationsTest {
 
     }
 
-//
-//    @Test
-//    public void test4_edit_folder_negative()
-//    {
-//
-//        BrowserItem  item = cmisBrowserService.editFolder("136", "test_folder_FF", "cmis:document");
-//
-//        assertTrue(item.getName().equals("test_folder_FF"));
-//        assertNotSame("cmis:document", item.getType().name());
-//
-//
-//    }
-//
 
-    @Ignore
-    @Test
+    @Test  (expected = CmisNameConstraintViolationException.class)
     public void test4_edit_folder_negative()
     {
 
         BrowserItem item = cmisBrowserService.editFolder("101", "test_folder_AA", "cmis:folder");
-        BrowserItem newItem = cmisBrowserService.findFolderById("101");
-        assertFalse(newItem.getName().equals("test_folder_AA"));
+       // BrowserItem newItem = cmisBrowserService.findFolderById("101");
+       // assertFalse(newItem.getName().equals("test_folder_AA"));
 
     }
 
 
-    @Ignore
     @Test (expected = CmisObjectNotFoundException.class)
-    public void test5_delete_folder_positive()
+    public void test5_delete_empty_folder()
     {
 
         cmisBrowserService.deleteFolder("136");
@@ -106,13 +87,12 @@ public class FolderOperationsTest {
     }
 
 
-    @Ignore
-    @Test
-    public void test6_delete_folder_negative()
+    @Test  (expected = CmisObjectNotFoundException.class)
+    public void test7_delete_not_empty_folder()
     {
 
-        cmisBrowserService.deleteFolder("101");
-        assertTrue(cmisBrowserService.findFolderById("101").getId().equals("101"));
+        cmisBrowserService.deleteFolder("108");
+        cmisBrowserService.findFolderById("108");
 
     }
 

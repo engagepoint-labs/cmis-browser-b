@@ -50,12 +50,6 @@
     <p:tree id="tree" value="#{cc.attrs.controller.root}" var="node" selectionMode="single"
             selection="#{cc.attrs.controller.selectedNode}"
             dynamic="true">
-        <p:ajax event="expand"
-                listener="#{cc.attrs.controller.onNodeExpand}"
-                update=":#{cc.clientId}:messages"/>
-        <p:ajax event="collapse"
-                listener="#{cc.attrs.controller.onNodeExpand}"
-                update=":#{cc.clientId}:messages"/>
 
         <p:treeNode id="node" expandedIcon="ui-icon-folder-open"
                     collapsedIcon="ui-icon-folder-collapsed">

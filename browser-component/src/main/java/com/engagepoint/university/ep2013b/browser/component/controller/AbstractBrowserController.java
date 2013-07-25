@@ -16,19 +16,16 @@ import java.util.List;
 
 public class AbstractBrowserController implements BrowserController
 {
-
 	private BrowserService service;
 	private String folderId;
 
 	// Tree
 	private TreeNode root;
-	private boolean isSelected = false;
 	private String currentLocation;
 	private TreeNode selectedNode;
 
 	// Table
-	private Integer pageNum = 1;
-	private int pagesCount = 1;
+	private Page page = new Page(2);			// Maximum of rows per number
 	private BrowserItem selectedItem = null;
 
 	// List which should be displayed
@@ -36,9 +33,6 @@ public class AbstractBrowserController implements BrowserController
 	private String searchCriteria = "none";
 
 	BrowserItem table, tree;
-
-	// Maximum of rows per page
-	private static final int rowCounts = 10;
 
 	private AdvSearchParams advancedSearchParams = new AdvSearchParams();
 
@@ -49,9 +43,25 @@ public class AbstractBrowserController implements BrowserController
 	private int operationFlag = 0;
 
 
+	private class Page
+	{
+		private int number = 1;		// current number
+		private int total = 1;		// total pages
+		private int max;			// items per number
+
+		public Page (int max)	{ this.max = max; }
+	}
+
+	public void first()		{ page.number = 1;			updateTable();}
+	public void next()		{ page.number++; 			updateTable();}
+	public void previous()	{ page.number--;			updateTable();}
+	public void last()		{ page.number = page.total;	updateTable();}
+
+	public boolean isPrevious()	{ return page.number > 1; }
+	public boolean isNext()		{ return page.number + 1 <= page.total; }
+
 	public AbstractBrowserController()
 	{
-
 	}
 
 	@PostConstruct
@@ -63,32 +73,43 @@ public class AbstractBrowserController implements BrowserController
 		folderId = request.getParameter("folderId");
 
 		System.out.println("init()");
-		System.out.println("\tfolderId = " + folderId);
 
-		if ((folderId == null) || ("".equals(folderId)) || ("null".equals(folderId)))
-		{
-			// first time at the page
-			table = service.findTableByPath("/", 1, rowCounts);
-			tree = service.findTreeByPath("/");
-		} else {
-			table = service.findTableById(folderId, pageNum, rowCounts);
-			tree = service.findTreeById(folderId);
-		}
+		updateTable();
+		updateTree();
+	}
+
+	private void updateTable()
+	{
+		System.out.println("updateTable()");
+
+		table = (folderId == null) ?
+				service.findTableByPath("/", 1, page.max) :
+				service.findTableById(folderId, page.number, page.max);
+
+		page.total = table.getTotalPages();
+		dataList = table.getChildren();
+
+		System.out.println("\tfolderId = " + folderId);
+		System.out.println("\tpage.number = " + page.number);
+		System.out.println("\tpage.total = " + page.total);
+	}
+
+	private void updateTree()
+	{
+		System.out.println("updateTree()");
+
+		tree = (folderId == null) ?
+				service.findTreeByPath("/") :
+				service.findTreeById(folderId);
 
 		folderId = tree.getId();
 
 		root = new DefaultTreeNode("Root", null);
-		// create tree from RootFolder (for showing all parents of current folder)
-		BrowserItem rootFolder = tree.getRootFolder();
-		makeTree(rootFolder, root);
+		makeTree(tree.getRootFolder(), root);
+
 		currentLocation = tree.getLocation();
 
-		pagesCount = table.getTotalPages();
-		dataList = table.getChildren();
-
-		System.out.println("\ttable = " + table);
-		System.out.println("\ttree = " + tree);
-		System.out.println("\tpagesCount = " + pagesCount);
+		System.out.println("\tfolderId = " + folderId);
 		System.out.println("\tcurrentLocation = " + currentLocation);
 	}
 
@@ -97,7 +118,6 @@ public class AbstractBrowserController implements BrowserController
 	{
 		showEditFolderPanel = true;
 		operationFlag = flag;
-
 	}
 
 	public void hidePanel()
@@ -201,7 +221,7 @@ public class AbstractBrowserController implements BrowserController
 //			// not searching
 //			if ((folderId == null) || ("".equals(folderId)) || ("null".equals(folderId)))
 //			{
-//				// first time at the page
+//				// first time at the number
 //				currentFolder = service.findFolderByPath("/", 1, rowCounts);
 //			} else currentFolder = service.findFolderById(folderId, pageNum, rowCounts);
 //
@@ -242,7 +262,7 @@ public class AbstractBrowserController implements BrowserController
 	}
 
 
-	// Method executed when dataTable renders (during loading page or ajax request)
+	// Method executed when dataTable renders (during loading number or ajax request)
 	public List<BrowserItem> getDataList()
 	{
 		return dataList;
@@ -253,60 +273,6 @@ public class AbstractBrowserController implements BrowserController
 		return folderId;
 	}
 
-	public void setPageNum(Integer pageNum)
-	{
-		this.pageNum = pageNum;
-	}
-
-	public Integer getPageNum()
-	{
-		return pageNum;
-	}
-
-	public boolean isPrevAllowed()
-	{
-		return pageNum > 1;
-	}
-
-	public boolean isNextAllowed()
-	{
-		return pageNum + 1 <= pagesCount;
-	}
-
-	public void firstPage()
-	{
-		pageNum = 1;
-	}
-
-	public void nextPage()
-	{
-		pageNum++;
-	}
-
-	public void prevPage()
-	{
-		pageNum--;
-	}
-
-	public void lastPage()
-	{
-		pageNum = pagesCount;
-	}
-
-	public int getNextPageNum()
-	{
-		return pageNum + 1;
-	}
-
-	public int getPrevPageNum()
-	{
-		return pageNum - 1;
-	}
-
-	public int getPagesCount()
-	{
-		return pagesCount;
-	}
 
 	public BrowserItem getSelectedItem()
 	{

@@ -2,12 +2,22 @@ package com.engagepoint.university.ep2013b.browser.component.controller;
 
 import com.engagepoint.university.ep2013b.browser.api.BrowserItem;
 import com.engagepoint.university.ep2013b.browser.cmis.AdvSearchParams;
+import org.apache.chemistry.opencmis.client.runtime.util.AbstractPageFetcher;
 import org.primefaces.model.TreeNode;
 
 import java.util.List;
 
-public interface BrowserController {
-    void init();
+public interface BrowserController
+{
+	public void first();
+	public void next();
+	public void previous();
+	public void last();
+
+	public boolean isPrevious();
+	public boolean isNext();
+
+	void init();
 
     // Tree
     void makeTree(BrowserItem item, TreeNode parent);
@@ -17,26 +27,16 @@ public interface BrowserController {
     void displaySelectedSingle();
     void deleteNode();
 
+
     // Table
     List<BrowserItem> getDataList();
     String getFolderId();
-    void setPageNum(Integer pageNum);
-    Integer getPageNum();
-    boolean isPrevAllowed();
-    boolean isNextAllowed();
-    int getNextPageNum();
-    int getPrevPageNum();
-    int getPagesCount();
     BrowserItem getSelectedItem();
     void setSelectedItem(BrowserItem selectedItem);
     String getSearchCriteria();
     void setSearchCriteria(String searchCriteria);
     AdvSearchParams getAdvancedSearchParams();
     void setAdvancedSearchParams(AdvSearchParams advancedSearchParams);
-    void firstPage();
-    void nextPage();
-    void prevPage();
-    void lastPage();
     void simple();
 
     public void showPanel(int flag);
@@ -55,8 +55,5 @@ public interface BrowserController {
     public  void setOperationFlag(int operationFlag);
     public int   getOperationFlag();
     public void onNodeExpand();
-
-
-
-
 }
+

@@ -217,29 +217,29 @@
 
         <!-- Paging Panel-->
         <f:facet name="footer">
-            <p:commandButton id="butfirst" action="#{cc.attrs.controller.firstPage}"
-                             disabled="#{!cc.attrs.controller.prevAllowed}"
+            <p:commandButton id="butfirst" action="#{cc.attrs.controller.first}"
+                             disabled="#{!cc.attrs.controller.previous}"
                              update=":#{cc.clientId}:table"
                              icon="ui-icon-arrowthickstop-1-w">
                 <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
             </p:commandButton>
 
-            <p:commandButton id="butprev" action="#{cc.attrs.controller.prevPage}"
-                             disabled="#{!cc.attrs.controller.prevAllowed}"
+            <p:commandButton id="butprev" action="#{cc.attrs.controller.previous}"
+                             disabled="#{!cc.attrs.controller.previous}"
                              update=":#{cc.clientId}:table"
                              icon="ui-icon-arrowthick-1-w">
                 <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
             </p:commandButton>
 
-            <p:commandButton id="butnext" action="#{cc.attrs.controller.nextPage}"
-                             disabled="#{!cc.attrs.controller.nextAllowed}"
+            <p:commandButton id="butnext" action="#{cc.attrs.controller.next}"
+                             disabled="#{!cc.attrs.controller.next}"
                              update=":#{cc.clientId}:table"
                              icon="ui-icon-arrowthick-1-e">
                 <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
             </p:commandButton>
 
-            <p:commandButton id="butlast" action="#{cc.attrs.controller.lastPage}"
-                             disabled="#{!cc.attrs.controller.nextAllowed}"
+            <p:commandButton id="butlast" action="#{cc.attrs.controller.last}"
+                             disabled="#{!cc.attrs.controller.next}"
                              update=":#{cc.clientId}:table"
                              icon="ui-icon-arrowthickstop-1-e">
                 <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>

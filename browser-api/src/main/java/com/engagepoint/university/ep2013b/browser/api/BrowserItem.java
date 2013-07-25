@@ -212,7 +212,7 @@ public class BrowserItem implements Serializable
 		String result = "BrowserItem (id:" + getId() +
 				", name:" + getName() +
 				", date:" + getCreated() +
-				", type:" + getType().name() +
+				", type:" + getType() +
 				", mime:" + getContentType() +
 				", size:" + getSize() +
 

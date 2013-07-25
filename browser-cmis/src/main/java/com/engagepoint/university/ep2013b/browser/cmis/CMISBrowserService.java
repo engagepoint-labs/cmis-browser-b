@@ -264,7 +264,7 @@ public class CMISBrowserService implements BrowserService
 		}
 	}
 
-	private BrowserItem findFolder(Folder current, int pageNum, int rowCounts)
+	private BrowserItem findFolderOld(Folder current, int pageNum, int rowCounts)
 	{
 		BrowserItem result;
 		List<BrowserItem> parents = findParents(current);
@@ -345,6 +345,18 @@ public class CMISBrowserService implements BrowserService
 		return result;
 	}
 
+	private BrowserItem findFolder(Folder current, int pageNum, int rowCounts)
+	{
+		String queryString = "SELECT * FROM cmis:document WHERE IN_FOLDER(?)";
+
+		QueryStatement query = session.createQueryStatement(queryString);
+		query.setString(1, current.getId());
+
+		System.out.println("Query = " + query.toString());
+
+		return search(query, pageNum, rowCounts);
+	}
+
 	private BrowserItem search(QueryStatement query, int pageNum, int rowCounts)
 	{
 		BrowserItem result = new BrowserItem();
@@ -369,10 +381,10 @@ public class CMISBrowserService implements BrowserService
 
 			String t = hit.getPropertyByQueryName("cmis:baseTypeId").getFirstValue().toString();
 			item.setType(("cmis:folder".equals(t)) ? BrowserItem.TYPE.FOLDER : BrowserItem.TYPE.FILE);
+			item.setCreated(((GregorianCalendar) hit.getPropertyByQueryName("cmis:creationDate").getFirstValue()).getTime());
 
 			if (item.getType() == BrowserItem.TYPE.FILE)
 			{
-				item.setCreated(((GregorianCalendar) hit.getPropertyByQueryName("cmis:creationDate").getFirstValue()).getTime());
 				item.setContentType(hit.getPropertyByQueryName("cmis:contentStreamMimeType").getFirstValue().toString());
 				item.setSize((BigInteger) hit.getPropertyByQueryName("cmis:contentStreamLength").getFirstValue());
 			}
@@ -438,7 +450,7 @@ public class CMISBrowserService implements BrowserService
 		return createDocument(current, name, null);
 	}
 
-	@Override
+//	@Override
 	public BrowserItem createDocument(String id, String name, BrowserDocumentContent content)
 	{
 		Folder current = (Folder) session.getObject(id);

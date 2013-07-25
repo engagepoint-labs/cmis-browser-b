@@ -38,33 +38,47 @@ public class CMISBrowserService implements BrowserService
 
 	// Non paging methods
 	@Override
-	public BrowserItem findFolderById(String id)
+	public BrowserItem findTableById(String id)
 	{
 		Folder current = (Folder) session.getObject(id);
-		return findFolder(current, 0, 0);
+		return findTable(current, 0, 0);
 	}
 
 	@Override
-	public BrowserItem findFolderByPath(String path)
+	public BrowserItem findTableByPath(String path)
 	{
 		Folder current = (Folder) session.getObjectByPath(path);
-		return findFolder(current, 0, 0);
+		return findTable(current, 0, 0);
+	}
+
+	@Override
+	public BrowserItem findTreeById(String id)
+	{
+		Folder current = (Folder) session.getObject(id);
+		return findTree(current);
+	}
+
+	@Override
+	public BrowserItem findTreeByPath(String path)
+	{
+		Folder current = (Folder) session.getObjectByPath(path);
+		return findTree(current);
 	}
 
 
 	// Paging methods
 	@Override
-	public BrowserItem findFolderById(String id, int page, int rowCount)
+	public BrowserItem findTableById(String id, int page, int rowCount)
 	{
 		Folder current = (Folder) session.getObject(id);
-		return findFolder(current, page, rowCount);
+		return findTable(current, page, rowCount);
 	}
 
 	@Override
-	public BrowserItem findFolderByPath(String path, int page, int rowCount)
+	public BrowserItem findTableByPath(String path, int page, int rowCount)
 	{
 		Folder current = (Folder) session.getObjectByPath(path);
-		return findFolder(current, page, rowCount);
+		return findTable(current, page, rowCount);
 	}
 
 	// Search methods
@@ -264,7 +278,17 @@ public class CMISBrowserService implements BrowserService
 		}
 	}
 
-	private BrowserItem findFolderOld(Folder current, int pageNum, int rowCounts)
+	private BrowserItem findTable(Folder current, int pageNum, int rowCounts)
+	{
+		String queryString = "SELECT * FROM cmis:document WHERE IN_FOLDER(?)";
+
+		QueryStatement query = session.createQueryStatement(queryString);
+		query.setString(1, current.getId());
+
+		return search(query, pageNum, rowCounts);
+	}
+
+	private BrowserItem findTree(Folder current)
 	{
 		BrowserItem result;
 		List<BrowserItem> parents = findParents(current);
@@ -274,68 +298,49 @@ public class CMISBrowserService implements BrowserService
 		{
 			ItemIterable<CmisObject> children = current.getChildren();
 
-			// if enabled paging (paging only for selected folder, other parents without)
-			if (((pageNum != 0) && (rowCounts != 0)) && (i.equals(parents.get(0))))
-			{
-				Page page = new Page(children.getTotalNumItems(), pageNum, rowCounts);
-				i.setTotalPages(page.total);
-				children = current.getChildren().skipTo(page.skip).getPage(rowCounts);
-			}
-
 			for (CmisObject o : children)
 			{
-				BrowserItem child, subchild;
-
-				// check if already exists (is one of the parents)
-				BrowserItem find = new BrowserItem();
-				find.setId(o.getId());
-				int index = parents.indexOf(find);
-
-				if (index == -1)
+				if (o instanceof Folder)
 				{
-					// create child
-					child = new BrowserItem();
-					child.setId(o.getId());
-					child.setName(o.getName());
-					child.setCreated(o.getCreationDate().getTime());
-					if (o instanceof Document)
+					BrowserItem child, subchild;
+
+					// check if already exists (is one of the parents)
+					BrowserItem find = new BrowserItem();
+					find.setId(o.getId());
+					int index = parents.indexOf(find);
+
+					if (index == -1)
 					{
-						// ..child is Document
-						child.setType(BrowserItem.TYPE.FILE);
-						child.setContentType(((Document) o).getContentStreamMimeType());
-						child.setSize(BigInteger.valueOf(((Document) o).getContentStreamLength()));
-					}
-					else
-					{
-						// ..child is Folder
+						// create child
+						child = new BrowserItem();
+						child.setId(o.getId());
+						child.setName(o.getName());
+						child.setCreated(o.getCreationDate().getTime());
 						child.setType(BrowserItem.TYPE.FOLDER);
 
-						for (CmisObject s : ((Folder) o).getChildren())
+						ItemIterable<CmisObject> subchildren = ((Folder) o).getChildren();
+						for (CmisObject s : subchildren)
 						{
-							// create subchild
-							subchild = new BrowserItem();
-							subchild.setId(s.getId());
-							subchild.setName(s.getName());
-							subchild.setCreated(s.getCreationDate().getTime());
-							if (s instanceof Document)
+							if (s instanceof Folder)
 							{
-								// ..subchild is Document
-								subchild.setType(BrowserItem.TYPE.FILE);
-								subchild.setContentType(((Document) s).getContentStreamMimeType());
-								subchild.setSize(BigInteger.valueOf(((Document) s).getContentStreamLength()));
+								// create subchild
+								subchild = new BrowserItem();
+								subchild.setId(s.getId());
+								subchild.setName(s.getName());
+								subchild.setCreated(s.getCreationDate().getTime());
+								subchild.setType(BrowserItem.TYPE.FOLDER);
+
+								subchild.setParent(child);
+								child.setChild(subchild);
 							}
-							else subchild.setType(BrowserItem.TYPE.FOLDER);
-
-							subchild.setParent(child);
-							child.setChild(subchild);
 						}
-					}
 
-					child.setParent(i);
+						child.setParent(i);
 
-				} else child = parents.get(index);
+					} else child = parents.get(index);
 
-				i.setChild(child);
+					i.setChild(child);
+				}
 			}
 
 			current = current.getFolderParent();
@@ -343,18 +348,6 @@ public class CMISBrowserService implements BrowserService
 
 		result = parents.get(0);
 		return result;
-	}
-
-	private BrowserItem findFolder(Folder current, int pageNum, int rowCounts)
-	{
-		String queryString = "SELECT * FROM cmis:document WHERE IN_FOLDER(?)";
-
-		QueryStatement query = session.createQueryStatement(queryString);
-		query.setString(1, current.getId());
-
-		System.out.println("Query = " + query.toString());
-
-		return search(query, pageNum, rowCounts);
 	}
 
 	private BrowserItem search(QueryStatement query, int pageNum, int rowCounts)

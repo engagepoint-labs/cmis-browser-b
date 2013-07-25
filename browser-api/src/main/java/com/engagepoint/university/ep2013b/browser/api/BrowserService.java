@@ -10,11 +10,14 @@ public interface BrowserService
     // should return unique name of service for search
     public String getServiceName();
 
-    public BrowserItem findFolderById(String id);
-    public BrowserItem findFolderByPath(String path);
+    public BrowserItem findTableById(String id);
+    public BrowserItem findTableByPath(String path);
 
-    public BrowserItem findFolderById(String id, int page, int rowCount);
-    public BrowserItem findFolderByPath(String path, int page, int rowCount);
+	public BrowserItem findTreeById(String id);
+	public BrowserItem findTreeByPath(String path);
+
+    public BrowserItem findTableById(String id, int page, int rowCount);
+    public BrowserItem findTableByPath(String path, int page, int rowCount);
 
     public BrowserItem simpleSearch(String id, String parameter, int page, int rowCounts);
     public BrowserItem advancedSearch(String id, Object parameter, int pageNum, int rowCounts);

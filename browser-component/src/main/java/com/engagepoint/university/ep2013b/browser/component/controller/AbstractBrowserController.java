@@ -34,7 +34,8 @@ public class AbstractBrowserController implements BrowserController
 	// List which should be displayed
 	private List<BrowserItem> dataList;
 	private String searchCriteria = "none";
-	private BrowserItem currentFolder = null;
+
+	BrowserItem table, tree;
 
 	// Maximum of rows per page
 	private static final int rowCounts = 10;
@@ -60,31 +61,35 @@ public class AbstractBrowserController implements BrowserController
 
 		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 		folderId = request.getParameter("folderId");
-		System.out.println(" -------------    init()  folderId = request.getParameter(folderId) =  " + folderId);
+
+		System.out.println("init()");
+		System.out.println("\tfolderId = " + folderId);
 
 		if ((folderId == null) || ("".equals(folderId)) || ("null".equals(folderId)))
 		{
 			// first time at the page
-			currentFolder = service.findFolderByPath("/", 1, rowCounts);
-		} else currentFolder = service.findFolderById(folderId, pageNum, rowCounts);
+			table = service.findTableByPath("/", 1, rowCounts);
+			tree = service.findTreeByPath("/");
+		} else {
+			table = service.findTableById(folderId, pageNum, rowCounts);
+			tree = service.findTreeById(folderId);
+		}
 
-		folderId = currentFolder.getId();
-
+		folderId = tree.getId();
 
 		root = new DefaultTreeNode("Root", null);
 		// create tree from RootFolder (for showing all parents of current folder)
-		BrowserItem rootFolder = currentFolder.getRootFolder();
+		BrowserItem rootFolder = tree.getRootFolder();
 		makeTree(rootFolder, root);
-		currentLocation = currentFolder.getLocation();
+		currentLocation = tree.getLocation();
 
-		System.out.println(" -------------    init()  currentFolder = " + currentFolder);
+		pagesCount = table.getTotalPages();
+		dataList = table.getChildren();
 
-		// Table
-
-		pagesCount = currentFolder.getTotalPages();
-		dataList = currentFolder.getChildren();
-		System.out.println(" -------------    init()  dataList = " + dataList.size());
-
+		System.out.println("\ttable = " + table);
+		System.out.println("\ttree = " + tree);
+		System.out.println("\tpagesCount = " + pagesCount);
+		System.out.println("\tcurrentLocation = " + currentLocation);
 	}
 
 
@@ -182,67 +187,64 @@ public class AbstractBrowserController implements BrowserController
 		selectedNode = null;
 	}
 
-	// TODO: Should have better name
-	// Process received parameters and decided what data to show (folder items or search results)
-	public void businessLogic()
-	{
-//        System.out.println("businessLogic()");
-//        System.out.println("\tfolderID       = " + folderId);
-//        System.out.println("\tpage           = " + pageNum);
-//        System.out.println("\tsimple search  = " + searchCriteria);
-
-		if ((searchCriteria == null) && advancedSearchParams.isEmpty())
-		{
-			// not searching
-			if ((folderId == null) || ("".equals(folderId)) || ("null".equals(folderId)))
-			{
-				// first time at the page
-				currentFolder = service.findFolderByPath("/", 1, rowCounts);
-			} else currentFolder = service.findFolderById(folderId, pageNum, rowCounts);
-
-			folderId = currentFolder.getId();
-		} else
-		{
-			if ((searchCriteria != null))
-			{
-				// simple search
-				currentFolder = service.simpleSearch(folderId, searchCriteria, pageNum, rowCounts);
-			} else
-			{
-				// advanced search
-				advancedSearchParams.setFolderId(folderId);
-
-				System.out.println("\tadvanced search (isEmpty = " + advancedSearchParams.isEmpty() + "):");
-				System.out.println("\t\tid           = " + advancedSearchParams.getFolderId());
-				System.out.println("\t\tDocumentType = " + advancedSearchParams.getDocumentType());
-				System.out.println("\t\tDateFrom     = " + advancedSearchParams.getDateFrom());
-				System.out.println("\t\tDateTo       = " + advancedSearchParams.getDateTo());
-				System.out.println("\t\tContentType  = " + advancedSearchParams.getContentType());
-				System.out.println("\t\tSize         = " + advancedSearchParams.getSize());
-				System.out.println("\t\tText         = " + advancedSearchParams.getText());
-
-				currentFolder = service.advancedSearch(folderId, advancedSearchParams, pageNum, rowCounts);
-			}
-		}
-
-		pagesCount = currentFolder.getTotalPages();
-		dataList = currentFolder.getChildren();
-	}
+//	// TODO: Should have better name
+//	// Process received parameters and decided what data to show (folder items or search results)
+//	public void businessLogic()
+//	{
+////        System.out.println("businessLogic()");
+////        System.out.println("\tfolderID       = " + folderId);
+////        System.out.println("\tpage           = " + pageNum);
+////        System.out.println("\tsimple search  = " + searchCriteria);
+//
+//		if ((searchCriteria == null) && advancedSearchParams.isEmpty())
+//		{
+//			// not searching
+//			if ((folderId == null) || ("".equals(folderId)) || ("null".equals(folderId)))
+//			{
+//				// first time at the page
+//				currentFolder = service.findFolderByPath("/", 1, rowCounts);
+//			} else currentFolder = service.findFolderById(folderId, pageNum, rowCounts);
+//
+//			folderId = currentFolder.getId();
+//		} else
+//		{
+//			if ((searchCriteria != null))
+//			{
+//				// simple search
+//				currentFolder = service.simpleSearch(folderId, searchCriteria, pageNum, rowCounts);
+//			} else
+//			{
+//				// advanced search
+//				advancedSearchParams.setFolderId(folderId);
+//
+//				System.out.println("\tadvanced search (isEmpty = " + advancedSearchParams.isEmpty() + "):");
+//				System.out.println("\t\tid           = " + advancedSearchParams.getFolderId());
+//				System.out.println("\t\tDocumentType = " + advancedSearchParams.getDocumentType());
+//				System.out.println("\t\tDateFrom     = " + advancedSearchParams.getDateFrom());
+//				System.out.println("\t\tDateTo       = " + advancedSearchParams.getDateTo());
+//				System.out.println("\t\tContentType  = " + advancedSearchParams.getContentType());
+//				System.out.println("\t\tSize         = " + advancedSearchParams.getSize());
+//				System.out.println("\t\tText         = " + advancedSearchParams.getText());
+//
+//				currentFolder = service.advancedSearch(folderId, advancedSearchParams, pageNum, rowCounts);
+//			}
+//		}
+//
+//		pagesCount = currentFolder.getTotalPages();
+//		dataList = currentFolder.getChildren();
+//	}
 
 	public void simple()
 	{
 //        state.put("searchCriteria", searchCriteria);
 ////        state.put("advancedSearch", advancedSearchParams);
 //        state.put("pageNum", 1);
-
-		businessLogic();
 	}
 
 
 	// Method executed when dataTable renders (during loading page or ajax request)
 	public List<BrowserItem> getDataList()
 	{
-
 		return dataList;
 	}
 
@@ -274,25 +276,21 @@ public class AbstractBrowserController implements BrowserController
 	public void firstPage()
 	{
 		pageNum = 1;
-		businessLogic();
 	}
 
 	public void nextPage()
 	{
 		pageNum++;
-		businessLogic();
 	}
 
 	public void prevPage()
 	{
 		pageNum--;
-		businessLogic();
 	}
 
 	public void lastPage()
 	{
 		pageNum = pagesCount;
-		businessLogic();
 	}
 
 	public int getNextPageNum()
@@ -390,40 +388,40 @@ public class AbstractBrowserController implements BrowserController
 	public void deleteFolder(String link)
 	{
 
-		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-
-		BrowserItem parent = service.findFolderById(folderId).getParent();
-
-		try
-		{
-
-			service.deleteFolder(folderId);
-			showEditFolderPanel = false;
-
-			//init();
-
-			//System.out.println("" + link + "?faces-redirect=true");
-
-		}
-		catch (Exception e)
-		{
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_WARN,
-							"Error during deleting folder by id: " + folderId, null));
-		}
-
-		System.out.println(" -------------      " + link + "?folderId=" + parent.getId() + "&faces-redirect=true");
-		folderId = parent.getId();
-
-		try
-		{
-			FacesContext facesContext = FacesContext.getCurrentInstance();
-			FacesContext.getCurrentInstance().getExternalContext().redirect(link + "?folderId=" + parent.getId());
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+//		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+//
+//		BrowserItem parent = service.findFolderById(folderId).getParent();
+//
+//		try
+//		{
+//
+//			service.deleteFolder(folderId);
+//			showEditFolderPanel = false;
+//
+//			//init();
+//
+//			//System.out.println("" + link + "?faces-redirect=true");
+//
+//		}
+//		catch (Exception e)
+//		{
+//			FacesContext.getCurrentInstance().addMessage(null,
+//					new FacesMessage(FacesMessage.SEVERITY_WARN,
+//							"Error during deleting folder by id: " + folderId, null));
+//		}
+//
+//		System.out.println(" -------------      " + link + "?folderId=" + parent.getId() + "&faces-redirect=true");
+//		folderId = parent.getId();
+//
+//		try
+//		{
+//			FacesContext facesContext = FacesContext.getCurrentInstance();
+//			FacesContext.getCurrentInstance().getExternalContext().redirect(link + "?folderId=" + parent.getId());
+//		}
+//		catch (Exception e)
+//		{
+//			e.printStackTrace();
+//		}
 
 	}
 

@@ -18,7 +18,6 @@ public interface BrowserController {
     void deleteNode();
 
     // Table
-    void businessLogic();
     List<BrowserItem> getDataList();
     String getFolderId();
     void setPageNum(Integer pageNum);

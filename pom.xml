@@ -204,7 +204,9 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.6.3.201306030806</version>
-
+                <configuration>
+                    <haltOnFailure>false</haltOnFailure>
+                </configuration>
                 <executions>
                     <execution>
                         <id>prepare-agent</id>

@@ -57,6 +57,12 @@
                     update=":#{cc.clientId}:seniorpanel"
                     onclick="confirmDeleteDialog.show()"
                     icon="ui-icon-close"/>
+
+        <p:menuitem id="contextItemNewDoc" value="Create document"
+                    update=":#{cc.clientId}:seniorpanel"
+                    actionListener="#{cc.attrs.controller.showPanel(4)}"
+                    icon="ui-icon-search"/>
+
     </p:contextMenu>
 
     <p:tree id="tree" value="#{cc.attrs.controller.root}" var="node" selectionMode="single"
@@ -173,7 +179,7 @@
     </p:toolbar>
 
     <!--Was ist das???-->
-    <h:outputText value="" style="height: 20px;"/>
+    <h:outputText value="    " style="height: 20px;"/>
 
     <!-- Table Panel-->
     <p:dataTable var="item" value="#{cc.attrs.controller.dataList}" id="table" style="width: 840px;">
@@ -245,7 +251,7 @@
 </p:panel>
 
 
-<p:panel id="panel" style="margin-bottom:10px; width: 400px;"
+<p:panel id="folderpan" style="margin-bottom:10px; width: 400px;"
          rendered="#{cc.attrs.controller.folderPanel.show}">
 
     <h:panelGrid columns="3">
@@ -290,6 +296,58 @@
     </h:panelGrid>
 </p:panel>
 
+<p:panel id="documentpan" style="margin-bottom:10px; width: 400px;" >
+
+    <h:panelGrid columns="3">
+        <h:outputLabel for="docname" value="Name:* "/>
+        <p:inputText id="docname" required="true" label="Name"
+                     value="#{cc.attrs.controller.folderPanel.name}"
+                     requiredMessage="Missing document name!"/>
+        <h:message for="docname"/>
+
+
+        <h:outputLabel for="doctype" value="Type:* "/>
+        <!-- SHOULD BE TYPE INSTEAD OF ID!!! -->
+        <h:selectOneMenu id="doctype" value="#{cc.attrs.controller.folderPanel.type}">
+            <f:selectItem itemLabel="Document" itemValue="cmis:document"/>
+        </h:selectOneMenu>
+        <h:message for="doctype"/>
+
+        <p:fileUpload value="#{fileUploadController.file}" mode="simple"/>
+
+        <p:commandButton value="Upload" ajax="false"
+                         actionListener="#{fileUploadController.upload}"/>
+
+
+        <p:commandButton id="docsavebtn"
+                         action="#{cc.attrs.controller.folderPanel.createFolder(cc.attrs.link)}"
+                         value="Save" ajax="false"
+                         update=":#{cc.clientId}:seniorpanel"
+                         title="Create new document"
+                         >
+
+            <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
+        </p:commandButton>
+
+        <p:commandButton id="doceditbtn"
+                         action="#{cc.attrs.controller.folderPanel.editFolder(cc.attrs.link)}"
+                         value="Edit" ajax="false"
+                         update=":#{cc.clientId}:seniorpanel"
+                         title="Edit document"
+                         >
+
+            <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
+        </p:commandButton>
+
+
+        <p:commandButton id="documentcancel" action="#{cc.attrs.controller.folderPanel.hide}"
+                         value="Cancel"
+                         update=":#{cc.clientId}:seniorpanel" immediate="true"/>
+
+    </h:panelGrid>
+</p:panel>
+
+
 
 </h:column>
 </h:panelGrid>
@@ -306,6 +364,24 @@
     <p:commandButton id="cancel1"
                      value="Cancel"
                      onclick="confirmDeleteDialog.hide()"
+                     update=":#{cc.clientId}:seniorpanel"
+                     immediate="true"/>
+
+</p:confirmDialog>
+
+<p:confirmDialog message="Are you sure about deleting the document?"
+                 id="confirmDocDeleteDialog" widgetVar="confirmDocDeleteDialog">
+    <p:commandButton id="docdeletebtn1"
+                     actionListener="#{cc.attrs.controller.folderPanel.deleteFolder(cc.attrs.link)}"
+                     value="Delete"
+                     immediate="true"
+
+                     title="Delete document">
+        <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
+    </p:commandButton>
+    <p:commandButton id="cancel2"
+                     value="Cancel"
+                     onclick="confirmDocDeleteDialog.hide()"
                      update=":#{cc.clientId}:seniorpanel"
                      immediate="true"/>
 

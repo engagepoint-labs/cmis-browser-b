@@ -2,7 +2,6 @@ package com.engagepoint.university.ep2013b.browser.component.controller;
 
 import com.engagepoint.university.ep2013b.browser.api.BrowserItem;
 import com.engagepoint.university.ep2013b.browser.cmis.SearchParams;
-import org.apache.chemistry.opencmis.client.runtime.util.AbstractPageFetcher;
 import org.primefaces.model.TreeNode;
 
 import java.util.List;
@@ -64,7 +63,29 @@ public interface BrowserController
 		public void setType(String type);
 	}
 
-	public BrowserFolderPanel getFolderPanel();
+    // Folder Management
+    public interface BrowserDocumentPanel
+    {
+        public void showNewFolderPanel();
+        public void showEditFolderPanel();
+        public void hide();
+        public boolean isShow();
+        public boolean isShowSaveButton();
+        public boolean isShowEditButton();
+
+        public String createFolder(String link);
+        public String editFolder(String link);
+        public void deleteFolder(String link);
+
+        public String getName();
+        public void setName(String name);
+        public String getType();
+        public void setType(String type);
+    }
+
+
+
+    public BrowserFolderPanel getFolderPanel();
 
 }
 

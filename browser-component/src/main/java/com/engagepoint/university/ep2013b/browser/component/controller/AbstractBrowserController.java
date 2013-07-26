@@ -38,6 +38,8 @@ public class AbstractBrowserController implements BrowserController
 	private Page page = new Page(2);	// Maximum of rows per number
 	private SearchParams searchParams = new SearchParams();
 	private FolderPanel folderPanel = new FolderPanel();
+    //private DocumentPanel documentPanel = new DocumentPanel();
+
 
 
 	public AbstractBrowserController()
@@ -289,6 +291,8 @@ public class AbstractBrowserController implements BrowserController
 			this.type = type;
 		}
 	}
+
+
 
 	public FolderPanel getFolderPanel()
 	{

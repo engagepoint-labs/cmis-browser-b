@@ -13,7 +13,7 @@ import java.io.FileNotFoundException;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 
-public class DocumentTests
+public class DocumentOperationsIT
 {
     private CMISBrowserService service = new CMISBrowserService();
 //

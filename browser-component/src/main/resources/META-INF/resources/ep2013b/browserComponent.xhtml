@@ -15,8 +15,10 @@
 
 <cc:implementation>
 
+<p:outputLabel value="Repository: #{cc.attrs.controller.currentUrl}"/>
+<br/>
+<p:outputLabel value="Current location: #{cc.attrs.controller.currentLocation}"/>
 
-<h:outputText value="#{cc.attrs.controller.currentLocation}"/>
 
 <p:ajaxStatus>
     <f:facet name="start">
@@ -65,9 +67,16 @@
 
     </p:contextMenu>
 
-    <p:tree id="tree" value="#{cc.attrs.controller.root}" var="node" selectionMode="single"
+    <p:tree id="tree" value="#{cc.attrs.controller.root}"
+            var="node" selectionMode="single"
             selection="#{cc.attrs.controller.selectedNode}"
+            draggable="true" droppable="true"
+            dynamic="true"
             >
+        <p:ajax event="dragdrop"
+                listener="#{cc.attrs.controller.moveFolder}"
+                update=":#{cc.clientId}:tree"/>
+
         <!-- dynamic="true" -->
 
         <p:treeNode id="node" expandedIcon="ui-icon-folder-open"
@@ -149,6 +158,25 @@
                                  title="Advanced search">
                     <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
                 </p:commandButton>
+            </h:panelGrid>
+        </p:tab>
+
+        <!--Preferences-->
+        <p:tab id="tab3" title="Preferences">
+            <h:panelGrid columns="2">
+                <p:column>
+                    <h:outputLabel value="URL:"/>
+                    <p:inputText id="inputNewLink"
+                                 value="#{cc.attrs.controller.currentUrl}"/>
+                </p:column>
+
+                <p:column>
+                    <p:commandButton id="newConnect"
+                                     value="Connect"
+                                     ajax="false"
+                                     actionListener="#{cc.attrs.controller.findLink(cc.attrs.link)}">
+                    </p:commandButton>
+                </p:column>
             </h:panelGrid>
         </p:tab>
     </p:tabView>

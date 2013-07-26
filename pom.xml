@@ -68,6 +68,13 @@
     <dependencyManagement>
         <dependencies>
 
+            <!-- PrimeFaces -->
+            <dependency>
+                <groupId>org.primefaces</groupId>
+                <artifactId>primefaces</artifactId>
+                <version>3.5.8</version>
+            </dependency>
+
             <!--maven-release-plugin dependency-->
             <dependency>
                 <groupId>org.apache.maven.release</groupId>

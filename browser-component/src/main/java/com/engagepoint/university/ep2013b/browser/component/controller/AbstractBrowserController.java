@@ -3,8 +3,10 @@ package com.engagepoint.university.ep2013b.browser.component.controller;
 
 import com.engagepoint.university.ep2013b.browser.api.BrowserItem;
 import com.engagepoint.university.ep2013b.browser.api.BrowserService;
+import com.engagepoint.university.ep2013b.browser.api.PreferencesHelper;
 import com.engagepoint.university.ep2013b.browser.cmis.SearchParams;
 import com.engagepoint.university.ep2013b.browser.component.BrowserFactory;
+import org.primefaces.event.TreeDragDropEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
@@ -38,11 +40,12 @@ public class AbstractBrowserController implements BrowserController
 	private Page page = new Page(2);	// Maximum of rows per number
 	private SearchParams searchParams = new SearchParams();
 	private FolderPanel folderPanel = new FolderPanel();
-    //private DocumentPanel documentPanel = new DocumentPanel();
+
+    private String currentUrl = null;
+    private PreferencesHelper preferencesHelper;
 
 
-
-	public AbstractBrowserController()
+    public AbstractBrowserController()
 	{
 	}
 
@@ -51,7 +54,10 @@ public class AbstractBrowserController implements BrowserController
 	{
 		service = BrowserFactory.getInstance("CMIS");
 
-		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        preferencesHelper = new PreferencesHelper();
+        currentUrl = preferencesHelper.getCmisUrl("http://localhost:18080/server/services/");
+
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 		folderId = request.getParameter("folderId");
 
 		System.out.println("init()");
@@ -292,8 +298,6 @@ public class AbstractBrowserController implements BrowserController
 		}
 	}
 
-
-
 	public FolderPanel getFolderPanel()
 	{
 		return folderPanel;
@@ -373,11 +377,34 @@ public class AbstractBrowserController implements BrowserController
 		this.searchParams = searchParams;
 	}
 
+    public String getCurrentUrl() {
+        return currentUrl;
+    }
 
+    public void setCurrentUrl(String currentUrl) {
+        this.currentUrl = currentUrl;
+    }
 
+    public void findLink(String link) {
+        preferencesHelper.setCmisUrl(currentUrl);
+        service.connect();
+        try {
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            FacesContext.getCurrentInstance().getExternalContext().redirect(link);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
+    @Override
+    public void moveFolder(TreeDragDropEvent event) {
+        TreeNode dragNode = event.getDragNode();
+        TreeNode dropNode = event.getDropNode();
 
+        BrowserItem source = (BrowserItem) dragNode.getData();
+        BrowserItem target = (BrowserItem) dropNode.getData();
+
+        service.moveFolder(source, target);
+        updateTree();
+    }
 }
-
-
-

@@ -30,5 +30,9 @@ public interface BrowserService
 	public BrowserItem editDocument(String id, String name);
 	public void deleteDocument(String id);
 
+    void moveFolder(BrowserItem source, BrowserItem target);
+
+    public void connect();
+
     // ... add more here ...
 }

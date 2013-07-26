@@ -308,10 +308,12 @@
 
         <h:outputLabel for="doctype" value="Type:* "/>
         <!-- SHOULD BE TYPE INSTEAD OF ID!!! -->
-        <h:selectOneMenu id="doctype" value="#{cc.attrs.controller.folderPanel.type}">
-            <f:selectItem itemLabel="Document" itemValue="cmis:document"/>
+        <h:selectOneMenu id="doctype"  value="#{cc.attrs.controller.folderPanel.type}" >
+            <f:selectItems value="#{cc.attrs.controller.typeList}" var="type"
+                           itemLabel="#{type.key}" itemValue="#{type.value}" />
         </h:selectOneMenu>
         <h:message for="doctype"/>
+
 
         <p:fileUpload value="#{fileUploadController.file}" mode="simple"/>
 
@@ -319,9 +321,9 @@
                          actionListener="#{fileUploadController.upload}"/>
 
 
-        <p:commandButton id="docsavebtn"
+        <p:commandButton id="doccreatebtn"
                          action="#{cc.attrs.controller.folderPanel.createFolder(cc.attrs.link)}"
-                         value="Save" ajax="false"
+                         value="Create" ajax="false"
                          update=":#{cc.clientId}:seniorpanel"
                          title="Create new document"
                          >

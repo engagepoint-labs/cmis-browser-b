@@ -257,13 +257,13 @@
                         id="editdocument"
                         action="#{cc.attrs.controller.documentPanel.showEdit(item.id)}" immediate="true"
                         disabled="#{item.type != 'FILE'}"
-                        value="Edit Document" update=":#{cc.clientId}:seniorpanel" title="Edit Document">
+                        value="Edit" update=":#{cc.clientId}:seniorpanel" title="Edit Document">
                     <f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>
                 </p:commandButton>
 
                 <!-- Delete Document Button -->
                 <p:commandButton id="deletedocument"
-					value="Delete Document"
+					value="Delete"
 					type="button"
                     action="#{cc.attrs.controller.documentPanel.showDelete(item.id)}"
 					onclick="confirmDocDeleteDialog.show()"

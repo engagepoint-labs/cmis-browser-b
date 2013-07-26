@@ -165,9 +165,10 @@
         <p:tab id="tab3" title="Preferences">
             <h:panelGrid columns="2">
                 <p:column>
-                    <h:outputLabel value="URL:"/>
+                    <h:outputLabel value="URL: "/>
                     <p:inputText id="inputNewLink"
-                                 value="#{cc.attrs.controller.currentUrl}"/>
+                                 value="#{cc.attrs.controller.currentUrl}"
+                            style="width: 220px;"/>
                 </p:column>
 
                 <p:column>
@@ -181,6 +182,7 @@
         </p:tab>
     </p:tabView>
 
+    <p:separator style="height: 5px;" />
     <p:toolbar>
         <p:toolbarGroup align="left">
             <!-- button : "New Folder"-->

@@ -1,0 +1,48 @@
+Meta:
+
+Narrative:
+As a content management system (CMS) user
+I want to edit folders in the repository
+So that I can make changes in content
+
+Scenario: User tries to edit a folder from context menu and click cancel
+
+Given opened 'http://localhost:18080/browser'
+When use right click on './/*[contains(@id,'tree:0_0:treelink')]'
+And clicks on 'EditFolder'
+Then find 'smth' on 'page'
+When types 'foldername' on 'field'
+And types 'type' on 'field'
+And clicks on 'cancel'
+Then find 'smth' on 'page'
+
+Scenario: User tries to edit a folder from context menu and click save
+
+Given opened 'http://localhost:18080/browser'
+When use right click on './/*[contains(@id,'tree:0_0:treelink')]'
+And clicks on 'EditFolder'
+Then find 'smth' on 'page'
+When types 'foldername' on 'field'
+And types 'type' on 'field'
+And clicks on 'save'
+Then find 'smth' on 'page'
+
+Scenario: User tries to edit a folder with button and click cancel
+
+Given opened 'http://localhost:18080/browser'
+When clicks on 'Edit'
+Then find 'smth' on 'page'
+When types 'foldername' on 'field'
+And types 'type' on 'field'
+And clicks on 'cancel'
+Then find 'smth' on 'page'
+
+Scenario: User tries to edit a folder with button and click save
+
+Given opened 'http://localhost:18080/browser'
+When clicks on 'Edit'
+Then find 'smth' on 'page'
+When types 'foldername' on 'field'
+And types 'type' on 'field'
+And clicks on 'save'
+Then find 'smth' on 'page'

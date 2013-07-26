@@ -216,7 +216,8 @@ public class CMISBrowserService implements BrowserService
     }
 
     @Override
-    public void connect() {
+    public void connect()
+	{
         String url = preferencesHelper.getCmisUrl("http://localhost:18080/server/services/");
 
         session = connect(url);
@@ -403,7 +404,8 @@ public class CMISBrowserService implements BrowserService
 
 			if (item.getType() == BrowserItem.TYPE.FILE)
 			{
-				item.setContentType(hit.getPropertyByQueryName("cmis:contentStreamMimeType").getFirstValue().toString());
+				Object mime = hit.getPropertyByQueryName("cmis:contentStreamMimeType").getFirstValue();
+				if (mime != null) item.setContentType(mime.toString());
 				item.setSize((BigInteger) hit.getPropertyByQueryName("cmis:contentStreamLength").getFirstValue());
 			}
 
@@ -468,14 +470,15 @@ public class CMISBrowserService implements BrowserService
 		return createDocument(current, name, null);
 	}
 
-
-
-//	@Override
+	@Override
 	public BrowserItem createDocument(String id, String name, BrowserDocumentContent content)
 	{
 		Folder current = (Folder) session.getObject(id);
 
-		ContentStream con = new ContentStreamImpl(
+		ContentStream con = null;
+
+		if (content != null)
+		con = new ContentStreamImpl(
 				content.getFilename(),
 				content.getSize(),
 				content.getType(),
@@ -508,10 +511,17 @@ public class CMISBrowserService implements BrowserService
 	public BrowserItem editDocument(String id, String name)
 	{
 		Document current = (Document) session.getObject(id);
-		return editDocument(current, name);
+		return editDocument(current, name, null);
 	}
 
-	private BrowserItem editDocument(Document document, String name)
+	@Override
+	public BrowserItem editDocument(String id, String name, BrowserDocumentContent content)
+	{
+		Document current = (Document) session.getObject(id);
+		return editDocument(current, name, content);
+	}
+
+	private BrowserItem editDocument(Document document, String name, BrowserDocumentContent content)
 	{
 		BrowserItem result = new BrowserItem();
 
@@ -519,6 +529,18 @@ public class CMISBrowserService implements BrowserService
 		properties.put(PropertyIds.NAME, name);
 
 		document.updateProperties(properties);
+		if (content != null)
+		{
+			ContentStream con = new ContentStreamImpl(
+					content.getFilename(),
+					content.getSize(),
+					content.getType(),
+					content.getStream()
+			);
+
+			document.deleteContentStream();
+			document.setContentStream(con, true);
+		}
 
 		result.setName(name);
 		result.setId(document.getId());

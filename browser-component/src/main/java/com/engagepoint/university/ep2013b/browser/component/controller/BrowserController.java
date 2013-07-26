@@ -5,7 +5,9 @@ import com.engagepoint.university.ep2013b.browser.cmis.SearchParams;
 import org.apache.chemistry.opencmis.client.runtime.util.AbstractPageFetcher;
 import org.primefaces.event.TreeDragDropEvent;
 import org.primefaces.model.TreeNode;
+import org.primefaces.model.UploadedFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface BrowserController
@@ -48,8 +50,8 @@ public interface BrowserController
 	// Folder Management
 	public interface BrowserFolderPanel
 	{
-		public void showNewFolderPanel();
-		public void showEditFolderPanel();
+		public void showNew();
+		public void showEdit();
 		public void hide();
 		public boolean isShow();
 		public boolean isShowSaveButton();
@@ -58,6 +60,7 @@ public interface BrowserController
 		public String createFolder(String link);
 		public String editFolder(String link);
 		public void deleteFolder(String link);
+		public void moveFolder(TreeDragDropEvent event);
 
 		public String getName();
 		public void setName(String name);
@@ -67,9 +70,34 @@ public interface BrowserController
 
 	public BrowserFolderPanel getFolderPanel();
 
-    void moveFolder(TreeDragDropEvent event);
+	// Document Management
+	public interface BrowserDocumentPanel
+	{
+		public void showNew();
+		public void showEdit(String id);
+		public void showDelete(String id);
+		public void hide();
+		public boolean isShow();
+		public boolean isShowSaveButton();
+		public boolean isShowEditButton();
+
+		public String createDocument(String link);
+		public String editDocument(String link) throws IOException;
+		public void deleteDocument(String link);
+
+		public String getName();
+		public void setName(String name);
+		public String getType();
+		public void setType(String type);
+		public UploadedFile getFile();
+		public void setFile(UploadedFile file);
+	}
+
+	public BrowserDocumentPanel getDocumentPanel();
+
     String getCurrentUrl();
     void setCurrentUrl(String currentUrl);
     void findLink(String link);
+
 }
 

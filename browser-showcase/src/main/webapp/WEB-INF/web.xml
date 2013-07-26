@@ -33,6 +33,16 @@
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
 
+	<!-- PrimeFaces FileUpload Filter -->
+	<filter>
+		<filter-name>PrimeFaces FileUpload Filter</filter-name>
+		<filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>PrimeFaces FileUpload Filter</filter-name>
+		<servlet-name>Faces Servlet</servlet-name>
+	</filter-mapping>
+
     <!-- Enable comments in JSF pages-->
     <context-param>
         <param-name>facelets.SKIP_COMMENTS</param-name>

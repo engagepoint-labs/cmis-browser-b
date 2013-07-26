@@ -13,15 +13,24 @@
 
 <h:body>
 
-    <h1>Browser</h1>
+    <h1>Double Browser</h1>
     <h3>cmis-browser-b</h3>
 
     <div style="margin: 10px; padding:10px; border:1px solid #acacac;">
-        <h:form id="form" style="font-size:80%" enctype="multipart/form-data">
+        <h:form id="form1" style="font-size:50%" enctype="multipart/form-data">
             <ep2013b:browserComponent
-                    id="royal"
+                    id="royal1"
                     link="#{request.contextPath}/browser.xhtml"
                     controller="#{showcaseBrowserController}" />
+        </h:form>
+    </div>
+
+    <div style="margin: 10px; padding:10px; border:1px solid #acacac;">
+        <h:form id="form2" style="font-size:50%" enctype="multipart/form-data">
+            <ep2013b:browserComponent
+                    id="royal2"
+                    link="#{request.contextPath}/browser.xhtml"
+                    controller="#{showcaseBrowserController2}" />
         </h:form>
     </div>
 

@@ -21,13 +21,18 @@ public interface BrowserService
 
     public BrowserItem simpleSearch(String id, String parameter, int page, int rowCounts);
     public BrowserItem advancedSearch(String id, Object parameter, int pageNum, int rowCounts);
-    public BrowserItem createFolder(String id, String name, String type);
+
+	public BrowserItem createFolder(String id, String name, String type);
     public BrowserItem editFolder(String id, String name, String type);
     public void deleteFolder(String id);
-    public Map<String,String> getTypeList(String type);
+
+	public Map<String,String> getTypeList(String type);
 
 	public BrowserItem createDocument(String id, String name);
+	public BrowserItem createDocument(String id, String name, BrowserDocumentContent content);
+
 	public BrowserItem editDocument(String id, String name);
+	public BrowserItem editDocument(String id, String name, BrowserDocumentContent content);
 	public void deleteDocument(String id);
 
     void moveFolder(BrowserItem source, BrowserItem target);

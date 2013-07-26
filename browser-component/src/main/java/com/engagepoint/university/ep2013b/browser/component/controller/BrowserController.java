@@ -3,6 +3,7 @@ package com.engagepoint.university.ep2013b.browser.component.controller;
 import com.engagepoint.university.ep2013b.browser.api.BrowserItem;
 import com.engagepoint.university.ep2013b.browser.cmis.SearchParams;
 import org.apache.chemistry.opencmis.client.runtime.util.AbstractPageFetcher;
+import org.primefaces.event.TreeDragDropEvent;
 import org.primefaces.model.TreeNode;
 
 import java.util.List;
@@ -66,5 +67,9 @@ public interface BrowserController
 
 	public BrowserFolderPanel getFolderPanel();
 
+    void moveFolder(TreeDragDropEvent event);
+    String getCurrentUrl();
+    void setCurrentUrl(String currentUrl);
+    void findLink(String link);
 }
 

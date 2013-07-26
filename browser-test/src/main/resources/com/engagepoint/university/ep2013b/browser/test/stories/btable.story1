@@ -48,5 +48,3 @@ Given user goes on page by url 'http://localhost:18080/browser/browser.xhtml'
 When user clicks in the tree folder by xpath './/*[contains(@id,'tree:0_0:treelink')]'
 And user clicks table button by xpath './/*[contains(@id,'table:butlast')]'
 Then in the table folder child by xpath './/*[contains(@id,'table:0:itemname') and text()='My_Folder-1-1']' is visible
-
-

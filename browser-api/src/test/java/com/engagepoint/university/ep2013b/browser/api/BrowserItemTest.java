@@ -1,4 +1,4 @@
-package com.engagepoint.university.ep2013b.browser.cmis;
+package com.engagepoint.university.ep2013b.browser.api;
 
 import com.engagepoint.university.ep2013b.browser.api.BrowserItem;
 import org.junit.Before;

@@ -101,7 +101,7 @@
 				<h:panelGrid columns="3">
 					<p:inputText id="searchInput" value="#{cc.attrs.controller.searchCriteria}"/>
 
-					<p:commandButton id="searchbtn" action="#{cc.attrs.controller.searchSimple}"
+					<p:commandButton id="simpleSearchBtn" action="#{cc.attrs.controller.searchSimple}"
 									 update=":#{cc.clientId}:table"
 									 icon="ui-icon-search" title="Search">
 						<!--<f:param name="folderId" value="#{cc.attrs.controller.folderId}"/>-->
@@ -151,7 +151,7 @@
 					<p:inputText id="searchText" value="#{cc.attrs.controller.searchParams.text}"/>
 
 					<h:outputText value="" style="width: 80px; text-align: right;"/>
-					<p:commandButton id="advsearchbtn" action="#{cc.attrs.controller.searchAdvanced}"
+					<p:commandButton id="advancedSearchBtn" action="#{cc.attrs.controller.searchAdvanced}"
 									 update=":#{cc.clientId}:table"
 									 value="Advanced search"
 									 icon="ui-icon-search"
@@ -347,7 +347,7 @@
 				</p:commandButton>
 
 				<!-- Cancel Button -->
-				<p:commandButton id="cancel" action="#{cc.attrs.controller.folderPanel.hide}" value="Cancel"
+				<p:commandButton id="cancelForm" action="#{cc.attrs.controller.folderPanel.hide}" value="Cancel"
 								 update=":#{cc.clientId}:seniorpanel" immediate="true"/>
 
     		</h:panelGrid>

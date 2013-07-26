@@ -9,51 +9,62 @@ import java.util.List;
 
 public interface BrowserController
 {
-	public void first();
-	public void next();
-	public void previous();
-	public void last();
-
-	public boolean isPrevious();
-	public boolean isNext();
-
-	void init();
+	// Initialize
+	public void init();
 
     // Tree
-    TreeNode getRoot();
-    String getCurrentLocation();
-    TreeNode getSelectedNode();
-    void displaySelectedSingle();
-    void deleteNode();
-
+	public TreeNode getRoot();
+	public String getCurrentLocation();
+	public TreeNode getSelectedNode();
+	public void setSelectedNode(TreeNode selectedNode);
 
     // Table
-    List<BrowserItem> getDataList();
-    String getFolderId();
-    BrowserItem getSelectedItem();
-    void setSelectedItem(BrowserItem selectedItem);
-    String getSearchCriteria();
-    void setSearchCriteria(String searchCriteria);
-    SearchParams getSearchParams();
-    void setSearchParams(SearchParams advancedSearchParams);
-    void searchSimple();
+	public List<BrowserItem> getDataList();
+	public String getFolderId();
+
+	// Search
+	public String getSearchCriteria();
+	public void setSearchCriteria(String searchCriteria);
+	public SearchParams getSearchParams();
+	public void setSearchParams(SearchParams advancedSearchParams);
+	public void searchSimple();
 	public void searchAdvanced();
 
-    public void showPanel(int flag);
-    public void hidePanel();
-    public boolean isShowEditFolderPanel();
+	// Pagination
+	public interface BrowserPage
+	{
+		public void first();
+		public void next();
+		public void previous();
+		public void last();
 
-    public BrowserItem getNewFolderItem();
+		public boolean isPrevious();
+		public boolean isNext();
+	}
 
-    public void setNewFolderItem(BrowserItem newFolderItem);
+	public BrowserPage getPage();
 
-    public String createFolder(String link);
-    public String editFolder(String link);
-    public void deleteFolder(String link);
-    public void setNameNewFolder(String name);
-    public String getNameNewFolder();
-    public  void setOperationFlag(int operationFlag);
-    public int   getOperationFlag();
-    public void onNodeExpand();
+	// Folder Management
+	public interface BrowserFolderPanel
+	{
+		public void showNewFolderPanel();
+		public void showEditFolderPanel();
+		public void hide();
+		public boolean isShow();
+		public boolean isShowSaveButton();
+		public boolean isShowEditButton();
+
+		public String createFolder(String link);
+		public String editFolder(String link);
+		public void deleteFolder(String link);
+
+		public String getName();
+		public void setName(String name);
+		public String getType();
+		public void setType(String type);
+	}
+
+	public BrowserFolderPanel getFolderPanel();
+
 }
 

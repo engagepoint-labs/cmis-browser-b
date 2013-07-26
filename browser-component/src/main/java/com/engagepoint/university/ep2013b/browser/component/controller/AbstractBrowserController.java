@@ -19,49 +19,26 @@ public class AbstractBrowserController implements BrowserController
 	private BrowserService service;
 	private String folderId;
 
-	private static enum STATE { NORMAL, SEARCH_SIMPLE, SEARCH_ADVANCED }
+	private static enum STATE { NORMAL, SEARCH_SIMPLE, SEARCH_ADVANCED, NEW_FOLDER, EDIT_FOLDER }
 	private STATE state = STATE.NORMAL;
+	private STATE tempstate = STATE.NORMAL;	// remember state before opening Folder Panel
 
 	// Tree
 	private TreeNode root;
 	private String currentLocation;
 	private TreeNode selectedNode;
 
-	// Table
-	private Page page = new Page(2);			// Maximum of rows per number
-	private BrowserItem selectedItem = null;
 
 	// List which should be displayed
 	private List<BrowserItem> dataList;
 	private String searchCriteria = "";
 
-	BrowserItem table, tree;
+	private BrowserItem table, tree;
 
+	private Page page = new Page(2);	// Maximum of rows per number
 	private SearchParams searchParams = new SearchParams();
+	private FolderPanel folderPanel = new FolderPanel();
 
-	private boolean showEditFolderPanel = false;
-
-	private BrowserItem newFolderItem = new BrowserItem();
-	private String nameNewFolder = "";
-	private int operationFlag = 0;
-
-
-	private class Page
-	{
-		private int number = 1;		// current number
-		private int total = 1;		// total pages
-		private int max;			// items per number
-
-		public Page (int max)	{ this.max = max; }
-	}
-
-	public void first()		{ page.number = 1;			updateTable();}
-	public void next()		{ page.number++; 			updateTable();}
-	public void previous()	{ page.number--;			updateTable();}
-	public void last()		{ page.number = page.total;	updateTable();}
-
-	public boolean isPrevious()	{ return page.number > 1; }
-	public boolean isNext()		{ return page.number + 1 <= page.total; }
 
 	public AbstractBrowserController()
 	{
@@ -81,6 +58,7 @@ public class AbstractBrowserController implements BrowserController
 		updateTree();
 	}
 
+	// Updating Table according to current state
 	private void updateTable()
 	{
 		System.out.println("updateTable()");
@@ -95,18 +73,8 @@ public class AbstractBrowserController implements BrowserController
 			}
 			break;
 
-			case SEARCH_SIMPLE:
-			{
-				table = service.simpleSearch(folderId, searchCriteria, page.number, page.max);
-			}
-			break;
-
-			case SEARCH_ADVANCED:
-			{
-//				searchParams.setFolderId(folderId);
-				table = service.advancedSearch(folderId, searchParams, page.number, page.max);
-			}
-			break;
+			case SEARCH_SIMPLE:		table = service.simpleSearch(folderId, searchCriteria, page.number, page.max);	break;
+			case SEARCH_ADVANCED:	table = service.advancedSearch(folderId, searchParams, page.number, page.max);	break;
 		}
 
 		page.total = table.getTotalPages();
@@ -118,6 +86,7 @@ public class AbstractBrowserController implements BrowserController
 		System.out.println("\tpage.total  = " + page.total);
 	}
 
+	// Updating Tree according to current state
 	private void updateTree()
 	{
 		System.out.println("updateTree()");
@@ -139,7 +108,7 @@ public class AbstractBrowserController implements BrowserController
 	}
 
 	// fill tree recursively
-	public void makeTree(BrowserItem item, TreeNode parent)
+	private void makeTree(BrowserItem item, TreeNode parent)
 	{
 		TreeNode node = new DefaultTreeNode(item, parent);
 
@@ -164,30 +133,202 @@ public class AbstractBrowserController implements BrowserController
 		}
 	}
 
-	public void showPanel(int flag)
+	// Helper class for holding Paging Management
+	public class Page implements BrowserPage
 	{
-		showEditFolderPanel = true;
-		operationFlag = flag;
+		private int number = 1;		// current number
+		private int total = 1;		// total pages
+		private int max;			// items per number
+
+		public Page (int max)	{ this.max = max; }
+
+		public void first()		{ number = 1;		updateTable();}
+		public void next()		{ number++; 		updateTable();}
+		public void previous()	{ number--;			updateTable();}
+		public void last()		{ number = total;	updateTable();}
+
+		public boolean isPrevious()	{ return number > 1; }
+		public boolean isNext()		{ return number + 1 <= total; }
 	}
 
-	public void hidePanel()
+	@Override
+	public BrowserPage getPage()
 	{
-		showEditFolderPanel = false;
+		return page;
 	}
 
-	public boolean isShowEditFolderPanel()
+	// Helper class for holding Folder Management
+	public class FolderPanel implements BrowserFolderPanel
 	{
-		return showEditFolderPanel;
+		private String name;
+		private String type;
+
+		// Show panel in "Creation" mode
+		public void showNewFolderPanel()
+		{
+			tempstate = state;
+			state = STATE.NEW_FOLDER;
+			name = "";
+		}
+
+		// Show panel in "Edit" mode
+		public void showEditFolderPanel()
+		{
+			tempstate = state;
+			state = STATE.EDIT_FOLDER;
+			name = tree.getName();
+		}
+
+		public void hide()
+		{
+			state = tempstate;
+		}
+
+		public boolean isShow()
+		{
+			return (state == STATE.NEW_FOLDER) || (state == STATE.EDIT_FOLDER);
+		}
+
+		public boolean isShowSaveButton()
+		{
+			return (state == STATE.NEW_FOLDER);
+		}
+
+		public boolean isShowEditButton()
+		{
+			return (state == STATE.EDIT_FOLDER);
+		}
+
+		@Override
+		public String createFolder(String link)
+		{
+			try
+			{
+				BrowserItem folder = service.createFolder(folderId, name, type);
+				hide();
+				init();
+			}
+			catch (Exception e)
+			{
+				FacesContext.getCurrentInstance().addMessage(null,
+						new FacesMessage(FacesMessage.SEVERITY_WARN,
+								"Error during creating folder by name: " + name, null));
+			}
+
+			return link + "?faces-redirect=true";
+		}
+
+		@Override
+		public String editFolder(String link)
+		{
+			try
+			{
+				BrowserItem folder = service.editFolder(folderId, name, type);
+				hide();
+				init();
+			}
+			catch (Exception e)
+			{
+				FacesContext.getCurrentInstance().addMessage(null,
+						new FacesMessage(FacesMessage.SEVERITY_WARN,
+								"Error during editing folder by name: " + name, null));
+			}
+			return link + "?faces-redirect=true";
+
+		}
+
+
+		@Override
+		public void deleteFolder(String link)
+		{
+			BrowserItem parent = tree.getParent();
+
+			try
+			{
+				service.deleteFolder(folderId);
+				hide();
+			}
+			catch (Exception e)
+			{
+				FacesContext.getCurrentInstance().addMessage(null,
+						new FacesMessage(FacesMessage.SEVERITY_WARN,
+								"Error during deleting folder " + tree.getName(), null));
+			}
+
+			folderId = parent.getId();
+
+			try
+			{
+				FacesContext facesContext = FacesContext.getCurrentInstance();
+				facesContext.getExternalContext().redirect(link + "?folderId=" + parent.getId());
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+
+		}
+
+		public String getName()
+		{
+			return name;
+		}
+
+		public void setName(String name)
+		{
+			this.name = name;
+		}
+
+		public String getType()
+		{
+			return type;
+		}
+
+		public void setType(String type)
+		{
+			this.type = type;
+		}
 	}
 
-	public BrowserItem getNewFolderItem()
+	public FolderPanel getFolderPanel()
 	{
-		return newFolderItem;
+		return folderPanel;
 	}
 
-	public void setNewFolderItem(BrowserItem newFolderItem)
+
+	// Search methods
+	public void searchSimple()
 	{
-		this.newFolderItem = newFolderItem;
+		System.out.println("-- searchSimple() --------------- ");
+		state = (searchCriteria != null) ? STATE.SEARCH_SIMPLE : STATE.NORMAL;
+		page.number = 1;
+		updateTable();
+	}
+
+	public void searchAdvanced()
+	{
+		System.out.println("-- searchAdvanced() --------------- ");
+		System.out.println("params = \n" + searchParams);
+		state = (!searchParams.isEmpty()) ? STATE.SEARCH_ADVANCED : STATE.NORMAL;
+		page.number = 1;
+		updateTable();
+	}
+
+
+	// Setters and Getters
+	public List<BrowserItem> getDataList()
+	{
+		return dataList;
+	}
+
+	public String getSearchCriteria()
+	{
+		return searchCriteria;
+	}
+
+	public void setSearchCriteria(String searchCriteria)
+	{
+		this.searchCriteria = (!"".equals(searchCriteria)) ? searchCriteria : null;
 	}
 
 	public TreeNode getRoot()
@@ -208,80 +349,15 @@ public class AbstractBrowserController implements BrowserController
 	public void setSelectedNode(TreeNode selectedNode)
 	{
 		this.selectedNode = selectedNode;
+//		folderId = ((BrowserItem)selectedNode.getData()).getId();
+//		System.out.println("SelectedNode = " + folderId);
 	}
 
-	public void displaySelectedSingle()
-	{
-		if (selectedNode != null)
-		{
-			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Selected", selectedNode.getData().toString());
-
-			FacesContext.getCurrentInstance().addMessage(null, message);
-		}
-	}
-
-	//  delete Folder
-	public void deleteNode()
-	{
-		selectedNode.getChildren().clear();
-		selectedNode.getParent().getChildren().remove(selectedNode);
-		selectedNode.setParent(null);
-
-		selectedNode = null;
-	}
-
-
-	public void searchSimple()
-	{
-		System.out.println("-- searchSimple() --------------- ");
-		state = (searchCriteria != null) ? STATE.SEARCH_SIMPLE : STATE.NORMAL;
-		page.number = 1;
-		updateTable();
-	}
-
-	public void searchAdvanced()
-	{
-		System.out.println("-- searchAdvanced() --------------- ");
-		System.out.println("params = \n" + searchParams);
-		state = (!searchParams.isEmpty()) ? STATE.SEARCH_ADVANCED : STATE.NORMAL;
-		page.number = 1;
-		updateTable();
-	}
-
-	public String getSearchCriteria()
-	{
-		return searchCriteria;
-	}
-
-	public void setSearchCriteria(String searchCriteria)
-	{
-		this.searchCriteria = (!"".equals(searchCriteria)) ? searchCriteria : null;
-	}
-
-
-
-	// Method executed when dataTable renders (during loading number or ajax request)
-	public List<BrowserItem> getDataList()
-	{
-		return dataList;
-	}
 
 	public String getFolderId()
 	{
 		return folderId;
 	}
-
-
-	public BrowserItem getSelectedItem()
-	{
-		return selectedItem;
-	}
-
-	public void setSelectedItem(BrowserItem selectedItem)
-	{
-		this.selectedItem = selectedItem;
-	}
-
 
 	public SearchParams getSearchParams()
 	{
@@ -291,122 +367,5 @@ public class AbstractBrowserController implements BrowserController
 	public void setSearchParams(SearchParams searchParams)
 	{
 		this.searchParams = searchParams;
-	}
-
-	@Override
-	public String createFolder(String link)
-	{
-
-		try
-		{
-
-			BrowserItem newFolder = service.createFolder(folderId, newFolderItem.getName(), "cmis:folder");
-			showEditFolderPanel = false;
-			//System.out.println("" + link + "?faces-redirect=true");
-			init();
-			//newFolderItem = "";
-		}
-		catch (Exception e)
-		{
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_WARN,
-							"Error during creating folder by name: " + newFolderItem.getName(), null));
-		}
-
-		return link + "?faces-redirect=true";
-	}
-
-	@Override
-	public String editFolder(String link)
-	{
-
-		try
-		{
-			BrowserItem newFolder = service.editFolder(folderId, newFolderItem.getName(), "cmis:folder");
-			showEditFolderPanel = false;
-			//System.out.println("" + link + "?faces-redirect=true");
-			init();
-			//nameNewFolder = "";
-		}
-		catch (Exception e)
-		{
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_WARN,
-							"Error during editing folder by name: " + newFolderItem.getName(), null));
-		}
-		return link + "?faces-redirect=true";
-
-	}
-
-
-	@Override
-	public void deleteFolder(String link)
-	{
-
-//		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-//
-//		BrowserItem parent = service.findFolderById(folderId).getParent();
-//
-//		try
-//		{
-//
-//			service.deleteFolder(folderId);
-//			showEditFolderPanel = false;
-//
-//			//init();
-//
-//			//System.out.println("" + link + "?faces-redirect=true");
-//
-//		}
-//		catch (Exception e)
-//		{
-//			FacesContext.getCurrentInstance().addMessage(null,
-//					new FacesMessage(FacesMessage.SEVERITY_WARN,
-//							"Error during deleting folder by id: " + folderId, null));
-//		}
-//
-//		System.out.println(" -------------      " + link + "?folderId=" + parent.getId() + "&faces-redirect=true");
-//		folderId = parent.getId();
-//
-//		try
-//		{
-//			FacesContext facesContext = FacesContext.getCurrentInstance();
-//			FacesContext.getCurrentInstance().getExternalContext().redirect(link + "?folderId=" + parent.getId());
-//		}
-//		catch (Exception e)
-//		{
-//			e.printStackTrace();
-//		}
-
-	}
-
-
-	@Override
-	public void onNodeExpand()
-	{
-
-		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_INFO,
-						"Tree expanding for folder: " + folderId, null));
-	}
-
-	public String getNameNewFolder()
-	{
-		return nameNewFolder;
-	}
-
-	public void setNameNewFolder(String nameNewFolder)
-	{
-		this.nameNewFolder = nameNewFolder;
-	}
-
-	public int getOperationFlag()
-	{
-		return operationFlag;
-	}
-
-	public void setOperationFlag(int operationFlag)
-	{
-		this.operationFlag = operationFlag;
 	}
 }

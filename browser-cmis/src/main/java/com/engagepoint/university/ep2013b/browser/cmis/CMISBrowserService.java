@@ -218,7 +218,7 @@ public class CMISBrowserService implements BrowserService
     @Override
     public void connect()
 	{
-        String url = preferencesHelper.getCmisUrl("http://localhost:18080/server/services/");
+        String url = preferencesHelper.getCmisUrl("http://192.168.32.231:9081/content/cmis/services/");
 
         session = connect(url);
     }

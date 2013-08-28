@@ -245,7 +245,7 @@ public class CMISBrowserService implements BrowserService
 		parameter.put(SessionParameter.WEBSERVICES_RELATIONSHIP_SERVICE, url + "RelationshipService?wsdl");
 		parameter.put(SessionParameter.WEBSERVICES_REPOSITORY_SERVICE, url + "RepositoryService?wsdl");
 		parameter.put(SessionParameter.WEBSERVICES_VERSIONING_SERVICE, url + "VersioningService?wsdl");
-
+		parameter.put(SessionParameter.WEBSERVICES_JAXWS_IMPL, "websphere");
 		Repository repository = sessionFactory.getRepositories(parameter).get(0);
 		parameter.put(SessionParameter.REPOSITORY_ID, repository.getId());
 
